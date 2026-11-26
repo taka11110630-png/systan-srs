@@ -819,8 +819,21 @@ const EMBEDDED_BUNDLE = null;
     return { label:`${d}日後`, next:{ ...c, st:"review", iv:d, ef:Math.min(2.80, +(ef+0.08).toFixed(2)), reps:(c.reps||0)+1, streakFast:newStreak>=3?0:newStreak, lastGrade:"ok", due:todayStr(d), dueTs:0 } };
   }
 
-  // --- Queue Builder (Calm default: EN->JP + Pattern! No forced confusable overload!) ---
+  // --- Queue Builder (Calm default: EN->JP + Pattern! Waits on Start screen until user presses Start!) ---
   let currentMode = "auto", sessionQueue = [], sessionIndex = 0, customBatchLabel = "", undoStack = [];
+  let sessionStarted = false;
+  let timerEnabled = true;
+
+  const MODE_LABELS = {
+    auto: "今日の復習（基本・英→日＋型）",
+    new10: "新規 +10語（10語マイクロバッチ）",
+    new50: "新規 +50語（1日分バッチ）",
+    patterns: "📐 単語の型がある単語だけ演習",
+    weak: "弱点集中（教材 ❌ / 🔺）",
+    stage5: "多義語（Stage 5）",
+    cloze: "応用：ミニフレーズ穴埋め"
+  };
+
   function isDueToday(c) {
     if (!c || c.st === "new") return false;
     if (c.dueTs && c.dueTs <= Date.now()) return true;
@@ -846,13 +859,12 @@ const EMBEDDED_BUNDLE = null;
   }
 
   function buildQueue(mode, customList = null, label = "") {
-    currentMode = mode; customBatchLabel = label; sessionIndex = 0;
+    currentMode = mode; customBatchLabel = label; sessionIndex = 0; sessionStarted = false;
     if (customList) {
       sessionQueue = customList.map(w => ({ id: w.id, cardMode: "en2jp" }));
       renderStudy(); return;
     }
     if (mode === "auto") {
-      // Calm default: always EN->JP (user explicitly asked not to make initial practice overly hard!)
       sessionQueue = getDueItems().map(d => ({ id: d.w.id, cardMode: "en2jp" }));
     } else if (mode === "new10" || mode === "new50") {
       const lim = mode === "new10" ? 10 : 50;
@@ -878,8 +890,9 @@ const EMBEDDED_BUNDLE = null;
   function stopLatency() { if (latencyRaf) cancelAnimationFrame(latencyRaf); latencyRaf = null; }
   function startLatency() {
     stopLatency(); cardStartTs = performance.now(); cardLatencyMs = 0;
+    if (!timerEnabled) return;
     const tick = () => {
-      if (cardRevealed) return;
+      if (cardRevealed || !sessionStarted) return;
       cardLatencyMs = performance.now() - cardStartTs;
       const fill = document.getElementById("latencyFill"), ro = document.getElementById("latencyReadout");
       if (fill && ro) {
@@ -926,6 +939,7 @@ const EMBEDDED_BUNDLE = null;
     stopLatency(); renderStats();
     const area = document.getElementById("studyCardArea");
     const metaEl = document.getElementById("queueMeta");
+
     if (!sessionQueue.length || sessionIndex >= sessionQueue.length) {
       metaEl.textContent = "";
       const dueLeft = getDueItems().length;
@@ -934,8 +948,8 @@ const EMBEDDED_BUNDLE = null;
         <h2 style="margin:0; font-size:20px;">${customBatchLabel ? esc(customBatchLabel)+" 完了！" : "セッション完了！"}</h2>
         <p class="muted" style="margin:0; max-width:460px;">${dueLeft > 0 ? `今日の復習があと ${dueLeft}語 残っています。` : "今日の必須復習は完了です！1時間タイマーを押すか、意味グループ確認・新規10語へ進めます。"}</p>
         <div class="row" style="justify-content:center; margin-top:6px;">
-          ${dueLeft > 0 ? `<button class="primary" id="eResume">残りの復習を続ける (${dueLeft})</button>` : ""}
-          <button class="primary" id="eNew10">＋ 新規 10語</button>
+          ${dueLeft > 0 ? `<button class="primary" id="eResume">残りの復習を準備 (${dueLeft})</button>` : ""}
+          <button class="primary" id="eNew10">＋ 新規 10語を準備</button>
           <button id="eSyn">🔗 意味グループ＆型を見る</button>
           <button id="e1h">⏱ 1時間タイマー</button>
         </div>
@@ -944,6 +958,32 @@ const EMBEDDED_BUNDLE = null;
       document.getElementById("eNew10")?.addEventListener("click", () => buildQueue("new10"));
       document.getElementById("eSyn")?.addEventListener("click", () => switchTab("synonyms"));
       document.getElementById("e1h")?.addEventListener("click", startOneHourTimer);
+      return;
+    }
+
+    // Standby screen BEFORE starting (never starts timer or flashes card automatically!)
+    if (!sessionStarted) {
+      const title = customBatchLabel || MODE_LABELS[currentMode] || "復習セッション";
+      const rem = sessionQueue.length - sessionIndex;
+      metaEl.textContent = `待機中（対象 ${rem}語）`;
+      area.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center; padding:38px 20px;">
+        <span class="badge accent" style="font-size:12px; padding:4px 12px;">準備完了・待機中</span>
+        <h2 style="margin:2px 0 0; font-size:21px;">${esc(title)}</h2>
+        <div style="font-size:28px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums;">${sessionIndex > 0 ? `残り ${rem} / ${sessionQueue.length} 語` : `全 ${sessionQueue.length} 語`}</div>
+        <p class="muted" style="margin:0; max-width:440px; font-size:13px;">
+          「スタート」を押すまで単語もタイマーも動きません。<br>準備ができたら自分のペースで始めてください。
+        </p>
+        <label class="muted" style="font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="checkbox" id="timerToggleChk" ${timerEnabled ? "checked" : ""} /> 2秒レスポンス計測を表示する（OFFで時間計測なし）
+        </label>
+        <div class="row" style="justify-content:center; margin-top:6px; gap:10px;">
+          <button id="startSessionBtn" class="primary" style="min-width:210px; padding:13px 26px; font-size:16px;">▶ ${sessionIndex > 0 ? "続きから再開" : "スタート"}</button>
+          <button id="goSynBeforeStart">🔗 先に意味グループ＆型を見る</button>
+        </div>
+      </div>`;
+      document.getElementById("timerToggleChk")?.addEventListener("change", e => { timerEnabled = e.target.checked; });
+      document.getElementById("startSessionBtn")?.addEventListener("click", () => { sessionStarted = true; renderStudy(); });
+      document.getElementById("goSynBeforeStart")?.addEventListener("click", () => switchTab("synonyms"));
       return;
     }
 
@@ -1006,7 +1046,7 @@ const EMBEDDED_BUNDLE = null;
       </div>` : "";
 
     area.innerHTML = `<div class="flashcard">
-      <div class="latency-track"><div class="latency-fill" id="latencyFill"></div></div>
+      ${timerEnabled ? `<div class="latency-track"><div class="latency-fill" id="latencyFill"></div></div>` : ""}
       <div class="row space-between" style="margin-bottom:8px;">
         <div class="row" style="gap:6px;">
           <span class="badge accent">Stage ${w.s} #${w.n}</span>
@@ -1015,7 +1055,10 @@ const EMBEDDED_BUNDLE = null;
           ${mkBadge}
           ${leechBadge}
         </div>
-        <span id="latencyReadout" class="mono muted" style="font-size:12px;">0.0s</span>
+        <div class="row" style="gap:8px;">
+          ${timerEnabled ? `<span id="latencyReadout" class="mono muted" style="font-size:12px;">0.0s</span>` : ""}
+          <button id="pauseStudyBtn" class="ghost" style="font-size:12px; padding:4px 8px; min-height:30px;">⏸ 待機へ</button>
+        </div>
       </div>
 
       <div class="word-stage">
@@ -1062,6 +1105,7 @@ const EMBEDDED_BUNDLE = null;
     </div>`;
 
     metaEl.textContent = `${sessionIndex+1} / ${sessionQueue.length} 枚目${customBatchLabel ? " ｜ " + customBatchLabel : ""}`;
+    document.getElementById("pauseStudyBtn")?.addEventListener("click", () => { sessionStarted = false; renderStudy(); });
     document.getElementById("audioWordBtn")?.addEventListener("click", () => speak(w.w));
     document.getElementById("audioAnsBtn")?.addEventListener("click", () => speak(w.w));
     document.getElementById("audioPhraseBtn")?.addEventListener("click", () => speak(w.ph.split("（")[0]));
@@ -1073,6 +1117,7 @@ const EMBEDDED_BUNDLE = null;
     document.getElementById("userNoteInput")?.addEventListener("input", e => { c.note = e.target.value; saveState(); });
     area.querySelectorAll(".syn-jump-btn").forEach(btn => {
       btn.addEventListener("click", () => {
+        sessionStarted = false;
         switchTab("synonyms");
         setTimeout(() => document.getElementById("sg-" + btn.dataset.gid)?.scrollIntoView({ behavior:"smooth", block:"start" }), 60);
       });
@@ -1082,17 +1127,18 @@ const EMBEDDED_BUNDLE = null;
   }
 
   function showHint() {
-    if (cardRevealed) return;
+    if (cardRevealed || !sessionStarted) return;
     const w = wordsMap.get(sessionQueue[sessionIndex].id);
     const enOnly = (w.ph || "").split("（")[0].trim();
     const a = document.getElementById("hintArea");
     if (a && enOnly) { hintUsed = true; a.style.display = "block"; a.innerHTML = `<strong>例文ヒント：</strong> ${esc(enOnly)}`; document.getElementById("hintBtn")?.setAttribute("disabled", "true"); }
   }
   function revealCard() {
-    if (cardRevealed) return;
+    if (cardRevealed || !sessionStarted) return;
     cardRevealed = true; stopLatency();
     document.getElementById("preFlipActions").style.display = "none";
     document.getElementById("answerArea").style.display = "flex";
+    if (!timerEnabled && !hintUsed) return;
     if (hintUsed || cardLatencyMs > 2000) {
       document.getElementById("gradeTri")?.classList.add("recommended");
       const r = document.getElementById("recTri"); if (r) { r.style.display = "inline"; r.textContent = hintUsed ? "ヒント使用・推奨" : `${(cardLatencyMs/1000).toFixed(1)}秒・推奨`; }
@@ -1102,13 +1148,13 @@ const EMBEDDED_BUNDLE = null;
     }
   }
   function submitGrade(grade) {
-    if (!cardRevealed) return;
+    if (!cardRevealed || !sessionStarted) return;
     const qItem = sessionQueue[sessionIndex];
     const w = wordsMap.get(qItem.id);
     const c = getCard(w.id);
     undoStack.push({ id:w.id, prevCard:JSON.parse(JSON.stringify(c)), prevIndex:sessionIndex, grade, queueLen:sessionQueue.length });
     if (undoStack.length > 20) undoStack.shift();
-    state.cards[w.id] = previewNext(c, grade, cardLatencyMs).next;
+    state.cards[w.id] = previewNext(c, grade, timerEnabled ? cardLatencyMs : 1500).next;
     const t = todayStr(0);
     if (!state.daily[t]) state.daily[t] = { done:0, ok:0, tri:0, x:0 };
     state.daily[t].done += 1; state.daily[t][grade] += 1;
@@ -1121,7 +1167,7 @@ const EMBEDDED_BUNDLE = null;
 
   document.getElementById("showConfusableChk").addEventListener("change", e => {
     state.showConfusable = e.target.checked; saveState();
-    if (cardRevealed) { const idx = sessionIndex; renderStudy(); revealCard(); }
+    if (sessionStarted && cardRevealed) { renderStudy(); revealCard(); }
   });
   document.getElementById("undoBtn").addEventListener("click", () => {
     const last = undoStack.pop(); if (!last) return;
@@ -1132,13 +1178,19 @@ const EMBEDDED_BUNDLE = null;
       const i = sessionQueue.findIndex((it, k) => k > last.prevIndex && it.id === last.id);
       if (i >= 0) sessionQueue.splice(i, 1);
     }
-    sessionIndex = last.prevIndex; saveState(); toast("直前の評価を取り消しました"); renderStudy();
+    sessionIndex = last.prevIndex; sessionStarted = true; saveState(); toast("直前の評価を取り消しました"); renderStudy();
   });
 
   document.addEventListener("keydown", e => {
     if (!document.getElementById("tab-study").classList.contains("active")) return;
     const tag = (e.target && e.target.tagName) || "";
     if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+    if (!sessionStarted) {
+      if ((e.code === "Space" || e.key === "Enter") && sessionQueue.length && sessionIndex < sessionQueue.length) {
+        e.preventDefault(); sessionStarted = true; renderStudy();
+      }
+      return;
+    }
     if ((e.code === "Space" || e.key === "Enter") && !cardRevealed && sessionQueue[sessionIndex]) { e.preventDefault(); revealCard(); }
     else if (e.key === "1" && cardRevealed) submitGrade("x");
     else if (e.key === "2" && cardRevealed) submitGrade("tri");
@@ -1515,8 +1567,10 @@ const EMBEDDED_BUNDLE = null;
 
   // --- Tabs ---
   function switchTab(name) {
+    if (name !== "study" && sessionStarted) { sessionStarted = false; stopLatency(); }
     document.querySelectorAll(".nav-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `tab-${name}`));
+    if (name === "study") renderStudy();
     if (name === "synonyms") renderSynonyms();
     if (name === "schedule") renderSchedule();
     if (name === "explorer") { renderHeatmap(); renderWordList(); }
