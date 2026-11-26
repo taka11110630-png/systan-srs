@@ -905,12 +905,27 @@ const EMBEDDED_BUNDLE = null;
     latencyRaf = requestAnimationFrame(tick);
   }
 
+  function fmtPat(p) {
+    return String(p || "")
+      .replace(/\bthat S \+ \(should\) 原形V/g, "that〜 (should 原形)")
+      .replace(/\(that\) S \+ \(should\) 原形V/g, "(that)〜 (should 原形)")
+      .replace(/\bthat S \+ V\b/g, "that〜")
+      .replace(/\(that\) S \+ V\b/g, "(that)〜")
+      .replace(/\b(Apparently|Moreover|Nevertheless),\s*S \+ V\.?/g, "$1, 〜")
+      .replace(/\bS \+ V; therefore, S \+ V\b/g, "〜; therefore, 〜")
+      .replace(/\bimmediately S \+ V\b/g, "immediately〜")
+      .replace(/\bunless S \+ 現在形V\b/g, "unless〜（現在形）")
+      .replace(/\bin spite of S \+ V（節）/g, "in spite of 節（文）")
+      .replace(/\botherwise S would V\b/g, "otherwise 〜 would V")
+      .replace(/\bunless S don't\b/g, "unless 〜 don't");
+  }
+
   function renderPatternHtml(patterns) {
     if (!patterns || !patterns.length) return "";
     return `<div class="pattern-box">
       <div class="pattern-title">📐 単語の型（語法・コロケーション）</div>
       <div class="pattern-pills">
-        ${patterns.map(p => `<span class="pat-chip ${p.startsWith("⚠️") ? "trap" : ""}">${esc(p)}</span>`).join("")}
+        ${patterns.map(p => { const s = fmtPat(p); return `<span class="pat-chip ${s.startsWith("⚠️") ? "trap" : ""}">${esc(s)}</span>`; }).join("")}
       </div>
     </div>`;
   }
@@ -1254,7 +1269,7 @@ const EMBEDDED_BUNDLE = null;
                 </div>
               </div>
               <div style="font-size:13px; color:var(--ink-muted);">ニュアンス：${esc(it.nuance)}</div>
-              ${pats.length ? `<div class="pattern-pills" style="margin-top:2px;">${pats.map(p => `<span class="pat-chip ${p.startsWith("⚠️") ? "trap" : ""}">📐 ${esc(p)}</span>`).join("")}</div>` : ""}
+              ${pats.length ? `<div class="pattern-pills" style="margin-top:2px;">${pats.map(p => { const s = fmtPat(p); return `<span class="pat-chip ${s.startsWith("⚠️") ? "trap" : ""}">📐 ${esc(s)}</span>`; }).join("")}</div>` : ""}
             </div>`;
           }).join("")}
         </div>
@@ -1422,7 +1437,7 @@ const EMBEDDED_BUNDLE = null;
             <span class="muted mono" style="font-size:12px;">S${w.s}#${w.n}</span>
             <span>${esc(w.w)}</span>
             ${w.mk==="x"?`<span class="badge x">❌</span>`:w.mk==="tri"?`<span class="badge tri">🔺</span>`:w.mk==="check"?`<span class="badge ok">レ</span>`:""}
-            ${w.pt&&w.pt.length?`<span class="badge pat">📐 ${esc(w.pt[0].slice(0,22))}</span>`:""}
+            ${w.pt&&w.pt.length?`<span class="badge pat">📐 ${esc(fmtPat(w.pt[0]).slice(0,24))}</span>`:""}
           </div>
           <div class="word-item-sub">${esc(w.m)}</div>
         </div>
@@ -1514,7 +1529,7 @@ const EMBEDDED_BUNDLE = null;
       `### 最優先弱点 TOP 10`,
       `| # | 単語 | 意味 | 単語の型 |`,
       `| :--- | :--- | :--- | :--- |`,
-      ...leeches.map(({ w }) => `| S${w.s}#${w.n} | **${w.w}** | ${w.m.slice(0,22).replace(/\|/g,"／")} | ${(w.pt&&w.pt[0]?w.pt[0]:"-").replace(/\|/g,"／")} |`)
+      ...leeches.map(({ w }) => `| S${w.s}#${w.n} | **${w.w}** | ${w.m.slice(0,22).replace(/\|/g,"／")} | ${(w.pt&&w.pt[0]?fmtPat(w.pt[0]):"-").replace(/\|/g,"／")} |`)
     ].join("\n");
   }
 
