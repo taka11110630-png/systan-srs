@@ -131,6 +131,7 @@
   }
   .timer-pill.running { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
   .timer-pill.done { background: var(--ok-bg); border-color: var(--ok-fg); color: var(--ok-fg); }
+  .timer-pill.warn { background: var(--tri-bg); border-color: var(--tri-fg); color: var(--tri-fg); }
 
   /* Layout */
   .container { max-width: 980px; margin: 0 auto; padding: 16px 14px 56px; }
@@ -368,6 +369,7 @@
       <button class="nav-tab" data-tab="wiki">Wiki連携</button>
     </nav>
     <div class="top-actions">
+      <button id="syncPill" class="timer-pill" title="Google Drive自動同期設定">☁️ 自動同期</button>
       <button id="oneHourBtn" class="timer-pill" title="1時間後リマインダー">⏱ 1hタイマー</button>
       <button id="themeBtn" class="ghost" title="ライト/ダーク切替">🌓</button>
     </div>
@@ -383,8 +385,24 @@
       <p class="muted" style="margin:0; font-size:13px;">著作権保護のため単語データはあなたのGoogle Driveに非公開保存されています。<br>初回だけ読み込めば、<strong>次回からはオフライン＆アイコン1タップで即起動</strong>します！</p>
     </div>
 
+    <div class="step-box" style="border-color:var(--accent); background:var(--accent-soft);">
+      <div class="row space-between">
+        <div class="row"><span class="step-num">☁️</span><strong>GAS自動同期で自動読込（おすすめ・PCと学習履歴も自動共有）</strong></div>
+        <a href="https://drive.google.com/file/d/1acIqqF-SKZ8x4_ddPxmA7gb91u0ctFPU/view?usp=drivesdk" target="_blank" rel="noopener" style="font-size:12px; font-weight:700;">📖 2分設定ガイド</a>
+      </div>
+      <div class="muted" style="font-size:12px;">GASウェブアプリURLと合言葉（<code>SYNC_KEY</code>）を入力すると、単語データと学習履歴の両方をGoogle Driveから自動取得します。</div>
+      <div class="stack" style="gap:8px;">
+        <input id="obGasUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;" />
+        <div class="row" style="gap:8px;">
+          <input id="obGasKey" type="password" placeholder="合言葉 (SYNC_KEY)" style="flex:1; min-width:140px;" />
+          <button id="obGasSyncBtn" class="primary">☁️ 自動同期して開始</button>
+        </div>
+        <div id="obGasStatus" class="muted" style="font-size:12px; display:none;"></div>
+      </div>
+    </div>
+
     <div class="step-box">
-      <div class="row"><span class="step-num">1</span><strong>Google Driveから自分の単語データを保存する</strong></div>
+      <div class="row"><span class="step-num">1</span><strong>手動：Google Driveから自分の単語データを保存する</strong></div>
       <div class="muted" style="font-size:13px;">下のボタンで <code>systan_data.json</code> をタブレットにダウンロードしてください（Google Docsではなくファイルとして保存されます）。</div>
       <div class="row">
         <a id="driveDataDlLink" href="https://drive.google.com/uc?export=download&id=1SoOigYCcNDhTyDavYdz8dLp6QgOZrImh" target="_blank" rel="noopener" style="display:inline-block; padding:10px 16px; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; text-decoration:none;">⬇ systan_data.json をDriveから保存</a>
@@ -392,7 +410,7 @@
     </div>
 
     <div class="step-box">
-      <div class="row"><span class="step-num">2</span><strong>保存した <code>systan_data.json</code> をここに読み込む</strong></div>
+      <div class="row"><span class="step-num">2</span><strong>手動：保存した <code>systan_data.json</code> をここに読み込む</strong></div>
       <div class="muted" style="font-size:13px;">一度読み込むとタブレット内に自動保存され、次からはこの画面は出ません。</div>
       <div class="row">
         <label style="display:inline-block;">
@@ -618,6 +636,29 @@
 
   <!-- TAB 5: WIKI & BACKUP -->
   <section id="tab-wiki" class="tab-panel stack">
+    <div class="card stack" id="gasSyncCard">
+      <div class="row space-between">
+        <div>
+          <h2 style="margin:0; font-size:16px;">☁️ Google Drive 自動同期設定（PC ⇄ タブレット・スマホ）</h2>
+          <div class="muted" style="font-size:12px;">GASウェブアプリ経由で学習履歴（<code>systan_state.json</code>）と進捗サマリーを自動保存＆自動取得します。</div>
+        </div>
+        <a href="https://drive.google.com/file/d/1acIqqF-SKZ8x4_ddPxmA7gb91u0ctFPU/view?usp=drivesdk" target="_blank" rel="noopener" style="font-size:12px; font-weight:700;">📖 GAS 2分設定ガイド</a>
+      </div>
+      <div class="stack" style="gap:8px;">
+        <label style="font-size:12px; font-weight:700; color:var(--ink-muted);" for="syncUrlInput">GAS ウェブアプリ URL</label>
+        <input id="syncUrlInput" type="url" placeholder="https://script.google.com/macros/s/.../exec" style="width:100%;" />
+        <label style="font-size:12px; font-weight:700; color:var(--ink-muted);" for="syncKeyInput">合言葉（SYNC_KEY）</label>
+        <input id="syncKeyInput" type="password" placeholder="スクリプトプロパティに設定した SYNC_KEY" style="width:100%;" />
+      </div>
+      <div class="row" style="gap:8px;">
+        <button id="syncSavePullBtn" class="primary">保存して今すぐ同期</button>
+        <button id="syncManualPushBtn">☁️ 手動でDriveへアップロード</button>
+        <button id="syncCopyMagicUrlBtn">🔗 他端末用ワンタップ設定URLをコピー</button>
+        <button id="syncDisableBtn" class="ghost" style="color:var(--x-fg);">自動同期をOFF</button>
+      </div>
+      <div id="syncStatusText" class="muted" style="font-size:12px;">未設定（オフラインローカル保存のみ）</div>
+    </div>
+
     <div class="card stack">
       <h2 style="margin:0; font-size:16px;">AIミス蓄積ノート（LLM Wiki）連携リンク</h2>
       <div id="wikiLinksGrid" class="batch-grid"></div>
@@ -791,17 +832,217 @@ const EMBEDDED_BUNDLE = null;
     return { version:2, seededOn:todayStr(0), cards, customWords:[], daily:{}, oneHourTargetTs:0, showConfusable:false };
   }
 
-  function saveState() { try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {} }
+  const SYNC_CFG_KEY = "systan_sync_cfg_v1";
+  const PUBLIC_APP_URL = "https://taka11110630-png.github.io/systan-srs/";
+  let syncCfg = loadSyncCfg();
+  let syncTimer = null;
+  let pendingCloudUpload = false;
+  let syncStatusMode = "idle"; // idle | syncing | saved | offline | error
+
+  function loadSyncCfg() {
+    try {
+      const raw = localStorage.getItem(SYNC_CFG_KEY);
+      if (raw) {
+        const p = JSON.parse(raw);
+        return { url: String(p.url || ""), key: String(p.key || ""), enabled: !!p.enabled, lastSync: String(p.lastSync || "") };
+      }
+    } catch (_) {}
+    return { url: "", key: "", enabled: false, lastSync: "" };
+  }
+  function saveSyncCfg(cfg) {
+    syncCfg = {
+      url: String((cfg && cfg.url) || "").trim(),
+      key: String((cfg && cfg.key) || "").trim(),
+      enabled: !!(cfg && cfg.enabled),
+      lastSync: String((cfg && cfg.lastSync) || "")
+    };
+    try { localStorage.setItem(SYNC_CFG_KEY, JSON.stringify(syncCfg)); } catch (_) {}
+    updateSyncUI();
+  }
+  function parseMagicHash() {
+    const h = location.hash || "";
+    if (!h.includes("gas=")) return false;
+    try {
+      const params = new URLSearchParams(h.replace(/^#/, ""));
+      const gas = (params.get("gas") || "").trim();
+      const key = (params.get("key") || "").trim();
+      if (gas && key) {
+        saveSyncCfg({ url: gas, key, enabled: true, lastSync: syncCfg.lastSync || "" });
+        history.replaceState(null, "", location.pathname + location.search);
+        return true;
+      }
+    } catch (_) {}
+    return false;
+  }
+  function setSyncPill(mode, customText) {
+    syncStatusMode = mode;
+    const pill = document.getElementById("syncPill");
+    if (!pill) return;
+    if (!syncCfg.enabled || !syncCfg.url || !syncCfg.key) {
+      pill.className = "timer-pill";
+      pill.textContent = "☁️ 自動同期";
+      return;
+    }
+    if (mode === "syncing") {
+      pill.className = "timer-pill running";
+      pill.textContent = customText || "☁️ 同期中...";
+    } else if (mode === "saved") {
+      pill.className = "timer-pill done";
+      pill.textContent = customText || "☁️ 自動保存済";
+    } else if (mode === "offline" || mode === "error") {
+      pill.className = "timer-pill warn";
+      pill.textContent = customText || "☁️ オフライン待機";
+    } else {
+      pill.className = "timer-pill done";
+      pill.textContent = "☁️ 自動同期ON";
+    }
+  }
+  function updateSyncUI() {
+    setSyncPill(syncStatusMode);
+    const urlIn = document.getElementById("syncUrlInput");
+    const keyIn = document.getElementById("syncKeyInput");
+    const stEl = document.getElementById("syncStatusText");
+    if (urlIn && urlIn.value !== syncCfg.url) urlIn.value = syncCfg.url;
+    if (keyIn && keyIn.value !== syncCfg.key) keyIn.value = syncCfg.key;
+    if (stEl) {
+      if (syncCfg.enabled && syncCfg.url && syncCfg.key) {
+        const ls = syncCfg.lastSync ? new Date(syncCfg.lastSync).toLocaleString("ja-JP") : "未同期";
+        stEl.textContent = `✅ 自動同期 ON ｜ 最終同期: ${ls}${pendingCloudUpload ? "（同期待機あり）" : ""}`;
+      } else {
+        stEl.textContent = "未設定（オフラインローカル保存のみ）";
+      }
+    }
+    const obUrl = document.getElementById("obGasUrl");
+    const obKey = document.getElementById("obGasKey");
+    if (obUrl && !obUrl.value && syncCfg.url) obUrl.value = syncCfg.url;
+    if (obKey && !obKey.value && syncCfg.key) obKey.value = syncCfg.key;
+  }
+
+  function buildWikiSummaryMd() {
+    if (!state || !BUNDLE) return "";
+    const today = state.daily[todayStr(0)] || { done:0, ok:0, tri:0, x:0 };
+    const mastered = allWords.filter(w => state.cards[w.id] && state.cards[w.id].st==="review" && state.cards[w.id].iv>=7).length;
+    const leeches = allWords.map(w => ({ w, c:state.cards[w.id] })).filter(x => x.c && ((x.c.lapses||0)>=2 || x.c.lastGrade==="x")).sort((a,b)=>(b.c.lapses||0)-(a.c.lapses||0)).slice(0,10);
+    return [
+      `## [${todayStr(0)}] study | システム英単語 SRS 進捗サマリー`,
+      `- 本日の復習: **${today.done}語**（レ ${today.ok} / 🔺 ${today.tri} / ❌ ${today.x}）｜ 定着済み(7日以上): **${mastered}語**`,
+      ``,
+      `### 最優先弱点 TOP 10`,
+      `| # | 単語 | 意味 | 単語の型 |`,
+      `| :--- | :--- | :--- | :--- |`,
+      ...leeches.map(({ w }) => `| S${w.s}#${w.n} | **${w.w}** | ${w.m.slice(0,22).replace(/\|/g,"／")} | ${(w.pt&&w.pt[0]?fmtPat(w.pt[0]):"-").replace(/\|/g,"／")} |`)
+    ].join("\n");
+  }
+
+  async function pushStateToCloud(showToast = false) {
+    if (!syncCfg.enabled || !syncCfg.url || !syncCfg.key || !state) return false;
+    if (!navigator.onLine) {
+      pendingCloudUpload = true;
+      setSyncPill("offline", "☁️ オフライン待機");
+      updateSyncUI();
+      return false;
+    }
+    setSyncPill("syncing", "☁️ 同期中...");
+    try {
+      const res = await fetch(syncCfg.url, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ key: syncCfg.key, state, summaryMd: buildWikiSummaryMd() })
+      });
+      const data = await res.json();
+      if (!data || !data.ok) throw new Error((data && data.error) || "sync failed");
+      pendingCloudUpload = false;
+      saveSyncCfg({ ...syncCfg, lastSync: data.updatedAt || new Date().toISOString() });
+      setSyncPill("saved", "☁️ 自動保存済");
+      updateSyncUI();
+      if (showToast) toast("☁️ Driveへアップロードしました");
+      return true;
+    } catch (_) {
+      pendingCloudUpload = true;
+      setSyncPill("offline", "☁️ オフライン待機");
+      updateSyncUI();
+      if (showToast) toast("☁️ Driveアップロードに失敗しました（後で自動再送します）");
+      return false;
+    }
+  }
+
+  function scheduleCloudUpload() {
+    if (!syncCfg.enabled || !syncCfg.url || !syncCfg.key) return;
+    pendingCloudUpload = true;
+    clearTimeout(syncTimer);
+    setSyncPill("syncing", "☁️ 同期待機...");
+    syncTimer = setTimeout(() => { pushStateToCloud(false); }, 2500);
+  }
+
+  async function pullStateInBackground() {
+    if (!syncCfg.enabled || !syncCfg.url || !syncCfg.key || !navigator.onLine) return;
+    setSyncPill("syncing", "☁️ 確認中...");
+    try {
+      const res = await fetch(`${syncCfg.url}?action=state&key=${encodeURIComponent(syncCfg.key)}`);
+      const data = await res.json();
+      if (!data || !data.ok) throw new Error((data && data.error) || "pull failed");
+      if (data.state && data.state.cards && Number(data.state.updatedAt || 0) > Number((state && state.updatedAt) || 0)) {
+        applyRemoteState(data.state);
+        saveSyncCfg({ ...syncCfg, lastSync: new Date().toISOString() });
+        setSyncPill("saved", "☁️ 自動保存済");
+        toast("☁️ Driveの最新履歴を同期しました");
+        refreshActiveView();
+      } else {
+        saveSyncCfg({ ...syncCfg, lastSync: new Date().toISOString() });
+        setSyncPill("saved", "☁️ 自動保存済");
+      }
+    } catch (_) {
+      setSyncPill(navigator.onLine ? "error" : "offline", "☁️ オフライン待機");
+    }
+  }
+
+  async function initFromGAS(url, key) {
+    const res = await fetch(`${url}?action=init&key=${encodeURIComponent(key)}`);
+    const data = await res.json();
+    if (!data || !data.ok) throw new Error((data && data.error) || "GAS通信エラー");
+    if (!data.data || !Array.isArray(data.data.words)) throw new Error("単語データ(systan_data.json)が取得できませんでした");
+    return data;
+  }
+
+  function normalizeStateObj(st) {
+    const s = st && st.cards ? st : buildInitialState();
+    if (!s.customWords) s.customWords = [];
+    if (!s.daily) s.daily = {};
+    if (typeof s.showConfusable !== "boolean") s.showConfusable = false;
+    if (!s.updatedAt) s.updatedAt = 0;
+    return s;
+  }
+
+  function applyRemoteState(remoteSt) {
+    state = normalizeStateObj(remoteSt);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+    rebuildIndex();
+    document.getElementById("showConfusableChk").checked = state.showConfusable;
+  }
+
+  function refreshActiveView() {
+    const activeTab = document.querySelector(".nav-tab.active")?.dataset.tab || "study";
+    tickOneHourTimer();
+    if (activeTab === "study") { if (!sessionStarted) buildQueue(currentMode); else renderStudy(); }
+    else if (activeTab === "pquiz") renderPatternQuiz();
+    else if (activeTab === "synonyms") renderSynonyms();
+    else if (activeTab === "schedule") renderSchedule();
+    else if (activeTab === "explorer") { renderHeatmap(); renderWordList(); }
+    else if (activeTab === "wiki") renderWikiTab();
+  }
+
+  function saveState(opts = {}) {
+    if (!state) return;
+    if (!opts.skipStamp) state.updatedAt = Date.now();
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
+    if (!opts.skipCloud) scheduleCloudUpload();
+  }
   function loadState() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY) || localStorage.getItem("systan_srs_state_v1");
-      state = raw ? JSON.parse(raw) : buildInitialState();
-      if (!state.cards) state = buildInitialState();
-      if (!state.customWords) state.customWords = [];
-      if (!state.daily) state.daily = {};
-      if (typeof state.showConfusable !== "boolean") state.showConfusable = false;
+      state = raw ? normalizeStateObj(JSON.parse(raw)) : buildInitialState();
     } catch (_) { state = buildInitialState(); }
-    saveState();
+    saveState({ skipStamp: true, skipCloud: true });
     rebuildIndex();
     document.getElementById("showConfusableChk").checked = state.showConfusable;
   }
@@ -1540,9 +1781,11 @@ const EMBEDDED_BUNDLE = null;
 
   // --- TAB 5: Wiki & Backup ---
   function renderWikiTab() {
+    updateSyncUI();
     const L = BUNDLE.meta.links || {};
     const items = [
-      { title:"📱 タブレット対応WebアプリURL", desc:"Safari/Chromeで開いてホーム画面に追加", url:L.tablet_app || "https://taka11110630-png.github.io/systan-srs/" },
+      { title:"📱 タブレット対応WebアプリURL", desc:"Safari/Chromeで開いてホーム画面に追加", url:L.tablet_app || PUBLIC_APP_URL },
+      { title:"☁️ Google Drive 自動同期ガイド", desc:"2分で設定できるGASコード＆手順", url:"https://drive.google.com/file/d/1acIqqF-SKZ8x4_ddPxmA7gb91u0ctFPU/view?usp=drivesdk" },
       { title:"📁 AIミス蓄積ノート（Wikiルート）", desc:"Google Drive の全Wikiファイル", url:L.wiki_folder },
       { title:"📘 unit-英語_英単語.md", desc:"英単語単元Wiki（SRS運用・弱点要約）", url:L.unit_vocab },
       { title:"🗺 index.md（全体地図）", desc:"review_queue・core_cues・全単元索引", url:L.index_md },
@@ -1551,19 +1794,100 @@ const EMBEDDED_BUNDLE = null;
     ].filter(x => x.url);
     document.getElementById("wikiLinksGrid").innerHTML = items.map(it => `<a class="batch-card" href="${esc(it.url)}" target="_blank" rel="noopener" style="text-decoration:none; color:inherit;"><strong style="color:var(--accent);">${it.title}</strong><span class="muted" style="font-size:12px;">${it.desc}</span></a>`).join("");
 
-    const today = state.daily[todayStr(0)] || { done:0, ok:0, tri:0, x:0 };
-    const mastered = allWords.filter(w => state.cards[w.id] && state.cards[w.id].st==="review" && state.cards[w.id].iv>=7).length;
-    const leeches = allWords.map(w => ({ w, c:state.cards[w.id] })).filter(x => x.c && ((x.c.lapses||0)>=2 || x.c.lastGrade==="x")).sort((a,b)=>(b.c.lapses||0)-(a.c.lapses||0)).slice(0,10);
-    document.getElementById("wikiMdPreview").value = [
-      `## [${todayStr(0)}] study | システム英単語 SRS 進捗サマリー`,
-      `- 本日の復習: **${today.done}語**（レ ${today.ok} / 🔺 ${today.tri} / ❌ ${today.x}）｜ 定着済み(7日以上): **${mastered}語**`,
-      ``,
-      `### 最優先弱点 TOP 10`,
-      `| # | 単語 | 意味 | 単語の型 |`,
-      `| :--- | :--- | :--- | :--- |`,
-      ...leeches.map(({ w }) => `| S${w.s}#${w.n} | **${w.w}** | ${w.m.slice(0,22).replace(/\|/g,"／")} | ${(w.pt&&w.pt[0]?fmtPat(w.pt[0]):"-").replace(/\|/g,"／")} |`)
-    ].join("\n");
+    document.getElementById("wikiMdPreview").value = buildWikiSummaryMd();
   }
+
+  document.getElementById("syncPill").addEventListener("click", () => {
+    if (BUNDLE && BUNDLE.words && BUNDLE.words.length) {
+      switchTab("wiki");
+      setTimeout(() => document.getElementById("gasSyncCard")?.scrollIntoView({ behavior:"smooth", block:"start" }), 50);
+    } else {
+      document.getElementById("obGasUrl")?.focus();
+    }
+  });
+
+  document.getElementById("syncSavePullBtn").addEventListener("click", async () => {
+    const url = document.getElementById("syncUrlInput").value.trim();
+    const key = document.getElementById("syncKeyInput").value.trim();
+    if (!url || !key) { toast("GAS URL と 合言葉(SYNC_KEY) を入力してください"); return; }
+    saveSyncCfg({ url, key, enabled: true, lastSync: syncCfg.lastSync || "" });
+    setSyncPill("syncing", "☁️ 同期中...");
+    try {
+      const res = await fetch(`${url}?action=state&key=${encodeURIComponent(key)}`);
+      const data = await res.json();
+      if (!data || !data.ok) throw new Error((data && data.error) || "認証または通信エラー");
+      if (data.state && data.state.cards && Number(data.state.updatedAt || 0) > Number((state && state.updatedAt) || 0)) {
+        applyRemoteState(data.state);
+        saveSyncCfg({ ...syncCfg, lastSync: new Date().toISOString() });
+        setSyncPill("saved", "☁️ 自動保存済");
+        toast("☁️ Driveの最新履歴を取得して同期しました！");
+        refreshActiveView();
+      } else {
+        await pushStateToCloud(false);
+        toast("☁️ 自動同期を保存し、Driveと同期しました！");
+      }
+    } catch (err) {
+      setSyncPill("error", "☁️ 同期エラー");
+      toast(`同期エラー: ${err.message || "URLまたは合言葉を確認してください"}`);
+    }
+  });
+
+  document.getElementById("syncManualPushBtn").addEventListener("click", async () => {
+    const url = document.getElementById("syncUrlInput").value.trim();
+    const key = document.getElementById("syncKeyInput").value.trim();
+    if (!url || !key) { toast("先にGAS URLと合言葉を入力してください"); return; }
+    saveSyncCfg({ url, key, enabled: true, lastSync: syncCfg.lastSync || "" });
+    await pushStateToCloud(true);
+  });
+
+  document.getElementById("syncCopyMagicUrlBtn").addEventListener("click", async () => {
+    const url = document.getElementById("syncUrlInput").value.trim() || syncCfg.url;
+    const key = document.getElementById("syncKeyInput").value.trim() || syncCfg.key;
+    if (!url || !key) { toast("先にGAS URLと合言葉を入力してください"); return; }
+    const magic = `${PUBLIC_APP_URL}#gas=${encodeURIComponent(url)}&key=${encodeURIComponent(key)}`;
+    try { await navigator.clipboard.writeText(magic); toast("🔗 ワンタップ設定URLをコピーしました！（他端末で開くだけ）"); }
+    catch (_) { prompt("下のURLをコピーして他端末で開いてください:", magic); }
+  });
+
+  document.getElementById("syncDisableBtn").addEventListener("click", () => {
+    clearTimeout(syncTimer);
+    pendingCloudUpload = false;
+    saveSyncCfg({ ...syncCfg, enabled: false });
+    setSyncPill("idle");
+    toast("自動同期をOFFにしました（ローカル保存は継続）");
+  });
+
+  document.getElementById("obGasSyncBtn").addEventListener("click", async () => {
+    const url = document.getElementById("obGasUrl").value.trim();
+    const key = document.getElementById("obGasKey").value.trim();
+    const statusEl = document.getElementById("obGasStatus");
+    if (!url || !key) { toast("GAS URLと合言葉を入力してください"); return; }
+    statusEl.style.display = "block";
+    statusEl.textContent = "☁️ Google Driveから単語データと学習履歴を取得中...";
+    setSyncPill("syncing", "☁️ 同期中...");
+    try {
+      const res = await initFromGAS(url, key);
+      BUNDLE = res.data;
+      await saveBundleToIDB(BUNDLE);
+      saveSyncCfg({ url, key, enabled: true, lastSync: new Date().toISOString() });
+      if (res.state && res.state.cards) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeStateObj(res.state)));
+      }
+      setSyncPill("saved", "☁️ 自動保存済");
+      toast(`☁️ ${BUNDLE.words.length}語＆履歴を自動読込しました！`);
+      bootApp();
+    } catch (err) {
+      statusEl.textContent = `⚠️ 取得失敗: ${err.message || "URL・合言葉・デプロイ設定を確認してください"}`;
+      setSyncPill("error", "☁️ 同期エラー");
+      toast("GAS自動読込に失敗しました");
+    }
+  });
+
+  window.addEventListener("online", () => {
+    if (pendingCloudUpload && syncCfg.enabled && syncCfg.url && syncCfg.key) {
+      pushStateToCloud(false);
+    }
+  });
 
   document.getElementById("copyWikiMdBtn").addEventListener("click", async () => {
     const txt = document.getElementById("wikiMdPreview").value;
@@ -1926,14 +2250,43 @@ const EMBEDDED_BUNDLE = null;
     document.getElementById("appMain").style.display = "block";
     document.getElementById("mainNav").style.display = "flex";
     loadState();
+    updateSyncUI();
     tickOneHourTimer();
     buildQueue("auto");
+    if (syncCfg.enabled && syncCfg.url && syncCfg.key) {
+      pullStateInBackground();
+    }
   }
 
   (async () => {
+    const gotHash = parseMagicHash();
+    updateSyncUI();
     if (!BUNDLE) BUNDLE = await loadBundleFromIDB();
     if (BUNDLE && BUNDLE.words && BUNDLE.words.length) {
       bootApp();
+      if (gotHash) toast("☁️ ワンタップ同期設定を保存しました！");
+    } else if (syncCfg.enabled && syncCfg.url && syncCfg.key) {
+      document.getElementById("onboardingScreen").style.display = "block";
+      document.getElementById("appMain").style.display = "none";
+      document.getElementById("mainNav").style.display = "none";
+      const stEl = document.getElementById("obGasStatus");
+      if (stEl) { stEl.style.display = "block"; stEl.textContent = "☁️ Driveから単語データと学習履歴を自動ダウンロード中..."; }
+      setSyncPill("syncing", "☁️ 初期同期中...");
+      try {
+        const res = await initFromGAS(syncCfg.url, syncCfg.key);
+        BUNDLE = res.data;
+        await saveBundleToIDB(BUNDLE);
+        saveSyncCfg({ ...syncCfg, lastSync: new Date().toISOString() });
+        if (res.state && res.state.cards) {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(normalizeStateObj(res.state)));
+        }
+        setSyncPill("saved", "☁️ 自動保存済");
+        toast(`☁️ ${BUNDLE.words.length}語＆履歴を自動取得しました！`);
+        bootApp();
+      } catch (err) {
+        if (stEl) stEl.textContent = `⚠️ 自動取得に失敗しました: ${err.message || "設定を確認してください"}`;
+        setSyncPill("error", "☁️ 同期エラー");
+      }
     } else {
       document.getElementById("onboardingScreen").style.display = "block";
       document.getElementById("appMain").style.display = "none";
