@@ -373,7 +373,7 @@
     </div>
     <nav class="nav-tabs" role="tablist" id="mainNav">
       <button class="nav-tab active" data-tab="study">今日の復習</button>
-      <button class="nav-tab" data-tab="pquiz">📐 型クイズ＆なぜ？</button>
+      <button class="nav-tab" data-tab="pquiz">📐 型⇔日本語</button>
       <button class="nav-tab" data-tab="synonyms">🔗 意味グループ＆型</button>
       <button class="nav-tab" data-tab="schedule">間隔 &amp; 50語</button>
       <button class="nav-tab" data-tab="explorer">単語帳</button>
@@ -475,37 +475,31 @@
     </div>
   </section>
 
-  <!-- TAB: PATTERN QUIZ & WHY (型クイズ＆なぜその型になるか) -->
+  <!-- TAB: PATTERN <-> JAPANESE TRAINER (型⇔日本語 往復トレーニング) -->
   <section id="tab-pquiz" class="tab-panel stack">
     <div class="card stack">
       <div class="row space-between">
         <div>
-          <h2 style="margin:0; font-size:17px;">📐 単語の「型」クイズ ＆ なぜその型になる？（AI連携）</h2>
-          <div class="muted" style="font-size:13px;"><code>mention O (to 人)</code> のような正しい型をクイズで選び、<strong>「なぜそうなるか」</strong>の理由と6大原則を納得しながら定着させます。</div>
+          <h2 style="margin:0; font-size:17px;">📐 単語の型 ⇔ 日本語 トレーニング</h2>
+          <div class="muted" style="font-size:13px;"><code>mention A to B</code> ⇄ <strong>「BにAのことを述べる」</strong> の双方向を、<code>❌ / 🔺 / レ</code> の自動間隔管理で反復できます。</div>
         </div>
-        <button id="togglePrinciplesBtn" class="ghost" style="font-size:12px; color:var(--accent); font-weight:700;">🧠 6大原則ガイドを開く ▾</button>
       </div>
 
-      <div id="principlesGuide" style="display:none;" class="stack">
-        <div class="batch-grid" style="grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));">
-          <div class="batch-card"><strong>原則① 語源 × 前置詞イメージ</strong><span class="muted" style="font-size:12px;"><code>to</code>＝到達（→）、<code>from</code>＝分離（引き離す）、<code>of</code>＝奪う/関連、<code>with</code>＝持たせる、<code>as</code>＝イコール（＝）。</span></div>
-          <div class="batch-card"><strong>原則② ラテン語系はSVOO不可</strong><span class="muted" style="font-size:12px;"><code>explain / mention / suggest / describe</code> 等は「手渡し」ではなく「モノを平らに出す」語なので <strong>モノ先＋to人</strong>。</span></div>
-          <div class="batch-card"><strong>原則③ 内容ポン置き＝that〜 (should 原形)</strong><span class="muted" style="font-size:12px;"><code>demand / suggest / propose / insist</code> は人を直接押さず「提案・要求内容」をテーブルに出すため <strong>人 to V 不可</strong>。</span></div>
-          <div class="batch-card"><strong>原則④ 他動詞に前置詞が内蔵</strong><span class="muted" style="font-size:12px;"><code>discuss / mention / enter / approach / reach</code> は語自体に「〜について／〜へ」が含まれるため前置詞不要。</span></div>
-          <div class="batch-card"><strong>原則⑤ Ving（リアル情景）vs to V（未来→）</strong><span class="muted" style="font-size:12px;"><code>consider / avoid</code> は頭の中で動いている情景なので <code>Ving</code>。<code>allow / enable / encourage</code> は未来へ押すので <code>to V</code>。</span></div>
-          <div class="batch-card"><strong>原則⑥ 慣用分詞・接続詞と前置詞</strong><span class="muted" style="font-size:12px;"><code>judging from A</code> は一般人の視点として慣用化。<code>in spite of / despite</code> は前置詞なので後ろは名詞のみ。</span></div>
+      <div class="row space-between" style="gap:8px;">
+        <div class="mode-bar" id="pqDirBar">
+          <button class="mode-pill active" data-dir="en2ja">📐 型 → 日本語</button>
+          <button class="mode-pill" data-dir="ja2en">🇯🇵 日本語 → 型</button>
+          <button class="mode-pill" data-dir="both">🔀 両方ミックス</button>
         </div>
+        <div class="muted" id="pqStatsSummary" style="font-size:12px;"></div>
       </div>
 
       <div class="mode-bar" id="pqFilterBar">
-        <button class="mode-pill active" data-pq="all">全40問</button>
-        <button class="mode-pill" data-pq="原則①">①前置詞イメージ</button>
-        <button class="mode-pill" data-pq="原則②">②SVOO不可</button>
-        <button class="mode-pill" data-pq="原則③">③that(原形)</button>
-        <button class="mode-pill" data-pq="原則④">④他動詞</button>
-        <button class="mode-pill" data-pq="原則⑤">⑤Ving/to V</button>
-        <button class="mode-pill" data-pq="原則⑥">⑥分詞・接続詞</button>
-        <button class="mode-pill" data-pq="missed">❌ ミス問題のみ</button>
+        <button class="mode-pill active" data-pq="core">厳選 重要型 (Stage 1–2)</button>
+        <button class="mode-pill" data-pq="due">今日の自動復習 (SRS)</button>
+        <button class="mode-pill" data-pq="weak">教材 ×/△ の型</button>
+        <button class="mode-pill" data-pq="rand20">ランダム 20問</button>
+        <button class="mode-pill" data-pq="all">全Stage すべて</button>
       </div>
     </div>
 
@@ -2233,167 +2227,307 @@ const PATTERN_QUIZ = [
     state = buildInitialState(); rebuildIndex(); saveState(); toast("リセットしました"); buildQueue("auto");
   });
 
-  // --- TAB: Pattern Quiz & WHY (mention O 形式＋なぜその型になるか＋AI深掘り連携) ---
-  let pqFilter = "all", pqDeck = [], pqIdx = 0, pqStarted = false, pqAnswered = false, pqScore = 0;
-  function getPqStats() {
-    if (!state.pq) state.pq = { missed: [], mastered: [] };
-    return state.pq;
+  // --- TAB: Pattern <-> Japanese Bidirectional SRS Trainer (型 → 日本語 / 日本語 → 型) ---
+  let patPairs = [], pqDir = "en2ja", pqFilter = "core", pqDeck = [], pqIdx = 0;
+  let pqStarted = false, pqRevealed = false, pqHintUsed = false, pqTimerOn = true, pqStartTs = 0, pqLatMs = 0, pqRaf = null;
+
+  function parsePatternPair(rawPat) {
+    const pat = fmtPat(rawPat).trim();
+    if (!pat || /^(⚠️|★|Q:|⇔|＝|=)/.test(pat)) return null;
+    const m = pat.match(/^([A-Za-z0-9\s\(\)\[\]\+\-\'\/\.~〜,]+?)\s*[（「](.+?)[）」]\s*$/);
+    if (!m) return null;
+    const en = m[1].replace(/\s+/g, " ").replace(/^[ ・/]+|[ ・/]+$/g, "");
+    let ja = m[2].replace(/^[ ・/]+|[ ・/]+$/g, "");
+    if (!/\s/.test(en) || !/[A-Za-z]{2,}/.test(en)) return null;
+    let note = "";
+    const parts = ja.split(/[※★]/);
+    if (parts.length > 1) { ja = parts[0].replace(/[ 、。/／]+$/g, ""); note = parts.slice(1).join("・").trim(); }
+    if (ja.length < 2) return null;
+    return { en, ja, note };
   }
-  function buildPqDeck(filter) {
-    pqFilter = filter; pqIdx = 0; pqStarted = false; pqAnswered = false; pqScore = 0;
-    const pqs = getPqStats();
-    const list = (PATTERN_QUIZ || []).filter(q => {
-      if (filter === "all") return true;
-      if (filter === "missed") return pqs.missed.includes(q.qid);
-      return (q.principle || "").startsWith(filter);
-    });
-    // Shuffle questions
-    pqDeck = [...list].sort(() => Math.random() - 0.5);
+
+  function buildPatternPairs() {
+    patPairs = [];
+    const seen = new Set();
+    // 1. Curated synonym group patterns first (marked core=true)
+    for (const g of (BUNDLE.synonym_groups || [])) {
+      for (const it of (g.items || [])) {
+        const w = wordsMap.get(it.id);
+        const traps = (it.patterns || []).filter(p => p.startsWith("⚠️")).map(fmtPat);
+        for (const p of (it.patterns || [])) {
+          const r = parsePatternPair(p);
+          if (!r) continue;
+          const key = r.en.toLowerCase();
+          if (seen.has(key)) continue;
+          seen.add(key);
+          patPairs.push({
+            key, wid: it.id, s: w ? w.s : 1, n: w ? w.n : 0, w: it.word,
+            mk: w ? w.mk : "", en: r.en, ja: r.ja, note: r.note,
+            trap: traps[0] || "", ph: w ? w.ph : "", core: true
+          });
+        }
+      }
+    }
+    // 2. Remaining patterns across all 2,098 words
+    for (const w of allWords) {
+      const traps = (w.pt || []).filter(p => p.startsWith("⚠️")).map(fmtPat);
+      for (const p of (w.pt || [])) {
+        const r = parsePatternPair(p);
+        if (!r) continue;
+        const key = r.en.toLowerCase();
+        if (seen.has(key)) continue;
+        seen.add(key);
+        patPairs.push({
+          key, wid: w.id, s: w.s, n: w.n, w: w.w,
+          mk: w.mk, en: r.en, ja: r.ja, note: r.note,
+          trap: traps[0] || "", ph: w.ph || "", core: false
+        });
+      }
+    }
+  }
+
+  function getPatCard(key) {
+    if (!state.patCards) state.patCards = {};
+    if (!state.patCards[key]) {
+      state.patCards[key] = { st:"new", step:0, iv:0, ef:2.30, due:"", dueTs:0, reps:0, lapses:0, streakFast:0, lastGrade:"" };
+    }
+    return state.patCards[key];
+  }
+
+  function stopPqTimer() { if (pqRaf) cancelAnimationFrame(pqRaf); pqRaf = null; }
+  function startPqTimer() {
+    stopPqTimer(); pqStartTs = performance.now(); pqLatMs = 0;
+    if (!pqTimerOn) return;
+    const tick = () => {
+      if (pqRevealed || !pqStarted) return;
+      pqLatMs = performance.now() - pqStartTs;
+      const f = document.getElementById("pqLatFill"), r = document.getElementById("pqLatTxt");
+      if (f && r) {
+        f.style.width = Math.min(100, (pqLatMs/4000)*100) + "%";
+        f.style.background = pqLatMs <= 2000 ? "var(--ok-fg)" : pqLatMs <= 4000 ? "var(--tri-fg)" : "var(--x-fg)";
+        r.textContent = (pqLatMs/1000).toFixed(1) + "s";
+      }
+      pqRaf = requestAnimationFrame(tick);
+    };
+    pqRaf = requestAnimationFrame(tick);
+  }
+
+  function makePatternHint(en) {
+    return en.split(" ").map(tok => {
+      if (/^[ABV]$|^(Ving|to|of|for|from|with|as|by|on|in|at|that〜|\(that\)〜|\(should|原形\))$/.test(tok)) return tok;
+      if (tok.length <= 2) return tok[0] + "_";
+      return tok[0] + "_".repeat(Math.min(5, tok.length - 1));
+    }).join(" ");
+  }
+
+  function buildPqDeck(filter = pqFilter) {
+    pqFilter = filter; pqIdx = 0; pqStarted = false; pqRevealed = false;
+    stopPqTimer();
+    if (!patPairs.length) buildPatternPairs();
+    let list = [];
+    if (filter === "core") list = patPairs.filter(p => p.core);
+    else if (filter === "due") list = patPairs.filter(p => { const c = state.patCards && state.patCards[p.key]; return c && c.st !== "new" && isDueToday(c); });
+    else if (filter === "weak") list = patPairs.filter(p => p.mk === "x" || p.mk === "tri" || (state.patCards && state.patCards[p.key] && (state.patCards[p.key].lapses||0) >= 1));
+    else if (filter === "rand20") list = [...patPairs].sort(() => Math.random() - 0.5).slice(0, 20);
+    else list = [...patPairs];
+
+    if (filter !== "rand20") list = [...list].sort(() => Math.random() - 0.5);
+    pqDeck = list.map(item => ({
+      item,
+      dir: pqDir === "both" ? (Math.random() < 0.5 ? "en2ja" : "ja2en") : pqDir
+    }));
     document.querySelectorAll("#pqFilterBar .mode-pill").forEach(b => b.classList.toggle("active", b.dataset.pq === filter));
+    document.querySelectorAll("#pqDirBar .mode-pill").forEach(b => b.classList.toggle("active", b.dataset.dir === pqDir));
     renderPatternQuiz();
   }
+
   function renderPatternQuiz() {
+    stopPqTimer();
+    if (!patPairs.length) buildPatternPairs();
     const host = document.getElementById("pqCardArea");
-    const pqs = getPqStats();
-    if (!pqDeck.length && !pqStarted) {
-      if (pqFilter === "all") buildPqDeck("all");
-    }
+    const learned = Object.values(state.patCards || {}).filter(c => c.st !== "new").length;
+    const dueCnt = patPairs.filter(p => state.patCards && state.patCards[p.key] && state.patCards[p.key].st !== "new" && isDueToday(state.patCards[p.key])).length;
+    document.getElementById("pqStatsSummary").textContent = `全${patPairs.length}型 ｜ 演習済:${learned} ｜ 今日復習:${dueCnt}`;
+
     if (!pqDeck.length) {
       host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center;">
         <div style="font-size:30px;">✨</div>
-        <div style="font-weight:800; font-size:17px;">${pqFilter === "missed" ? "現在ミスした型クイズはありません！" : "該当する問題がありません"}</div>
-        <button id="pqBackAll" class="primary">全40問を表示</button>
+        <div style="font-weight:800; font-size:17px;">${pqFilter === "due" ? "今日の自動復習対象はまだありません（厳選重要型やランダム20問から始めよう！）" : "該当する型がありません"}</div>
+        <button id="pqGoCore" class="primary">厳選 重要型を準備する</button>
       </div>`;
-      document.getElementById("pqBackAll")?.addEventListener("click", () => buildPqDeck("all"));
+      document.getElementById("pqGoCore")?.addEventListener("click", () => buildPqDeck("core"));
       return;
     }
+
     if (!pqStarted) {
-      const label = pqFilter === "all" ? "全40問シャッフル" : pqFilter === "missed" ? "ミスした問題だけ再挑戦" : pqFilter + " 集中クイズ";
-      host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center; padding:34px 20px;">
-        <span class="badge pat" style="font-size:12px; padding:4px 12px;">📐 型クイズ・待機中</span>
-        <h3 style="margin:2px 0 0; font-size:20px;">${esc(label)}（全 ${pqDeck.length} 問）</h3>
+      const dirTxt = pqDir === "en2ja" ? "📐 型 → 日本語" : pqDir === "ja2en" ? "🇯🇵 日本語 → 型" : "🔀 型 ⇔ 日本語 ミックス";
+      const filtTxt = { core:"厳選 重要型 (Stage 1–2)", due:"今日の自動復習 (SRS)", weak:"教材 ×/△ の型", rand20:"ランダム 20問", all:`全Stage すべて` }[pqFilter] || pqFilter;
+      const rem = pqDeck.length - pqIdx;
+      host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center; padding:36px 20px;">
+        <span class="badge pat" style="font-size:12px; padding:4px 12px;">準備完了・待機中</span>
+        <h3 style="margin:2px 0 0; font-size:20px;">${dirTxt} ｜ ${esc(filtTxt)}</h3>
+        <div style="font-size:28px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums;">${pqIdx > 0 ? `残り ${rem} / ${pqDeck.length} 型` : `全 ${pqDeck.length} 型`}</div>
         <p class="muted" style="margin:0; max-width:460px; font-size:13px;">
-          <code>mention O (to 人)</code> のような正しい型を3択で選び、直後に<strong>「なぜその型になるか」</strong>と<strong>AI深掘り質問ボタン</strong>が出ます。<br>
+          ${pqDir === "ja2en" ? "日本語の意味を見て、英語の型（例：mention A to B）をパッと出す練習です。" : pqDir === "en2ja" ? "英語の型（例：mention A to B）を見て、日本語の意味をパッと出す練習です。" : "型→日本語 と 日本語→型 をランダムに往復練習します。"}<br>
           スタートを押すまで始まりません。
         </p>
-        <div class="muted" style="font-size:12px;">これまで正解済: ${pqs.mastered.length} / ${(PATTERN_QUIZ||[]).length} 問 ｜ ミス残: ${pqs.missed.length} 問</div>
-        <button id="pqStartBtn" class="primary" style="min-width:210px; padding:13px 26px; font-size:16px; margin-top:4px;">▶ クイズをスタート</button>
+        <label class="muted" style="font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="checkbox" id="pqTimerChk" ${pqTimerOn ? "checked" : ""} /> 2秒レスポンス計測を表示する
+        </label>
+        <button id="pqStartBtn" class="primary" style="min-width:210px; padding:13px 26px; font-size:16px; margin-top:4px;">▶ ${pqIdx > 0 ? "続きから再開" : "スタート"}</button>
       </div>`;
-      document.getElementById("pqStartBtn").addEventListener("click", () => { pqStarted = true; pqAnswered = false; renderPatternQuiz(); });
+      document.getElementById("pqTimerChk").onchange = e => { pqTimerOn = e.target.checked; };
+      document.getElementById("pqStartBtn").onclick = () => { pqStarted = true; pqRevealed = false; renderPatternQuiz(); };
       return;
     }
+
     if (pqIdx >= pqDeck.length) {
       pqStarted = false;
       host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center;">
-        <div style="font-size:34px;">🎯</div>
-        <h3 style="margin:0; font-size:20px;">型クイズ完了！ 正解 ${pqScore} / ${pqDeck.length} 問</h3>
-        <p class="muted" style="margin:0; font-size:13px;">間違えた問題は自動で「❌ ミス問題のみ」に保存されています。</p>
+        <div style="font-size:34px;">🎉</div>
+        <h3 style="margin:0; font-size:20px;">型トレーニング完了！</h3>
+        <p class="muted" style="margin:0; font-size:13px;">評価した型は自動で次回の復習日にスケジュールされました。</p>
         <div class="row" style="justify-content:center; margin-top:6px;">
-          ${pqs.missed.length ? `<button id="pqRetryMissed" class="primary">❌ ミス問題だけ再挑戦 (${pqs.missed.length})</button>` : ""}
+          <button id="pqFlipDir" class="primary">${pqDir === "en2ja" ? "🇯🇵 逆方向（日本語 → 型）を準備" : "📐 逆方向（型 → 日本語）を準備"}</button>
           <button id="pqReplay">もう一度シャッフル</button>
         </div>
       </div>`;
-      document.getElementById("pqRetryMissed")?.addEventListener("click", () => buildPqDeck("missed"));
-      document.getElementById("pqReplay")?.addEventListener("click", () => buildPqDeck(pqFilter));
+      document.getElementById("pqFlipDir").onclick = () => { pqDir = pqDir === "en2ja" ? "ja2en" : "en2ja"; buildPqDeck(pqFilter); };
+      document.getElementById("pqReplay").onclick = () => buildPqDeck(pqFilter);
       return;
     }
 
-    const q = pqDeck[pqIdx];
-    const opts = [q.correct, ...(q.distractors || [])].map(text => ({ text: fmtPat(text), ok: text === q.correct }));
-    // Deterministic-per-render shuffle
-    if (!q._shuffled) q._shuffled = opts.sort(() => Math.random() - 0.5);
-    const choices = q._shuffled;
+    const entry = pqDeck[pqIdx];
+    const p = entry.item;
+    const isJa2En = entry.dir === "ja2en";
+    const c = getPatCard(p.key);
+    pqRevealed = false; pqHintUsed = false;
 
-    host.innerHTML = `<div class="flashcard stack">
-      <div class="row space-between">
+    const pX = previewNext(c, "x", 3000), pTri = previewNext(c, "tri", 3000), pOk = previewNext(c, "ok", 1400);
+
+    host.innerHTML = `<div class="flashcard">
+      ${pqTimerOn ? `<div class="latency-track"><div class="latency-fill" id="pqLatFill"></div></div>` : ""}
+      <div class="row space-between" style="margin-bottom:8px;">
         <div class="row" style="gap:6px;">
-          <span class="badge pat">📐 Q ${pqIdx + 1} / ${pqDeck.length}</span>
-          <span class="badge">${esc(q.principle)}</span>
+          <span class="badge pat">${isJa2En ? "🇯🇵 日本語 → 型" : "📐 型 → 日本語"}</span>
+          <span class="badge accent">Stage ${p.s} #${p.n}</span>
+          ${p.mk==="x"?`<span class="badge x">教材: ❌</span>`:p.mk==="tri"?`<span class="badge tri">教材: 🔺</span>`:""}
+          <span class="badge">${pqIdx + 1} / ${pqDeck.length}</span>
         </div>
-        <button id="pqPauseBtn" class="ghost" style="font-size:12px; padding:4px 8px; min-height:30px;">⏸ 待機へ</button>
-      </div>
-
-      <div style="text-align:center; padding:8px 0 4px;">
-        <div class="row" style="justify-content:center; gap:8px;">
-          <span style="font-size:32px; font-weight:800; letter-spacing:-0.02em;">${esc(q.word)}</span>
-          <button id="pqSpkBtn" class="ghost" style="font-size:13px;">🔊</button>
+        <div class="row" style="gap:8px;">
+          ${pqTimerOn ? `<span id="pqLatTxt" class="mono muted" style="font-size:12px;">0.0s</span>` : ""}
+          <button id="pqPauseBtn" class="ghost" style="font-size:12px; padding:4px 8px; min-height:30px;">⏸ 待機へ</button>
         </div>
-        <div class="muted" style="font-size:14px; font-weight:700; margin-top:2px;">${esc(q.meaning)}</div>
-        <div style="font-size:15px; font-weight:700; margin-top:10px;">${esc(q.prompt)}</div>
       </div>
 
-      <div class="stack" style="gap:8px;" id="pqOptsWrap">
-        ${choices.map((ch, i) => `<button class="quiz-opt" data-idx="${i}"><span>${i+1}. ${esc(ch.text)}</span><span class="opt-mark"></span></button>`).join("")}
-      </div>
-
-      <div id="pqResultArea" style="display:none;" class="stack">
-        <div class="why-box">
-          <div class="row space-between">
-            <strong id="pqJudgeTitle" style="font-size:15px;"></strong>
-            <span class="badge accent">${esc(q.principle)}</span>
+      <div class="word-stage">
+        ${isJa2En ? `
+          <div style="font-size:clamp(22px, 4vw, 30px); font-weight:800; line-height:1.4; margin:6px 0;">${esc(p.ja)}</div>
+          <div class="muted" style="font-size:13px;">英語の型を思い出そう</div>
+          <div id="pqHintBox" style="display:none;" class="hint-box"></div>
+        ` : `
+          <div style="font-size:clamp(24px, 4.5vw, 34px); font-weight:800; letter-spacing:-0.01em; margin:6px 0;">${esc(p.en)}</div>
+          <div class="row" style="justify-content:center; gap:8px;">
+            <button id="pqSpkFront" class="ghost" style="font-size:13px;">🔊 発音</button>
           </div>
-          <div style="font-size:14px;"><strong>💡 なぜこの型になる？：</strong>${esc(q.why)}</div>
-          ${q.example ? `<div class="row space-between" style="background:var(--surface); padding:8px 11px; border-radius:8px; font-size:13px;"><span><strong>例文：</strong>${esc(q.example)}</span><button id="pqExSpk" class="ghost" style="font-size:12px; padding:2px 6px; min-height:28px;">🔊</button></div>` : ""}
+        `}
+      </div>
+
+      <div id="pqPreBtns" class="row" style="justify-content:center; gap:10px;">
+        ${isJa2En ? `<button id="pqHintBtn">💡 頭文字ヒント</button>` : ""}
+        <button id="pqRevealBtn" class="primary" style="min-width:190px; padding:12px 24px;">答えを見る</button>
+      </div>
+
+      <div id="pqAnsArea" class="answer-section" style="display:none;">
+        <div class="row space-between" style="align-items:flex-start;">
+          <div>
+            <div style="font-size:11px; font-weight:700; color:var(--ink-muted);">${isJa2En ? "英語の型" : "日本語の意味"}</div>
+            <div class="meaning-main" style="${isJa2En ? "color:var(--accent); font-size:24px;" : ""}">${esc(isJa2En ? p.en : p.ja)}</div>
+            ${p.note ? `<div class="muted" style="font-size:12px; margin-top:3px;">※ ${esc(p.note)}</div>` : ""}
+          </div>
+          <button id="pqSpkAns" style="font-size:12px;">🔊 発音</button>
         </div>
-        <div class="row space-between">
-          <button id="pqCopyAiBtn" style="font-size:12px;">🤖 AIに「なぜ？」を深掘り質問（コピー）</button>
-          <button id="pqNextBtn" class="primary" style="min-width:160px;">次の問題へ →</button>
+
+        ${p.trap ? `<div class="pat-chip trap" style="align-self:flex-start;">${esc(p.trap)}</div>` : ""}
+        ${p.ph ? `<div class="phrase-box"><div><div style="font-size:11px; font-weight:700; color:var(--ink-muted);">例文（${esc(p.w)}）</div><div class="phrase-en">${esc(p.ph)}</div></div><button id="pqSpkPh" class="ghost" style="flex-shrink:0; font-size:12px;">🔊</button></div>` : ""}
+
+        <div class="grade-bar">
+          <button class="grade-btn g-x" id="pqGX"><span class="grade-main" style="color:var(--x-fg);">❌ 忘れた</span><span class="grade-next">→ ${pX.label}</span></button>
+          <button class="grade-btn g-tri" id="pqGTri"><span class="grade-main" style="color:var(--tri-fg);">🔺 迷った/&gt;2秒</span><span class="grade-next">→ ${pTri.label}</span><span class="grade-rec-tag" id="pqRecTri" style="display:none;">推奨</span></button>
+          <button class="grade-btn g-ok" id="pqGOk"><span class="grade-main" style="color:var(--ok-fg);">レ 即答/≤2秒</span><span class="grade-next">→ ${pOk.label}</span><span class="grade-rec-tag" id="pqRecOk" style="display:none;">推奨</span></button>
         </div>
       </div>
     </div>`;
 
     document.getElementById("pqPauseBtn").onclick = () => { pqStarted = false; renderPatternQuiz(); };
-    document.getElementById("pqSpkBtn").onclick = () => speak(q.word);
-    document.querySelectorAll("#pqOptsWrap .quiz-opt").forEach(btn => {
-      btn.addEventListener("click", () => {
-        if (pqAnswered) return;
-        pqAnswered = true;
-        const chosen = choices[Number(btn.dataset.idx)];
-        document.querySelectorAll("#pqOptsWrap .quiz-opt").forEach((b, i) => {
-          b.disabled = true;
-          if (choices[i].ok) { b.classList.add("is-correct"); b.querySelector(".opt-mark").textContent = "⭕ 正解"; }
-          else if (i === Number(btn.dataset.idx)) { b.classList.add("is-wrong"); b.querySelector(".opt-mark").textContent = "❌"; }
-        });
-        const titleEl = document.getElementById("pqJudgeTitle");
-        if (chosen.ok) {
-          pqScore++;
-          titleEl.textContent = "⭕ 正解！「なぜこの型になるか」もチェックしよう";
-          titleEl.style.color = "var(--ok-fg)";
-          pqs.missed = pqs.missed.filter(id => id !== q.qid);
-          if (!pqs.mastered.includes(q.qid)) pqs.mastered.push(q.qid);
-        } else {
-          titleEl.textContent = `❌ 惜しい！正解は「${fmtPat(q.correct)}」`;
-          titleEl.style.color = "var(--x-fg)";
-          if (!pqs.missed.includes(q.qid)) pqs.missed.push(q.qid);
-        }
-        saveState();
-        document.getElementById("pqResultArea").style.display = "flex";
-        document.getElementById("pqExSpk")?.addEventListener("click", () => speak(q.example));
-        document.getElementById("pqCopyAiBtn").onclick = async () => {
-          const text = q.ai_prompt || `${q.word} がなぜ「${fmtPat(q.correct)}」の型になるのか、似ている動詞と比較しながら教えてください。`;
-          try { await navigator.clipboard.writeText(text); toast("AI質問プロンプトをコピーしました！GeminiやAntigravityに貼って聞いてみよう"); }
-          catch (_) { toast("コピーに失敗しました"); }
-        };
-        document.getElementById("pqNextBtn").onclick = () => { delete q._shuffled; pqIdx++; pqAnswered = false; renderPatternQuiz(); };
-      });
+    document.getElementById("pqSpkFront")?.addEventListener("click", () => speak(p.en));
+    document.getElementById("pqSpkAns").onclick = () => speak(p.en);
+    document.getElementById("pqSpkPh")?.addEventListener("click", () => speak(p.ph.split("（")[0]));
+    document.getElementById("pqHintBtn")?.addEventListener("click", () => {
+      pqHintUsed = true;
+      const hb = document.getElementById("pqHintBox");
+      hb.style.display = "block";
+      hb.innerHTML = `<strong>頭文字ヒント：</strong> <span class="mono" style="font-weight:700;">${esc(makePatternHint(p.en))}</span>`;
+      document.getElementById("pqHintBtn").disabled = true;
     });
+    const doReveal = () => {
+      if (pqRevealed) return;
+      pqRevealed = true; stopPqTimer();
+      document.getElementById("pqPreBtns").style.display = "none";
+      document.getElementById("pqAnsArea").style.display = "flex";
+      if (!pqTimerOn && !pqHintUsed) return;
+      if (pqHintUsed || pqLatMs > 2000) {
+        document.getElementById("pqGTri").classList.add("recommended");
+        const r = document.getElementById("pqRecTri"); r.style.display = "inline"; r.textContent = pqHintUsed ? "ヒント使用・推奨" : `${(pqLatMs/1000).toFixed(1)}秒・推奨`;
+      } else {
+        document.getElementById("pqGOk").classList.add("recommended");
+        const r = document.getElementById("pqRecOk"); r.style.display = "inline"; r.textContent = `${(pqLatMs/1000).toFixed(1)}秒・即答！`;
+      }
+    };
+    const doGrade = (g) => {
+      if (!pqRevealed) return;
+      state.patCards[p.key] = previewNext(c, g, pqTimerOn ? pqLatMs : 1500).next;
+      if (g === "x") {
+        pqDeck.splice(Math.min(pqDeck.length, pqIdx + 6), 0, entry);
+        toast(`❌「${p.en}」を5枚後に再テストします`);
+      }
+      saveState(); pqIdx++; renderPatternQuiz();
+    };
+    document.getElementById("pqRevealBtn").onclick = doReveal;
+    document.getElementById("pqGX").onclick = () => doGrade("x");
+    document.getElementById("pqGTri").onclick = () => doGrade("tri");
+    document.getElementById("pqGOk").onclick = () => doGrade("ok");
+    startPqTimer();
   }
 
-  document.getElementById("togglePrinciplesBtn").addEventListener("click", () => {
-    const g = document.getElementById("principlesGuide");
-    const open = g.style.display === "none";
-    g.style.display = open ? "flex" : "none";
-    document.getElementById("togglePrinciplesBtn").textContent = open ? "🧠 6大原則ガイドを閉じる ▴" : "🧠 6大原則ガイドを開く ▾";
-  });
+  document.querySelectorAll("#pqDirBar .mode-pill").forEach(b => b.addEventListener("click", () => { pqDir = b.dataset.dir; buildPqDeck(pqFilter); }));
   document.querySelectorAll("#pqFilterBar .mode-pill").forEach(b => b.addEventListener("click", () => buildPqDeck(b.dataset.pq)));
+
+  // Keyboard shortcuts for Pattern tab too
+  document.addEventListener("keydown", e => {
+    if (!document.getElementById("tab-pquiz").classList.contains("active")) return;
+    const tag = (e.target && e.target.tagName) || "";
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+    if (!pqStarted) {
+      if ((e.code === "Space" || e.key === "Enter") && pqDeck.length && pqIdx < pqDeck.length) { e.preventDefault(); pqStarted = true; renderPatternQuiz(); }
+      return;
+    }
+    if ((e.code === "Space" || e.key === "Enter") && !pqRevealed) { e.preventDefault(); document.getElementById("pqRevealBtn")?.click(); }
+    else if (e.key === "1" && pqRevealed) document.getElementById("pqGX")?.click();
+    else if (e.key === "2" && pqRevealed) document.getElementById("pqGTri")?.click();
+    else if (e.key === "3" && pqRevealed) document.getElementById("pqGOk")?.click();
+    else if (e.key.toLowerCase() === "a") document.getElementById("pqSpkAns")?.click();
+    else if (e.key.toLowerCase() === "h" && !pqRevealed) document.getElementById("pqHintBtn")?.click();
+  });
 
   // --- Tabs ---
   function switchTab(name) {
     if (name !== "study" && sessionStarted) { sessionStarted = false; stopLatency(); }
+    if (name !== "pquiz" && pqStarted) { pqStarted = false; stopPqTimer(); }
     document.querySelectorAll(".nav-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `tab-${name}`));
     if (name === "study") renderStudy();
-    if (name === "pquiz") renderPatternQuiz();
+    if (name === "pquiz") { if (!pqDeck.length && !pqStarted) buildPqDeck(pqFilter); else renderPatternQuiz(); }
     if (name === "synonyms") renderSynonyms();
     if (name === "schedule") renderSchedule();
     if (name === "explorer") { renderHeatmap(); renderWordList(); }
