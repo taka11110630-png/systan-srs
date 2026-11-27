@@ -1,0 +1,491 @@
+{
+  "version": "1.1",
+  "generated_at": "2026-11-27",
+  "hooks": {
+    "SYN-S1-01": {
+      "mp": [
+        {
+          "part": "dis-",
+          "role": "prefix",
+          "gloss": "四方へ"
+        },
+        {
+          "part": "cuss",
+          "role": "root",
+          "gloss": "打ち砕く"
+        }
+      ],
+      "co": "AI_CO_DISCUSS: 課題を多角的に砕いて話し合う",
+      "et": "AI_ET_DISCUSS: dis(分散)+quatere(振る)→論点を徹底検討する",
+      "kn": "AI_KN_DISCUSS: ディスカッション（他動詞なのでabout不要）",
+      "mn": "AI_MN_DISCUSS: ディスらずアバウトなしで直に議論する",
+      "cf": [
+        "talk about"
+      ],
+      "src": "ai_synthetic"
+    },
+    "SYN-S1-02": {
+      "mp": [
+        {
+          "part": "ap-",
+          "role": "prefix",
+          "gloss": "〜の方向へ"
+        },
+        {
+          "part": "proach",
+          "role": "root",
+          "gloss": "近い"
+        }
+      ],
+      "co": "AI_CO_APPROACH: 目標地点へ一直線に距離を詰める",
+      "et": "AI_ET_APPROACH: ad(方向)+prope(近い)→直接目的語へ接近",
+      "kn": "AI_KN_APPROACH: アプローチ（ゴルフや交渉で近づく）",
+      "mn": "AI_MN_APPROACH: アプリを開いてプロに近づく（to不要）",
+      "cf": [
+        "come near to"
+      ],
+      "src": "ai_synthetic"
+    },
+    "SYN-S1-10": {
+      "mp": [
+        {
+          "part": "pre-",
+          "role": "prefix",
+          "gloss": "前に"
+        },
+        {
+          "part": "vent",
+          "role": "root",
+          "gloss": "来る"
+        }
+      ],
+      "co": "AI_CO_PREVENT: 先回りして通せんぼする",
+      "et": "AI_ET_PREVENT: pre(前)+venire(来る)→先に立って防ぐ",
+      "kn": "AI_KN_PREVENT: プリベンション（予防・防止）",
+      "mn": "AI_MN_PREVENT: プレイ前にイベントをフロムで止める",
+      "cf": [
+        "keep",
+        "stop"
+      ],
+      "src": "ai_synthetic"
+    },
+    "SYN-S3-23": {
+      "mp": [
+        {
+          "part": "com-",
+          "role": "prefix",
+          "gloss": "完全に"
+        },
+        {
+          "part": "pel",
+          "role": "root",
+          "gloss": "押す"
+        }
+      ],
+      "co": "AI_CO_COMPEL: 逃げ道なく前へ強く押し出す",
+      "et": "AI_ET_COMPEL: com(強意)+pellere(駆り立てる)",
+      "kn": "AI_KN_COMPEL: コンペリング（迫力ある・抗しがたい）",
+      "mn": "AI_MN_COMPEL: コンペでペナルティを恐れ行動を強いられる",
+      "cf": [
+        "force",
+        "oblige"
+      ],
+      "src": "ai_synthetic"
+    },
+    "SYN-S5-31": {
+      "mp": [
+        {
+          "part": "yield",
+          "role": "root",
+          "gloss": "差し出す・返す"
+        }
+      ],
+      "co": "AI_CO_YIELD: 結果や道を相手へ差し出す",
+      "et": "AI_ET_YIELD: 古英語gieldan(支払う・報いる)→産出/譲歩",
+      "kn": "AI_KN_YIELD: イールド（利回り・歩留まり）",
+      "mn": "AI_MN_YIELD: いいルートで収穫を産出し、圧力には屈する",
+      "cf": [
+        "produce",
+        "submit"
+      ],
+      "src": "ai_synthetic"
+    },
+    "SYN-S5-32": {
+      "mp": [
+        {
+          "part": "ad-",
+          "role": "prefix",
+          "gloss": "〜へ"
+        },
+        {
+          "part": "dress",
+          "role": "root",
+          "gloss": "真っ直ぐ向ける"
+        }
+      ],
+      "co": "AI_CO_ADDRESS: 対象へ真正面から向き合う",
+      "et": "AI_ET_ADDRESS: ad(方向)+directus(真っ直ぐ)→課題へ直面",
+      "kn": "AI_KN_ADDRESS: アドレス（宛先・演説）",
+      "mn": "AI_MN_ADDRESS: 宛先を確かめ課題へ真正面から取り組む",
+      "cf": [
+        "tackle",
+        "deal with"
+      ],
+      "src": "ai_synthetic"
+    }
+  },
+  "cloze": [
+    {
+      "id": "SYN-Q-01",
+      "wid": "SYN-S1-01",
+      "family": "transitive_trap",
+      "stem": "The planning committee met on Friday to (    ) the proposed harbor budget.",
+      "ja": "計画委員会は提案された港湾予算を議論するため金曜日に集まった。",
+      "choices": [
+        "discuss",
+        "discuss about",
+        "discuss on",
+        "discuss over"
+      ],
+      "answer": 0,
+      "why": "discussは他動詞であり前置詞about/onを置かず直接目的語をとる。",
+      "trap": "⚠️ discuss about A は誤用（about不要）",
+      "level": "common",
+      "confusable_wids": [
+        "SYN-S1-08"
+      ]
+    },
+    {
+      "id": "SYN-Q-02",
+      "wid": "SYN-S1-05",
+      "family": "intrans_prep",
+      "stem": "The contractor had to apologize (    ) the municipal board for the late blueprint.",
+      "ja": "その請負業者は設計図の遅延について市議会に謝罪しなければならなかった。",
+      "choices": [
+        "to",
+        "with",
+        "for",
+        "at"
+      ],
+      "answer": 0,
+      "why": "apologizeは自動詞で apologize to 人 for 理由 の型をとる。",
+      "trap": "⚠️ apologize 人 は不可（to 人 が必須）",
+      "level": "common",
+      "confusable_wids": []
+    },
+    {
+      "id": "SYN-Q-03",
+      "wid": "SYN-S1-07",
+      "family": "svoo_vs_to",
+      "stem": "The hydrologist carefully explained the new filtration model (    ) the visiting delegates.",
+      "ja": "その水文学者は訪問団に新しいろ過モデルを丁寧に説明した。",
+      "choices": [
+        "to",
+        "for",
+        "with",
+        "into"
+      ],
+      "answer": 0,
+      "why": "explainは第4文型(SVOO)をとれず explain A to B の型を用いる。",
+      "trap": "⚠️ explain 人 物 は不可（explain 物 to 人）",
+      "level": "common",
+      "confusable_wids": [
+        "SYN-S1-08"
+      ]
+    },
+    {
+      "id": "SYN-Q-04",
+      "wid": "SYN-S1-09",
+      "family": "svoc",
+      "stem": "Upgraded solar sensors enable coastal stations (    ) tidal shifts accurately.",
+      "ja": "改良された太陽光センサーにより沿岸観測所は潮汐変化を正確に測定できる。",
+      "choices": [
+        "to track",
+        "track",
+        "tracking",
+        "tracked"
+      ],
+      "answer": 0,
+      "why": "enable は enable O to V の第5文型をとり原形不定詞や動名詞は不可。",
+      "trap": "⚠️ enable O 原形 は誤り（to V が必須）",
+      "level": "common",
+      "confusable_wids": [
+        "SYN-S2-21"
+      ]
+    },
+    {
+      "id": "SYN-Q-05",
+      "wid": "SYN-S1-10",
+      "family": "from_family",
+      "stem": "Thick shelterbelts prevented alpine gusts (    ) eroding the newly planted terrace.",
+      "ja": "厚い防風林のおかげで高山からの突風が新設段々畑を侵食するのを防げた。",
+      "choices": [
+        "from",
+        "to",
+        "against",
+        "with"
+      ],
+      "answer": 0,
+      "why": "prevent A from Ving（AがVするのを妨げる）の定番構文。",
+      "trap": "⚠️ prevent A to V は誤り（from Ving）",
+      "level": "march",
+      "confusable_wids": [
+        "SYN-S2-17"
+      ]
+    },
+    {
+      "id": "SYN-Q-06",
+      "wid": "SYN-S1-11",
+      "family": "with_family",
+      "stem": "The regional archive provides graduate fellows (    ) digitized botanical maps.",
+      "ja": "地域資料館は大学院研究員にデジタル化された植物地図を提供している。",
+      "choices": [
+        "with",
+        "of",
+        "from",
+        "as"
+      ],
+      "answer": 0,
+      "why": "provide 人 with モノ（人にモノを提供する）の供給型。",
+      "trap": "⚠️ provide 人 モノ（前置詞なし）は誤用",
+      "level": "march",
+      "confusable_wids": [
+        "SYN-S2-15"
+      ]
+    },
+    {
+      "id": "SYN-Q-07",
+      "wid": "SYN-S1-12",
+      "family": "of_family",
+      "stem": "A prolonged drought robbed the valley farmers (    ) their autumn grain harvest.",
+      "ja": "長引く干ばつのせいで谷間の農家は秋の穀物収穫を奪われた。",
+      "choices": [
+        "of",
+        "from",
+        "with",
+        "by"
+      ],
+      "answer": 0,
+      "why": "rob A of B（AからBを奪う）の剥奪型。fromを選ばない。",
+      "trap": "⚠️ rob A from B は誤り（of B）",
+      "level": "march",
+      "confusable_wids": [
+        "SYN-S2-16"
+      ]
+    },
+    {
+      "id": "SYN-Q-08",
+      "wid": "SYN-S1-13",
+      "family": "as_family",
+      "stem": "Many archivists regard oral histories (    ) indispensable evidence of local trade.",
+      "ja": "多くの記録保管官は口述歴史を地域交易の不可欠な証拠とみなしている。",
+      "choices": [
+        "as",
+        "for",
+        "to",
+        "with"
+      ],
+      "answer": 0,
+      "why": "regard A as B（AをBとみなす）の認識型。",
+      "trap": "⚠️ regard A to be B ではなく regard A as B が標準",
+      "level": "march",
+      "confusable_wids": [
+        "SYN-S2-18"
+      ]
+    },
+    {
+      "id": "SYN-Q-09",
+      "wid": "SYN-S2-20",
+      "family": "vocab_confusable",
+      "stem": "The cedar aroma in the timber hall (    ) visitors of traditional mountain inns.",
+      "ja": "木造ホールの杉の香りは訪問者に伝統的な山の宿を思い出させる。",
+      "choices": [
+        "reminds",
+        "recalls",
+        "remembers",
+        "informs"
+      ],
+      "answer": 0,
+      "why": "remind A of B（AにBを思い出させる）。remember/recallは人主語で of 型不可。",
+      "trap": "⚠️ remember A of B は誤用（remind A of B）",
+      "level": "march",
+      "confusable_wids": [
+        "SYN-S1-14"
+      ]
+    },
+    {
+      "id": "SYN-Q-10",
+      "wid": "SYN-S1-09",
+      "family": "inanimate_subject",
+      "stem": "Improved seismic telemetry will (    ) coastal engineers to issue earlier flood warnings.",
+      "ja": "地震遠隔測定の改良により、沿岸技術者はより早い洪水警報を出せるようになる。",
+      "choices": [
+        "enable",
+        "let",
+        "hope",
+        "prevent"
+      ],
+      "answer": 0,
+      "why": "無生物主語＋enable O to V（〜のおかげでOはVできる）。letは原形、hopeはO to V不可。",
+      "trap": "⚠️ 無生物主語＋let O to V / hope O to V は旧帝大英作で減点",
+      "level": "national",
+      "confusable_wids": [
+        "SYN-S3-23"
+      ]
+    },
+    {
+      "id": "SYN-Q-11",
+      "wid": "SYN-S3-23",
+      "family": "inanimate_subject",
+      "stem": "Severe winter blackouts (    ) municipal planners to diversify the regional power grid.",
+      "ja": "深刻な冬季停電のせいで、自治体の計画担当者は地域電力網の多様化を余儀なくされた。",
+      "choices": [
+        "compelled",
+        "demanded",
+        "suggested",
+        "insisted"
+      ],
+      "answer": 0,
+      "why": "無生物主語＋compel O to V（〜のせいでOはVせざるを得なくなる）。demand/suggest/insistはO to V不可。",
+      "trap": "⚠️ demand/suggest O to V は不可（compel O to V）",
+      "level": "national",
+      "confusable_wids": [
+        "SYN-S2-19"
+      ]
+    },
+    {
+      "id": "SYN-Q-12",
+      "wid": "SYN-S5-31",
+      "family": "stage5_polysemy",
+      "stem": "Recent core drilling beneath the glacier failed to (    ) conclusive trace isotopes.",
+      "ja": "氷河下での最近の掘削調査では決定的な微量同位体を得られなかった。",
+      "choices": [
+        "yield",
+        "submit",
+        "comply",
+        "resign"
+      ],
+      "answer": 0,
+      "why": "多義語yieldの他動詞義「（結果・データを）産出する・もたらす」。屈する義は自動詞yield to。",
+      "trap": "⚠️ Stage 5 多義語 yield＝「屈する」だけでなく「産出する」を文脈判断",
+      "level": "national",
+      "confusable_wids": []
+    },
+    {
+      "id": "SYN-Q-13",
+      "wid": "SYN-S5-32",
+      "family": "stage5_polysemy",
+      "stem": "The white paper urged provincial authorities to (    ) chronic aquifer depletion immediately.",
+      "ja": "その白書は地方自治体に対し慢性的な帯水層枯渇に直ちに取り組むよう促した。",
+      "choices": [
+        "address",
+        "address to",
+        "speak",
+        "attend"
+      ],
+      "answer": 0,
+      "why": "多義語addressの重要義「（問題に）取り組む」は他動詞で前置詞to不要。",
+      "trap": "⚠️ address to the problem は減点（他動詞 address A）",
+      "level": "national",
+      "confusable_wids": [
+        "SYN-S1-01"
+      ]
+    },
+    {
+      "id": "SYN-Q-14",
+      "wid": "SYN-S3-24",
+      "family": "stage3_usage",
+      "stem": "To keep the seminar rigorous, the chair asked speakers to confine their remarks (    ) empirical data.",
+      "ja": "ゼミの厳密さを保つため、司会者は発表者に発言を実証データに限定するよう求めた。",
+      "choices": [
+        "to",
+        "in",
+        "into",
+        "within"
+      ],
+      "answer": 0,
+      "why": "Stage 3 重要語法 confine A to B（AをBに限定する）。",
+      "trap": "⚠️ confine A in B ではなく confine A to B",
+      "level": "national",
+      "confusable_wids": [
+        "SYN-S3-25"
+      ]
+    },
+    {
+      "id": "SYN-Q-15",
+      "wid": "SYN-S3-27",
+      "family": "stage3_usage",
+      "stem": "The northern forestry reserve (    ) four alpine watersheds and two research stations.",
+      "ja": "北部森林保護区は4つの高山流域と2つの研究観測所から構成されている。",
+      "choices": [
+        "comprises",
+        "comprises of",
+        "consists",
+        "makes up of"
+      ],
+      "answer": 0,
+      "why": "compriseは能動態で前置詞ofをとらない（be comprised ofは可）。consistはof必須。",
+      "trap": "⚠️ comprise of A は典型的な難関大減点トラップ",
+      "level": "national",
+      "confusable_wids": []
+    },
+    {
+      "id": "SYN-Q-16",
+      "wid": "SYN-S4-29",
+      "family": "composition_trap",
+      "stem": "The initial trial showed minor variance; (    ), the revised protocol passed every audit.",
+      "ja": "初回試行では軽微なばらつきが見られたが、改訂手順は全監査を通過した。",
+      "choices": [
+        "however",
+        "although",
+        "despite",
+        "unless"
+      ],
+      "answer": 0,
+      "why": "セミコロンとカンマの間に入るのは接続副詞however。従位接続詞althoughや前置詞despiteは不可。",
+      "trap": "⚠️ カンマだけで節をつなぐ however のカンマスプライス減点に注意",
+      "level": "national",
+      "confusable_wids": [
+        "SYN-S4-30"
+      ]
+    },
+    {
+      "id": "SYN-Q-17",
+      "wid": "SYN-S3-26",
+      "family": "composition_trap",
+      "stem": "Restorers decided to substitute seasoned cedar (    ) decayed spruce along the veranda.",
+      "ja": "修復担当者は縁側沿いの腐食したトウヒの代わりに乾燥杉材を用いることに決めた。",
+      "choices": [
+        "for",
+        "with",
+        "by",
+        "to"
+      ],
+      "answer": 0,
+      "why": "substitute 新A for 旧B（Bの代わりにAを使う）。replace 旧B with 新A と順序が逆。",
+      "trap": "⚠️ substitute A with B は順序逆転による英作文減点トラップ",
+      "level": "national",
+      "confusable_wids": []
+    },
+    {
+      "id": "SYN-Q-18",
+      "wid": "SYN-S1-02",
+      "family": "transitive_trap",
+      "stem": "As the survey vessel carefully (    ) the submerged reef, sonar readings intensified.",
+      "ja": "調査船が水没した暗礁に慎重に近づくにつれ、ソナーの反応が強まった。",
+      "choices": [
+        "approached",
+        "approached to",
+        "approached at",
+        "approached into"
+      ],
+      "answer": 0,
+      "why": "approachは他動詞で「〜に近づく」。前置詞toは不要。",
+      "trap": "⚠️ approach to A は典型的な他動詞トラップ",
+      "level": "national",
+      "confusable_wids": [
+        "SYN-S2-22"
+      ]
+    }
+  ]
+}

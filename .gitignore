@@ -1,0 +1,9 @@
+.agents/
+systan_data.json
+systan_ai_pack.json
+ext_*.json
+systan-srs-state*.json
+*.tsv
+.DS_Store
+__pycache__/
+.pytest_cache/

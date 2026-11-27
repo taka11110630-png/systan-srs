@@ -115,11 +115,11 @@
 
   .nav-tabs {
     display: flex; gap: 4px; background: var(--surface-2); padding: 4px; border-radius: 12px;
-    overflow-x: auto; max-width: 100%;
+    overflow-x: auto; max-width: 100%; flex-wrap: nowrap; -webkit-overflow-scrolling: touch;
   }
   .nav-tab {
     border: none; background: transparent; padding: 7px 12px; border-radius: 9px;
-    font-size: 13px; font-weight: 700; color: var(--ink-muted); white-space: nowrap; min-height: 36px;
+    font-size: 13px; font-weight: 700; color: var(--ink-muted); white-space: nowrap; min-height: 36px; flex-shrink: 0;
   }
   .nav-tab.active { background: var(--surface); color: var(--ink); box-shadow: 0 1px 2px rgba(0,0,0,0.08); }
   .top-actions { display: flex; align-items: center; gap: 6px; }
@@ -127,11 +127,24 @@
     display: inline-flex; align-items: center; gap: 5px;
     padding: 6px 11px; border-radius: 999px; font-size: 12px; font-weight: 700;
     background: var(--surface-2); border: 1px solid var(--border); font-variant-numeric: tabular-nums;
-    min-height: 36px;
+    min-height: 36px; white-space: nowrap;
   }
   .timer-pill.running { background: var(--accent-soft); border-color: var(--accent); color: var(--accent); }
   .timer-pill.done { background: var(--ok-bg); border-color: var(--ok-fg); color: var(--ok-fg); }
   .timer-pill.warn { background: var(--tri-bg); border-color: var(--tri-fg); color: var(--tri-fg); }
+  @media (max-width: 640px) {
+    .topbar { padding: 6px 10px; padding-top: max(6px, env(safe-area-inset-top)); }
+    .topbar-inner { gap: 5px; }
+    .brand { gap: 7px; }
+    .brand-mark { width: 26px; height: 26px; font-size: 11px; border-radius: 7px; }
+    .brand-title { font-size: 13.5px; line-height: 1.2; }
+    .brand-sub { display: none; }
+    .top-actions { gap: 4px; }
+    .timer-pill { padding: 4px 8px; font-size: 11px; min-height: 28px; }
+    #themeBtn { padding: 3px 7px; min-height: 28px; font-size: 13px; }
+    .nav-tabs { order: 3; width: 100%; padding: 3px; gap: 3px; border-radius: 10px; }
+    .nav-tab { padding: 5px 9px; font-size: 12px; min-height: 28px; }
+  }
 
   /* Layout */
   .container { max-width: 980px; margin: 0 auto; padding: 16px 14px 56px; }
@@ -203,7 +216,7 @@
   }
   .ipa { font-size: 15px; color: var(--ink-muted); }
   .cloze-prompt { font-size: clamp(19px, 3vw, 25px); font-weight: 700; line-height: 1.45; margin: 12px auto; max-width: 640px; }
-  .cloze-blank { display: inline-block; min-width: 92px; border-bottom: 3px solid var(--accent); color: var(--accent); padding: 0 6px; margin: 0 4px; }
+  .cloze-blank { display: inline-block; min-width: 92px; border-bottom: 3px solid var(--accent); color: var(--accent); padding: 0 6px; margin: 0 4px; white-space: pre; }
   .hint-box {
     margin: 12px auto 0; max-width: 560px; padding: 10px 14px; border-radius: 10px;
     background: var(--tri-bg); color: var(--ink); font-size: 14px; text-align: left;
@@ -348,6 +361,134 @@
   .empty-state { text-align: center; padding: 34px 16px; }
   .muted { color: var(--ink-muted); }
   .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+  /* Loop Mode (🔁 周回特訓) */
+  .loop-ctrl-grid { display: flex; flex-direction: column; gap: 10px; }
+  .loop-mode-switch {
+    display: inline-flex; flex-wrap: wrap; gap: 4px; background: var(--surface-2);
+    padding: 4px; border-radius: 12px; border: 1px solid var(--border);
+  }
+  .loop-switch-btn {
+    border: none; background: transparent; padding: 8px 14px; border-radius: 9px;
+    font-size: 13px; font-weight: 800; color: var(--ink-muted); min-height: 38px;
+  }
+  .loop-switch-btn.active {
+    background: var(--accent); color: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.12);
+  }
+  [data-theme="dark"] .loop-switch-btn.active { color: #0b1120; }
+
+  .spiral-stepper {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+  }
+  @media (max-width: 720px) { .spiral-stepper { grid-template-columns: repeat(2, 1fr); } }
+  .spiral-step {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 11px;
+    padding: 9px 11px; display: flex; flex-direction: column; gap: 2px;
+    font-size: 12px; opacity: 0.72; transition: all 0.15s ease; text-align: left;
+  }
+  .spiral-step.active {
+    opacity: 1; border-color: var(--accent); background: var(--accent-soft);
+    box-shadow: 0 0 0 1px var(--accent);
+  }
+  .spiral-step.done { opacity: 0.92; border-color: var(--ok-fg); background: var(--ok-bg); }
+  .spiral-step-num { font-size: 10px; font-weight: 800; color: var(--ink-muted); text-transform: uppercase; letter-spacing: 0.03em; }
+  .spiral-step.active .spiral-step-num { color: var(--accent); }
+  .spiral-step.done .spiral-step-num { color: var(--ok-fg); }
+  .spiral-step-title { font-weight: 800; font-size: 12.5px; color: var(--ink); }
+
+  .skeleton-wrap {
+    margin: 10px auto 2px; display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; max-width: 640px;
+  }
+  .skeleton-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 5px 12px; border-radius: 9px; font-size: 14px; font-weight: 800;
+    background: var(--pat-bg); color: var(--pat-fg); border: 1px solid rgba(3, 105, 161, 0.25);
+  }
+  .ja-pat-prompt {
+    margin: 8px auto 0; max-width: 580px; padding: 8px 13px; border-radius: 10px;
+    background: var(--pat-bg); color: var(--pat-fg); font-size: 13px; font-weight: 700;
+  }
+
+  .step-hints-bar { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin-top: 8px; }
+  .step-hint-btn {
+    font-size: 12px; font-weight: 700; padding: 6px 12px; min-height: 36px;
+    border-radius: 999px; background: var(--surface-2); border: 1px dashed var(--border); color: var(--ink-muted);
+  }
+  .step-hint-btn.unlocked { border-style: solid; border-color: var(--tri-fg); background: var(--tri-bg); color: var(--tri-fg); }
+  .step-hint-list {
+    margin: 10px auto 0; max-width: 600px; display: flex; flex-direction: column; gap: 6px; text-align: left;
+  }
+  .step-hint-item {
+    padding: 8px 12px; border-radius: 9px; background: var(--tri-bg);
+    border-left: 3px solid var(--tri-fg); font-size: 13px; color: var(--ink);
+  }
+
+  .mcq-stem-box {
+    margin: 8px auto 12px; max-width: 680px; text-align: left;
+    background: var(--surface-2); border: 1px solid var(--border); border-radius: 13px; padding: 15px 18px;
+  }
+  .mcq-stem-en { font-size: clamp(17px, 2.7vw, 22px); font-weight: 800; line-height: 1.5; color: var(--ink); }
+  .mcq-stem-ja { font-size: 13.5px; color: var(--ink-muted); margin-top: 6px; }
+  .mcq-grid {
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; max-width: 680px; margin: 0 auto;
+  }
+  @media (max-width: 580px) { .mcq-grid { grid-template-columns: 1fr; } }
+  .mcq-btn {
+    display: flex; align-items: center; gap: 10px; text-align: left;
+    padding: 12px 15px; min-height: 52px; border-radius: 12px;
+    border: 2px solid var(--border); background: var(--surface); font-size: 15px; font-weight: 700;
+  }
+  .mcq-btn:hover:not(:disabled) { border-color: var(--accent); background: var(--accent-soft); }
+  .mcq-btn .mcq-num {
+    width: 25px; height: 25px; border-radius: 999px; background: var(--surface-2);
+    color: var(--ink-muted); font-size: 12px; font-weight: 800; display: grid; place-items: center; flex-shrink: 0;
+  }
+  .mcq-btn.correct { border-color: var(--ok-fg); background: var(--ok-bg); color: var(--ok-fg); }
+  .mcq-btn.correct .mcq-num { background: var(--ok-fg); color: #fff; }
+  .mcq-btn.wrong { border-color: var(--x-fg); background: var(--x-bg); color: var(--x-fg); }
+  .mcq-btn.wrong .mcq-num { background: var(--x-fg); color: #fff; }
+  .mcq-btn.dimmed { opacity: 0.58; }
+
+  .hook-workshop-grid {
+    display: grid; grid-template-columns: 1fr; gap: 9px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 13px 14px;
+  }
+  .hw-field { display: flex; flex-direction: column; gap: 4px; }
+  .hw-field label { font-size: 12px; font-weight: 800; color: var(--ink-muted); display: flex; align-items: center; gap: 6px; }
+  .hw-field input { width: 100%; font-size: 13.5px; }
+
+  .summary-kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; width: 100%; }
+  @media (max-width: 640px) { .summary-kpi-grid { grid-template-columns: 1fr; } }
+  .danger-word-row {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 9px 12px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border);
+  }
+  .ai-box {
+    background: var(--surface); border: 2px solid var(--accent); border-radius: var(--radius);
+    padding: 18px; box-shadow: var(--shadow);
+  }
+  .loop-select-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(175px, 1fr)); gap: 8px;
+  }
+  .loop-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+  .loop-field label { font-size: 11px; font-weight: 800; color: var(--ink-muted); }
+  .loop-field select { width: 100%; font-size: 13px; min-height: 38px; padding: 6px 10px; }
+  .badge.lvl-national { background: rgba(124, 58, 237, 0.14); color: #6d28d9; border: 1px solid rgba(124, 58, 237, 0.28); }
+  [data-theme="dark"] .badge.lvl-national { background: rgba(167, 139, 250, 0.18); color: #c4b5fd; border-color: rgba(167, 139, 250, 0.35); }
+  .badge.lvl-march { background: var(--accent-soft); color: var(--accent); }
+  .badge.lvl-common { background: var(--ok-bg); color: var(--ok-fg); }
+  .errtag-panel {
+    background: var(--surface-2); border: 1px solid var(--border);
+    border-radius: 11px; padding: 10px 12px; display: flex; flex-direction: column; gap: 7px;
+  }
+  .errtag-bar { display: flex; flex-wrap: wrap; gap: 6px; }
+  .errtag-btn {
+    font-size: 12px; font-weight: 700; padding: 5px 10px; min-height: 32px; border-radius: 999px;
+    background: var(--surface); border: 1px solid var(--border); color: var(--ink-muted);
+  }
+  .errtag-btn.active {
+    background: var(--x-bg); border-color: var(--x-fg); color: var(--x-fg);
+  }
 </style>
 </head>
 <body>
@@ -362,6 +503,7 @@
     </div>
     <nav class="nav-tabs" role="tablist" id="mainNav">
       <button class="nav-tab active" data-tab="study">今日の復習</button>
+      <button class="nav-tab" data-tab="loop">🔁 周回特訓</button>
       <button class="nav-tab" data-tab="pquiz">📐 型⇔日本語</button>
       <button class="nav-tab" data-tab="synonyms">🔗 意味グループ＆型</button>
       <button class="nav-tab" data-tab="schedule">間隔 &amp; 50語</button>
@@ -415,7 +557,7 @@
       <div class="row">
         <label style="display:inline-block;">
           <span style="display:inline-block; padding:11px 18px; border-radius:10px; background:var(--ok-fg); color:#fff; font-weight:700; cursor:pointer;">📂 systan_data.json を選択して開始</span>
-          <input id="onboardFileInput" type="file" accept=".json,application/json" style="display:none;" />
+          <input id="bundleFileInput" type="file" accept=".json,application/json" style="display:none;" />
         </label>
       </div>
     </div>
@@ -479,6 +621,112 @@
       <div>PC操作: <span class="kbd">Space</span> 答え / <span class="kbd">1</span> ❌ / <span class="kbd">2</span> 🔺 / <span class="kbd">3</span> レ / <span class="kbd">A</span> 発音 / <span class="kbd">E</span> 例文ヒント</div>
       <div id="queueMeta"></div>
     </div>
+  </section>
+
+  <!-- TAB: HYBRID LOOP TRAINER (🔁 周回特訓：PWA高速周回 × AI弱点特訓ハイブリッド) -->
+  <section id="tab-loop" class="tab-panel stack">
+    <div class="card loop-ctrl-grid">
+      <div class="row space-between">
+        <div>
+          <div class="row" style="gap:8px;">
+            <h2 style="margin:0; font-size:17px;">🔁 高速周回 × 旧帝大・弱点スパイラル特訓</h2>
+            <span class="badge accent" id="loopExtBadge">🧩 拡張フック 0語 / 📝 4択 0問</span>
+          </div>
+          <div class="muted" style="font-size:12.5px; margin-top:2px;">10秒仕分け → 3軸フック工房 → 逆引き（日→英＋動詞の型） → 入試4択仕上げを1セットで高速回転！</div>
+        </div>
+        <div class="row" style="gap:6px;">
+          <button id="loopThresholdBtn" class="ghost" style="font-size:12px; border:1px solid var(--border);">⏱ 基準秒設定</button>
+          <button id="loopToggleAiBtn" class="primary" style="font-size:12px;">🤖 AI弱点連携（プロンプト＆取込）</button>
+        </div>
+      </div>
+
+      <!-- 1. 回り方・形式・セット語数 -->
+      <div class="loop-select-grid">
+        <div class="loop-field">
+          <label for="loopModeSel">回り方</label>
+          <select id="loopModeSel">
+            <option value="spiral" selected>🅰 おまかせ4周スパイラル（推奨）</option>
+            <option value="single">🅱 単発フォーカス演習（柔軟モード）</option>
+          </select>
+        </div>
+        <div class="loop-field">
+          <label for="loopFocusSel">単発フォーカス形式</label>
+          <select id="loopFocusSel">
+            <option value="en2ja" selected>⚡ 英(型)→日 スピード</option>
+            <option value="ja2en">🔄 日→英(型) 逆引き</option>
+            <option value="mcq">📝 入試4択穴埋め道場</option>
+            <option value="workshop">🧩 記憶フック工房</option>
+          </select>
+        </div>
+        <div class="loop-field">
+          <label for="loopSizeSel">1セット語数</label>
+          <select id="loopSizeSel">
+            <option value="10" selected>10語</option>
+            <option value="20">20語</option>
+            <option value="30">30語</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 2. 出題ターゲット・難易度レベル・型/カテゴリ -->
+      <div style="border-top:1px solid var(--border); padding-top:10px; display:flex; flex-direction:column; gap:8px;">
+        <div class="loop-select-grid">
+          <div class="loop-field">
+            <label for="loopTargetSel">出題ターゲット</label>
+            <select id="loopTargetSel">
+              <option value="today_weak" selected>🔥 今日の要特訓</option>
+              <option value="ext_cloze">🤖 AI実戦4択 / 旧帝大特訓</option>
+              <option value="err_reason">⚠️ 間違えやすい単語（原因別）</option>
+              <option value="verb_family">📐 スタサプ動詞の型＆旧帝大カテゴリ</option>
+              <option value="stage_batch">📚 Stage / 50語バッチ選択</option>
+            </select>
+          </div>
+          <div class="loop-field">
+            <label for="loopLevelSel">入試レベル絞り込み</label>
+            <select id="loopLevelSel">
+              <option value="all" selected>全レベル</option>
+              <option value="common">共通テスト (common)</option>
+              <option value="march">MARCH・関関同立 (march)</option>
+              <option value="national">🏛 旧帝大・難関国立 (national)</option>
+            </select>
+          </div>
+          <div class="loop-field">
+            <label for="loopVerbFamilySel">動詞の型・旧帝大カテゴリ（13系統）</label>
+            <select id="loopVerbFamilySel">
+              <option value="all" selected>すべての型・カテゴリ</option>
+              <option value="transitive_trap">他動詞の罠（前置詞不要）</option>
+              <option value="intrans_prep">自動詞＋前置詞</option>
+              <option value="svoo_vs_to">SVOO vs to/for型</option>
+              <option value="svoc">SVOC・that節</option>
+              <option value="from_family">from（妨害・区別）</option>
+              <option value="with_family">with（供給・装備）</option>
+              <option value="of_family">of（奪取・通知）</option>
+              <option value="as_family">as（みなす・描写）</option>
+              <option value="vocab_confusable">紛らわしい語彙・類義語</option>
+              <option value="inanimate_subject">🏛 無生物主語×動詞の型</option>
+              <option value="stage5_polysemy">🏛 Stage 5 多義語文脈</option>
+              <option value="stage3_usage">🏛 Stage 3 難関語法</option>
+              <option value="composition_trap">🏛 英作文減点トラップ</option>
+            </select>
+          </div>
+        </div>
+        <div id="loopSubFilterArea"></div>
+      </div>
+    </div>
+
+    <!-- 4周スパイラル進捗ステッパー -->
+    <div id="loopStepperBar" class="spiral-stepper"></div>
+
+    <!-- メイン演習・工房・サマリー領域 -->
+    <div id="loopCardArea"></div>
+
+    <div class="row space-between muted" style="font-size:12px; padding:0 4px;">
+      <div>PC/iPadキーボード: <span class="kbd">Space</span> 開始・答え・次へ / <span class="kbd">1〜4</span> 評価・4択 / <span class="kbd">H</span> 段階ヒント / <span class="kbd">A</span> 発音</div>
+      <div id="loopQueueMeta"></div>
+    </div>
+
+    <!-- AI弱点特訓アシスタント（記憶博士プロンプト＆JSON取込パネル） -->
+    <div id="loopAiPanel" class="ai-box stack"></div>
   </section>
 
   <!-- TAB: PATTERN <-> JAPANESE TRAINER (型⇔日本語 往復トレーニング) -->
@@ -621,6 +869,7 @@
             <option value="all">全ステータス</option>
             <option value="pattern">📐 単語の型あり</option>
             <option value="weak">教材×/△</option>
+            <option value="errtag">⚠️ 誤答・想起遅延タグ付</option>
             <option value="hooks">語源・語呂フック付</option>
             <option value="leech">🩸 Leech (4回以上ミス)</option>
             <option value="due">今日が復習日</option>
@@ -749,6 +998,81 @@ const EMBEDDED_BUNDLE = null;
     }
   }
 
+  const FAMILY_ALIAS_MAP = {
+    vt_trap: "transitive_trap",
+    vi_prep: "intrans_prep",
+    svoo_to: "svoo_vs_to",
+    svoc_that: "svoc",
+    from_prevent: "from_family",
+    with_provide: "with_family",
+    of_rob: "of_family",
+    as_regard: "as_family",
+    writing_trap: "composition_trap"
+  };
+  function normalizeFamilyId(fid) {
+    const k = String(fid || "").trim().toLowerCase();
+    if (!k) return "";
+    return FAMILY_ALIAS_MAP[k] || k;
+  }
+  function normalizeLevel(lvl) {
+    const raw = String(lvl || "").trim();
+    if (!raw) return "";
+    const low = raw.toLowerCase();
+    if (low === "march" || /march|早慶|関関同立|私大/i.test(raw)) return "march";
+    if (low === "national" || /national|旧帝|国公立|難関国立|東大|京大/i.test(raw)) return "national";
+    if (low === "common" || /common|共通|標準|基本/i.test(raw)) return "common";
+    return low;
+  }
+  function normalizeExtPack(packObj) {
+    const hooks = (packObj && typeof packObj.hooks === "object" && packObj.hooks && !Array.isArray(packObj.hooks)) ? packObj.hooks : {};
+    const rawCloze = (packObj && Array.isArray(packObj.cloze)) ? packObj.cloze : [];
+    const cloze = rawCloze.map(c => {
+      if (!c || typeof c !== "object") return null;
+      return {
+        ...c,
+        family: normalizeFamilyId(c.family || ""),
+        level: normalizeLevel(c.level || "")
+      };
+    }).filter(Boolean);
+    return { hooks, cloze };
+  }
+
+  let extPack = { hooks: {}, cloze: [] };
+  async function saveExtPackToIDB(packObj) {
+    const clean = normalizeExtPack(packObj);
+    extPack = clean;
+    try {
+      const db = await openDB();
+      await new Promise((res, rej) => {
+        const tx = db.transaction(IDB_STORE, "readwrite");
+        tx.objectStore(IDB_STORE).put(clean, "ext_pack");
+        tx.oncomplete = res; tx.onerror = rej;
+      });
+    } catch (_) {}
+    try { localStorage.setItem("systan_ext_pack_cache", JSON.stringify(clean)); } catch (__) {}
+  }
+  async function loadExtPackFromIDB() {
+    try {
+      const db = await openDB();
+      const val = await new Promise((res, rej) => {
+        const tx = db.transaction(IDB_STORE, "readonly");
+        const req = tx.objectStore(IDB_STORE).get("ext_pack");
+        req.onsuccess = () => res(req.result || null);
+        req.onerror = () => rej(req.error);
+      });
+      if (val && (val.hooks || val.cloze)) {
+        return normalizeExtPack(val);
+      }
+    } catch (_) {}
+    try {
+      const raw = localStorage.getItem("systan_ext_pack_cache");
+      if (raw) {
+        return normalizeExtPack(JSON.parse(raw));
+      }
+    } catch (__) {}
+    return { hooks: {}, cloze: [] };
+  }
+
   // --- Utilities ---
   const todayStr = (offsetDays = 0) => {
     const d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() + offsetDays);
@@ -802,6 +1126,34 @@ const EMBEDDED_BUNDLE = null;
   let allWords = [];
   let state = null;
 
+  const DEFAULT_LAT_THRESHOLDS = {
+    en2ja: { fast: 2000, pass: 3500 },
+    ja2en: { fast: 3500, pass: 5500 },
+    mcq:   { fast: 5000, pass: 8000 }
+  };
+
+  const KIOKU_ERR_TAGS = [
+    { id: "knowledge_gap",    label: "① 知識不足",       cls: "x" },
+    { id: "misunderstanding", label: "② 理解のズレ",     cls: "pat" },
+    { id: "misreading",       label: "③ 読み間違い",     cls: "tri" },
+    { id: "careless",         label: "④ ケアレスミス",   cls: "tri" },
+    { id: "confusion",        label: "⑤ 似た概念との混同", cls: "x" },
+    { id: "order_error",      label: "⑥ 解き方順番ミス", cls: "pat" }
+  ];
+
+  const ERR_TAG_META = {
+    knowledge_gap:    { label: "① 知識不足", cls: "x" },
+    misunderstanding: { label: "② 理解のズレ", cls: "pat" },
+    misreading:       { label: "③ 読み間違い", cls: "tri" },
+    careless:         { label: "④ ケアレスミス", cls: "tri" },
+    confusion:        { label: "⑤ 似た概念との混同", cls: "x" },
+    order_error:      { label: "⑥ 解き方順番ミス", cls: "pat" },
+    prep_pattern:     { label: "📐 前置詞・型ズレ", cls: "pat" },
+    confusable:       { label: "🔀 類義語混同", cls: "x" },
+    slow:             { label: "🐢 想起遅延", cls: "tri" },
+    unlearned:        { label: "📕 単語未定着", cls: "x" }
+  };
+
   function buildInitialState() {
     const cards = {};
     const xS2 = [], xS1 = [], triS2 = [], triS1 = [], chk = [], cir = [], audS2 = [], audS1 = [];
@@ -829,7 +1181,12 @@ const EMBEDDED_BUNDLE = null;
     [...audS2, ...audS1].forEach((w, idx) => {
       cards[w.id] = { st:"audit", step:3, iv:w.s===2?14:21, ef:2.40, due:todayStr(6 + Math.floor(idx/15)), dueTs:0, reps:2, lapses:0, streakFast:0, lastGrade:"ok", note:"" };
     });
-    return { version:2, seededOn:todayStr(0), cards, customWords:[], daily:{}, oneHourTargetTs:0, showConfusable:false };
+    return {
+      version: 2, seededOn: todayStr(0), cards, customWords: [], daily: {},
+      oneHourTargetTs: 0, showConfusable: false,
+      userHooks: {}, latLog: {}, errTags: {},
+      latThresholds: JSON.parse(JSON.stringify(DEFAULT_LAT_THRESHOLDS))
+    };
   }
 
   const SYNC_CFG_KEY = "systan_sync_cfg_v1";
@@ -923,18 +1280,40 @@ const EMBEDDED_BUNDLE = null;
     const today = state.daily[todayStr(0)] || { done:0, ok:0, tri:0, x:0 };
     const mastered = allWords.filter(w => state.cards[w.id] && state.cards[w.id].st==="review" && state.cards[w.id].iv>=7).length;
     const leeches = allWords.map(w => ({ w, c:state.cards[w.id] })).filter(x => x.c && ((x.c.lapses||0)>=2 || x.c.lastGrade==="x")).sort((a,b)=>(b.c.lapses||0)-(a.c.lapses||0)).slice(0,10);
+    const tagCounts = {
+      knowledge_gap: 0, misunderstanding: 0, misreading: 0, careless: 0, confusion: 0, order_error: 0,
+      prep_pattern: 0, confusable: 0, slow: 0, unlearned: 0
+    };
+    for (const tags of Object.values(state.errTags || {})) {
+      if (Array.isArray(tags)) tags.forEach(t => { if (tagCounts[t] !== undefined) tagCounts[t]++; });
+    }
+    const slowEntries = [];
+    for (const [wid, logs] of Object.entries(state.latLog || {})) {
+      if (!Array.isArray(logs) || !logs.length) continue;
+      const w = wordsMap.get(wid);
+      if (!w) continue;
+      const maxMs = Math.max(...logs.map(l => Number(l.ms) || 0));
+      if (maxMs >= 3000) slowEntries.push({ w, maxMs });
+    }
+    slowEntries.sort((a, b) => b.maxMs - a.maxMs);
+    const slowLine = slowEntries.length
+      ? `- 🐢 想起遅延ワースト5: ${slowEntries.slice(0, 5).map(x => `**${x.w.w}** (${(x.maxMs/1000).toFixed(1)}s)`).join(" / ")}`
+      : `- 🐢 想起遅延ワースト5: 記録なし`;
+    const tagLine = `- ⚠️ 記憶博士6分類ミス集計: ①知識不足 ${tagCounts.knowledge_gap} / ②理解ズレ ${tagCounts.misunderstanding} / ③読違 ${tagCounts.misreading} / ④ケアレス ${tagCounts.careless} / ⑤混同 ${tagCounts.confusion} / ⑥順番ミス ${tagCounts.order_error} ｜ 旧・自動タグ: 型ズレ ${tagCounts.prep_pattern} / 混同 ${tagCounts.confusable} / 遅延 ${tagCounts.slow} / 未定着 ${tagCounts.unlearned}`;
     return [
       `## [${todayStr(0)}] study | システム英単語 SRS 進捗サマリー`,
       `- 本日の復習: **${today.done}語**（レ ${today.ok} / 🔺 ${today.tri} / ❌ ${today.x}）｜ 定着済み(7日以上): **${mastered}語**`,
+      tagLine,
+      slowLine,
       ``,
       `### 最優先弱点 TOP 10`,
       `| # | 単語 | 意味 | 単語の型 |`,
       `| :--- | :--- | :--- | :--- |`,
-      ...leeches.map(({ w }) => `| S${w.s}#${w.n} | **${w.w}** | ${w.m.slice(0,22).replace(/\|/g,"／")} | ${(w.pt&&w.pt[0]?fmtPat(w.pt[0]):"-").replace(/\|/g,"／")} |`)
+      ...leeches.map(({ w }) => `| S${w.s}#${w.n} | **${w.w}** | ${(w.m || "").slice(0,22).replace(/\|/g,"／")} | ${(w.pt&&w.pt[0]?fmtPat(w.pt[0]):"-").replace(/\|/g,"／")} |`)
     ].join("\n");
   }
 
-  async function pushStateToCloud(showToast = false) {
+  async function pushStateToCloud(showToast = false, opts = {}) {
     if (!syncCfg.enabled || !syncCfg.url || !syncCfg.key || !state) return false;
     if (!navigator.onLine) {
       pendingCloudUpload = true;
@@ -946,6 +1325,7 @@ const EMBEDDED_BUNDLE = null;
     try {
       const res = await fetch(syncCfg.url, {
         method: "POST",
+        keepalive: !!opts.keepalive,
         headers: { "Content-Type": "text/plain;charset=utf-8" },
         body: JSON.stringify({ key: syncCfg.key, state, summaryMd: buildWikiSummaryMd() })
       });
@@ -1010,6 +1390,22 @@ const EMBEDDED_BUNDLE = null;
     if (!s.daily) s.daily = {};
     if (typeof s.showConfusable !== "boolean") s.showConfusable = false;
     if (!s.updatedAt) s.updatedAt = 0;
+    if (!s.userHooks || typeof s.userHooks !== "object" || Array.isArray(s.userHooks)) s.userHooks = {};
+    if (!s.latLog || typeof s.latLog !== "object" || Array.isArray(s.latLog)) s.latLog = {};
+    if (!s.errTags || typeof s.errTags !== "object" || Array.isArray(s.errTags)) s.errTags = {};
+    const defTh = DEFAULT_LAT_THRESHOLDS;
+    if (!s.latThresholds || typeof s.latThresholds !== "object") {
+      s.latThresholds = JSON.parse(JSON.stringify(defTh));
+    } else {
+      for (const fmt of ["en2ja", "ja2en", "mcq"]) {
+        if (!s.latThresholds[fmt] || typeof s.latThresholds[fmt] !== "object") {
+          s.latThresholds[fmt] = { ...defTh[fmt] };
+        } else {
+          s.latThresholds[fmt].fast = Number(s.latThresholds[fmt].fast) > 0 ? Number(s.latThresholds[fmt].fast) : defTh[fmt].fast;
+          s.latThresholds[fmt].pass = Number(s.latThresholds[fmt].pass) > 0 ? Number(s.latThresholds[fmt].pass) : defTh[fmt].pass;
+        }
+      }
+    }
     return s;
   }
 
@@ -1024,6 +1420,7 @@ const EMBEDDED_BUNDLE = null;
     const activeTab = document.querySelector(".nav-tab.active")?.dataset.tab || "study";
     tickOneHourTimer();
     if (activeTab === "study") { if (!sessionStarted) buildQueue(currentMode); else renderStudy(); }
+    else if (activeTab === "loop") { if (typeof renderLoopTab === "function") { if (!loopState.started) buildLoopSession(); else renderLoopTab(); } }
     else if (activeTab === "pquiz") renderPatternQuiz();
     else if (activeTab === "synonyms") renderSynonyms();
     else if (activeTab === "schedule") renderSchedule();
@@ -1031,11 +1428,27 @@ const EMBEDDED_BUNDLE = null;
     else if (activeTab === "wiki") renderWikiTab();
   }
 
+  let debouncedSaveTimer = null;
   function saveState(opts = {}) {
     if (!state) return;
+    if (debouncedSaveTimer) { clearTimeout(debouncedSaveTimer); debouncedSaveTimer = null; }
     if (!opts.skipStamp) state.updatedAt = Date.now();
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (_) {}
     if (!opts.skipCloud) scheduleCloudUpload();
+  }
+  function scheduleDebouncedSave(delayMs = 400) {
+    if (debouncedSaveTimer) clearTimeout(debouncedSaveTimer);
+    debouncedSaveTimer = setTimeout(() => {
+      debouncedSaveTimer = null;
+      saveState();
+    }, delayMs);
+  }
+  function flushDebouncedSave() {
+    if (debouncedSaveTimer) {
+      clearTimeout(debouncedSaveTimer);
+      debouncedSaveTimer = null;
+      saveState();
+    }
   }
   function loadState() {
     try {
@@ -1047,7 +1460,7 @@ const EMBEDDED_BUNDLE = null;
     document.getElementById("showConfusableChk").checked = state.showConfusable;
   }
   function rebuildIndex() {
-    allWords = [...BUNDLE.words, ...(state.customWords || [])];
+    allWords = [...(BUNDLE.words || []), ...(state.customWords || [])];
     wordsMap.clear();
     for (const w of allWords) wordsMap.set(w.id, w);
     synGroupMap.clear();
@@ -1056,6 +1469,133 @@ const EMBEDDED_BUNDLE = null;
   function getCard(id) {
     if (!state.cards[id]) state.cards[id] = { st:"new", step:0, iv:0, ef:2.30, due:"", dueTs:0, reps:0, lapses:0, streakFast:0, lastGrade:"", note:"" };
     return state.cards[id];
+  }
+
+  // --- Shared Hooks (userHooks > extPack.hooks > w.hk), Latency Log & Error Tags ---
+  const MAX_LATENCY_MS = 30000;
+  function clampLatencyMs(rawMs) {
+    return Math.min(MAX_LATENCY_MS, Math.max(0, Math.round(Number(rawMs) || 0)));
+  }
+  function getLatThresholds(fmt) {
+    const th = (state && state.latThresholds && state.latThresholds[fmt]) || DEFAULT_LAT_THRESHOLDS[fmt] || DEFAULT_LAT_THRESHOLDS.en2ja;
+    return { fast: Number(th.fast) || 2000, pass: Number(th.pass) || 3500 };
+  }
+  function recordLatency(wid, fmt, ms, ok) {
+    if (!state || !wid || ms === null || ms === undefined) return;
+    if (!state.latLog) state.latLog = {};
+    if (!Array.isArray(state.latLog[wid])) state.latLog[wid] = [];
+    state.latLog[wid].push({ fmt, ms: clampLatencyMs(ms), ok: !!ok, ts: Date.now() });
+    if (state.latLog[wid].length > 15) {
+      state.latLog[wid].splice(0, state.latLog[wid].length - 15);
+    }
+  }
+  function getErrTags(wid) {
+    if (!state || !state.errTags || !Array.isArray(state.errTags[wid])) return [];
+    return state.errTags[wid];
+  }
+  function addErrTag(wid, tag) {
+    if (!state || !wid || !tag) return;
+    if (!state.errTags) state.errTags = {};
+    if (!Array.isArray(state.errTags[wid])) state.errTags[wid] = [];
+    if (!state.errTags[wid].includes(tag)) state.errTags[wid].push(tag);
+  }
+  function toggleErrTag(wid, tag) {
+    if (!state || !wid || !tag) return false;
+    if (!state.errTags) state.errTags = {};
+    if (!Array.isArray(state.errTags[wid])) state.errTags[wid] = [];
+    const idx = state.errTags[wid].indexOf(tag);
+    let active = false;
+    if (idx >= 0) {
+      state.errTags[wid].splice(idx, 1);
+      if (!state.errTags[wid].length) delete state.errTags[wid];
+    } else {
+      state.errTags[wid].push(tag);
+      active = true;
+    }
+    saveState();
+    return active;
+  }
+  function renderErrTagTogglesHtml(wid) {
+    const activeTags = new Set(getErrTags(wid));
+    return `<div class="errtag-panel">
+      <div style="font-size:12px; font-weight:800; color:var(--ink-muted);">🏷 記憶博士 6分類ミス原因タグ（タップで記録・解除）</div>
+      <div class="errtag-bar">
+        ${KIOKU_ERR_TAGS.map(t => {
+          const on = activeTags.has(t.id);
+          return `<button type="button" class="errtag-btn ${on ? "active" : ""}" data-errtag="${esc(t.id)}" data-wid="${esc(wid)}" aria-pressed="${on ? "true" : "false"}">${esc(t.label)}</button>`;
+        }).join("")}
+      </div>
+    </div>`;
+  }
+  function bindErrTagToggles(rootEl, onChange) {
+    if (!rootEl) return;
+    rootEl.querySelectorAll("[data-errtag]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const wid = btn.dataset.wid;
+        const tag = btn.dataset.errtag;
+        const active = toggleErrTag(wid, tag);
+        btn.classList.toggle("active", active);
+        btn.setAttribute("aria-pressed", active ? "true" : "false");
+        if (typeof onChange === "function") onChange(wid, tag, active);
+      });
+    });
+  }
+  function saveUserHook(wid, patch, opts = {}) {
+    if (!state || !wid) return;
+    if (!state.userHooks) state.userHooks = {};
+    const cur = state.userHooks[wid] || { kn: "", et: "", mn: "" };
+    const next = {
+      kn: patch.kn !== undefined ? String(patch.kn).trim() : (cur.kn || ""),
+      et: patch.et !== undefined ? String(patch.et).trim() : (cur.et || ""),
+      mn: patch.mn !== undefined ? String(patch.mn).trim() : (cur.mn || "")
+    };
+    if (!next.kn && !next.et && !next.mn) delete state.userHooks[wid];
+    else state.userHooks[wid] = next;
+    if (opts.debounce) scheduleDebouncedSave();
+    else if (!opts.deferSave) saveState();
+  }
+  function getMergedHooks(wid) {
+    const w = wordsMap.get(wid);
+    const base = (w && w.hk) || {};
+    const ext = (extPack && extPack.hooks && extPack.hooks[wid]) || {};
+    const usr = (state && state.userHooks && state.userHooks[wid]) || {};
+    const kn = usr.kn || ext.kn || base.kn || "";
+    const et = usr.et || ext.et || base.et || "";
+    const mn = usr.mn || ext.mn || base.mn || "";
+    const knSrc = usr.kn ? "user" : ext.kn ? "ext" : base.kn ? "base" : "";
+    const etSrc = usr.et ? "user" : ext.et ? "ext" : base.et ? "base" : "";
+    const mnSrc = usr.mn ? "user" : ext.mn ? "ext" : base.mn ? "base" : "";
+    const mp = (Array.isArray(ext.mp) && ext.mp.length ? ext.mp : (Array.isArray(base.mp) ? base.mp : []));
+    const co = ext.co || base.co || "";
+    const cfSet = new Set([...(Array.isArray(base.cf) ? base.cf : []), ...(Array.isArray(ext.cf) ? ext.cf : [])]);
+    const cf = [...cfSet];
+    const hasAny = !!(kn || et || mn || mp.length || co || cf.length);
+    return { kn, et, mn, knSrc, etSrc, mnSrc, mp, co, cf, hasAny, usr };
+  }
+  function srcBadgeHtml(src) {
+    if (src === "user") return `<span class="badge ok" style="font-size:10px; padding:1px 6px;">✏️ 自分</span>`;
+    if (src === "ext") return `<span class="badge accent" style="font-size:10px; padding:1px 6px;">🤖 AI</span>`;
+    return "";
+  }
+  function renderMergedHookPanelHtml(wid, showConfusable = true) {
+    const hk = getMergedHooks(wid);
+    if (!hk.hasAny) return "";
+    const morphHtml = hk.mp && hk.mp.length ? `
+      <div class="morpheme-row">
+        ${hk.mp.map((m,i)=>`${i>0?'<span class="morph-plus">+</span>':''}<span class="morph-chip ${esc(m.role||"root")}"><span class="morph-part">${esc(m.part)}</span><span class="morph-gloss">${esc(m.gloss)}</span></span>`).join("")}
+        ${hk.co ? `<span class="morph-plus">→</span><span class="core-arrow">${esc(hk.co)}</span>` : ""}
+      </div>` : "";
+    return `
+      <div class="hook-panel">
+        <strong style="font-size:13px;">🧠 3軸記憶フック（外来語・語源分解・イメージ語呂）</strong>
+        ${morphHtml}
+        <div class="hook-grid">
+          ${hk.kn ? `<div class="hook-row"><span class="hook-tag">🔗 外来語・既知</span><span>${esc(hk.kn)} ${srcBadgeHtml(hk.knSrc)}</span></div>` : ""}
+          ${hk.et ? `<div class="hook-row"><span class="hook-tag">🌱 語源分解</span><span>${esc(hk.et)} ${srcBadgeHtml(hk.etSrc)}</span></div>` : ""}
+          ${hk.mn ? `<div class="hook-row"><span class="hook-tag">💡 語呂・連想</span><span>${esc(hk.mn)} ${srcBadgeHtml(hk.mnSrc)}</span></div>` : ""}
+          ${showConfusable && hk.cf && hk.cf.length ? `<div class="hook-row"><span class="hook-tag">⚠️ 混同注意</span><div class="confusable-pills">${hk.cf.map(x=>`<span class="conf-pill">${esc(x)}</span>`).join("")}</div></div>` : ""}
+        </div>
+      </div>`;
   }
 
   // --- SRS Engine ---
@@ -1110,9 +1650,18 @@ const EMBEDDED_BUNDLE = null;
   function isDueToday(c) {
     if (!c || c.st === "new") return false;
     if (c.dueTs && c.dueTs <= Date.now()) return true;
-    return c.due && c.due <= todayStr(0);
+    if (typeof c.due === "number") return c.due <= Date.now();
+    return Boolean(c.due && c.due <= todayStr(0));
   }
-  function getDueItems() {
+  function getTotalDueCount() {
+    let cnt = 0;
+    for (const w of allWords) {
+      const c = state.cards[w.id];
+      if (c && c.st !== "new" && isDueToday(c)) cnt++;
+    }
+    return cnt;
+  }
+  function getDueItems(limit = 80) {
     const t = todayStr(0), due = [];
     for (const w of allWords) {
       const c = state.cards[w.id];
@@ -1128,7 +1677,7 @@ const EMBEDDED_BUNDLE = null;
       }
     }
     due.sort((a, b) => a.prio - b.prio || a.score - b.score);
-    return due.slice(0, 80);
+    return limit > 0 ? due.slice(0, limit) : due;
   }
 
   function buildQueue(mode, customList = null, label = "") {
@@ -1138,7 +1687,7 @@ const EMBEDDED_BUNDLE = null;
       renderStudy(); return;
     }
     if (mode === "auto") {
-      sessionQueue = getDueItems().map(d => ({ id: d.w.id, cardMode: "en2jp" }));
+      sessionQueue = getDueItems(80).map(d => ({ id: d.w.id, cardMode: "en2jp" }));
     } else if (mode === "new10" || mode === "new50") {
       const lim = mode === "new10" ? 10 : 50;
       sessionQueue = allWords.filter(w => (!state.cards[w.id] || state.cards[w.id].st === "new") && w.s !== 5).slice(0, lim).map(w => ({ id: w.id, cardMode: "en2jp" }));
@@ -1151,7 +1700,7 @@ const EMBEDDED_BUNDLE = null;
     } else if (mode === "stage5") {
       sessionQueue = allWords.filter(w => w.s === 5).slice(0, 30).map(w => ({ id: w.id, cardMode: "en2jp" }));
     } else if (mode === "cloze") {
-      const pool = allWords.filter(w => w.s <= 2 && w.ph && w.ph.toLowerCase().includes(w.w.toLowerCase().slice(0, Math.max(3, w.w.length-2))));
+      const pool = allWords.filter(w => w.s <= 2 && w.ph && w.ph.toLowerCase().includes((w.w || "").toLowerCase().slice(0, Math.max(3, (w.w || "").length-2))));
       sessionQueue = pool.slice(0, 30).map(w => ({ id: w.id, cardMode: "cloze" }));
     }
     document.querySelectorAll("#modeBar .mode-pill").forEach(b => b.classList.toggle("active", b.dataset.mode === mode));
@@ -1166,7 +1715,7 @@ const EMBEDDED_BUNDLE = null;
     if (!timerEnabled) return;
     const tick = () => {
       if (cardRevealed || !sessionStarted) return;
-      cardLatencyMs = performance.now() - cardStartTs;
+      cardLatencyMs = clampLatencyMs(performance.now() - cardStartTs);
       const fill = document.getElementById("latencyFill"), ro = document.getElementById("latencyReadout");
       if (fill && ro) {
         fill.style.width = Math.min(100, (cardLatencyMs/4000)*100) + "%";
@@ -1204,22 +1753,26 @@ const EMBEDDED_BUNDLE = null;
   }
 
   function renderStats() {
-    const dueCount = getDueItems().length;
+    const totalDueCount = getTotalDueCount();
     const today = state.daily[todayStr(0)] || { done:0, ok:0, tri:0, x:0 };
-    document.getElementById("statDue").textContent = dueCount;
-    document.getElementById("statDueSub").textContent = dueCount === 0 ? "今日の復習完了！" : "優先順・上限80語/日";
+    document.getElementById("statDue").textContent = totalDueCount;
+    document.getElementById("statDueSub").textContent = totalDueCount === 0
+      ? "今日の復習完了！"
+      : totalDueCount > 80 ? "優先80語を抽出（上限80語/日）" : "優先順・上限80語/日";
     document.getElementById("statDone").textContent = today.done;
     const acc = today.done ? Math.round((today.ok/today.done)*100) : null;
     document.getElementById("statAcc").textContent = acc === null ? "即答率 --%" : `即答率 ${acc}% (レ${today.ok}/🔺${today.tri}/❌${today.x})`;
     const paceEl = document.getElementById("statPace"), paceSub = document.getElementById("statPaceSub");
-    if (dueCount <= 60) { paceEl.textContent = "+50語 OK"; paceEl.style.color = "var(--ok-fg)"; paceSub.textContent = "🟢 順調（10語×5推奨）"; }
-    else if (dueCount <= 100) { paceEl.textContent = "+25語 目安"; paceEl.style.color = "var(--tri-fg)"; paceSub.textContent = "🟡 復習優先モード"; }
+    if (totalDueCount <= 60) { paceEl.textContent = "+50語 OK"; paceEl.style.color = "var(--ok-fg)"; paceSub.textContent = "🟢 順調（10語×5推奨）"; }
+    else if (totalDueCount <= 100) { paceEl.textContent = "+25語 目安"; paceEl.style.color = "var(--tri-fg)"; paceSub.textContent = "🟡 復習優先モード"; }
     else { paceEl.textContent = "+0〜10語"; paceEl.style.color = "var(--x-fg)"; paceSub.textContent = "🔴 渋滞ブレーキ作動"; }
     const weakTotal = allWords.filter(w => w.mk==="x"||w.mk==="tri").length;
     const weakCleared = allWords.filter(w => (w.mk==="x"||w.mk==="tri") && state.cards[w.id] && state.cards[w.id].st==="review" && state.cards[w.id].iv>=7).length;
+    const patCnt = BUNDLE.meta?.pattern_word_count ?? allWords.filter(w => w.pt && w.pt.length).length;
+    const synCnt = (BUNDLE.synonym_groups || []).length;
     document.getElementById("statWeak").textContent = `${weakCleared} / ${weakTotal}`;
-    document.getElementById("statHookInfo").textContent = `型 ${BUNDLE.meta.pattern_word_count||0}語 / 意味グループ ${(BUNDLE.synonym_groups||[]).length}種`;
-    document.getElementById("brandSub").textContent = `全${allWords.length}語｜意味グループ ${(BUNDLE.synonym_groups||[]).length}種・型 ${BUNDLE.meta.pattern_word_count||0}語`;
+    document.getElementById("statHookInfo").textContent = `型 ${patCnt}語 / 意味グループ ${synCnt}種`;
+    document.getElementById("brandSub").textContent = `全${allWords.length}語｜意味グループ ${synCnt}種・型 ${patCnt}語`;
     document.getElementById("undoBtn").disabled = undoStack.length === 0;
   }
 
@@ -1293,9 +1846,13 @@ const EMBEDDED_BUNDLE = null;
     if (qItem.cardMode === "cloze" && w.ph) {
       const idxP = w.ph.indexOf("（");
       const en = idxP >= 0 ? w.ph.slice(0, idxP).trim() : w.ph;
-      const jp = idxP >= 0 ? w.ph.slice(idxP) : w.m;
+      const jp = idxP >= 0 ? w.ph.slice(idxP) : (w.m || "");
       const stem = w.w.length > 4 ? w.w.slice(0, w.w.length-1) : w.w;
-      const masked = en.replace(new RegExp(`\\b(${stem.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}[a-zA-Z]*)\\b`, "i"), `<span class="cloze-blank">${w.w[0]}____</span>`);
+      const rx = new RegExp(`\\b(${stem.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}[a-zA-Z]*)\\b`, "i");
+      const m = en.match(rx);
+      const masked = m
+        ? esc(en.slice(0, m.index)) + `<span class="cloze-blank">${esc((w.w || "")[0] || "")}____</span>` + esc(en.slice(m.index + m[0].length))
+        : esc(en);
       frontHtml = `<div class="cloze-prompt">${masked}</div><div class="muted" style="font-size:14px;">${esc(jp)}</div>`;
     } else {
       frontHtml = `
@@ -1309,24 +1866,7 @@ const EMBEDDED_BUNDLE = null;
 
     const pX = previewNext(c, "x", 3000), pTri = previewNext(c, "tri", 3000), pOk = previewNext(c, "ok", 1400);
 
-    const morphHtml = hk && hk.mp && hk.mp.length ? `
-      <div class="morpheme-row">
-        ${hk.mp.map((m,i)=>`${i>0?'<span class="morph-plus">+</span>':''}<span class="morph-chip ${esc(m.role)}"><span class="morph-part">${esc(m.part)}</span><span class="morph-gloss">${esc(m.gloss)}</span></span>`).join("")}
-        ${hk.co ? `<span class="morph-plus">→</span><span class="core-arrow">${esc(hk.co)}</span>` : ""}
-      </div>` : "";
-
-    const showConf = state.showConfusable;
-    const hookHtml = hk ? `
-      <div class="hook-panel">
-        <strong style="font-size:13px;">🧠 記憶フック（語源・既知知識・イメージ語呂）</strong>
-        ${morphHtml}
-        <div class="hook-grid">
-          ${hk.et ? `<div class="hook-row"><span class="hook-tag">🌱 語源</span><span>${esc(hk.et)}</span></div>` : ""}
-          ${hk.kn ? `<div class="hook-row"><span class="hook-tag">🔗 既知知識</span><span>${esc(hk.kn)}</span></div>` : ""}
-          ${hk.mn ? `<div class="hook-row"><span class="hook-tag">💡 語呂・連想</span><span>${esc(hk.mn)}</span></div>` : ""}
-          ${showConf && hk.cf && hk.cf.length ? `<div class="hook-row"><span class="hook-tag">⚠️ 混同注意</span><div class="confusable-pills">${hk.cf.map(x=>`<span class="conf-pill">${esc(x)}</span>`).join("")}</div></div>` : ""}
-        </div>
-      </div>` : "";
+    const hookHtml = renderMergedHookPanelHtml(w.id, state.showConfusable);
 
     const synLinksHtml = sgs.length ? `
       <div class="row" style="gap:6px;">
@@ -1402,7 +1942,9 @@ const EMBEDDED_BUNDLE = null;
     document.getElementById("gradeX")?.addEventListener("click", () => submitGrade("x"));
     document.getElementById("gradeTri")?.addEventListener("click", () => submitGrade("tri"));
     document.getElementById("gradeOk")?.addEventListener("click", () => submitGrade("ok"));
-    document.getElementById("userNoteInput")?.addEventListener("input", e => { c.note = e.target.value; saveState(); });
+    const noteInputEl = document.getElementById("userNoteInput");
+    noteInputEl?.addEventListener("input", e => { c.note = e.target.value; scheduleDebouncedSave(); });
+    noteInputEl?.addEventListener("blur", () => { flushDebouncedSave(); });
     area.querySelectorAll(".syn-jump-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         sessionStarted = false;
@@ -1423,7 +1965,9 @@ const EMBEDDED_BUNDLE = null;
   }
   function revealCard() {
     if (cardRevealed || !sessionStarted) return;
-    cardRevealed = true; stopLatency();
+    cardRevealed = true;
+    cardLatencyMs = clampLatencyMs(performance.now() - cardStartTs);
+    stopLatency();
     document.getElementById("preFlipActions").style.display = "none";
     document.getElementById("answerArea").style.display = "flex";
     if (!timerEnabled && !hintUsed) return;
@@ -1469,10 +2013,23 @@ const EMBEDDED_BUNDLE = null;
     sessionIndex = last.prevIndex; sessionStarted = true; saveState(); toast("直前の評価を取り消しました"); renderStudy();
   });
 
+  function isTypingOrModalOpen(e) {
+    const mb = document.getElementById("modalBackdrop");
+    if (mb && mb.classList.contains("open")) return true;
+    const el = e && e.target;
+    if (!el) return false;
+    const tag = el.tagName || "";
+    return tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT" || !!el.isContentEditable;
+  }
+
   document.addEventListener("keydown", e => {
+    const mb = document.getElementById("modalBackdrop");
+    if (e.key === "Escape" && mb && mb.classList.contains("open")) {
+      mb.classList.remove("open");
+      return;
+    }
     if (!document.getElementById("tab-study").classList.contains("active")) return;
-    const tag = (e.target && e.target.tagName) || "";
-    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+    if (isTypingOrModalOpen(e)) return;
     if (!sessionStarted) {
       if ((e.code === "Space" || e.key === "Enter") && sessionQueue.length && sessionIndex < sessionQueue.length) {
         e.preventDefault(); sessionStarted = true; renderStudy();
@@ -1624,16 +2181,18 @@ const EMBEDDED_BUNDLE = null;
 
     const stSel = document.getElementById("batchStageFilter").value;
     const mb = document.getElementById("missingBanner");
-    if (stSel === "1" || stSel === "all") {
+    const missingS1 = BUNDLE.meta?.missing_stage1 || [];
+    if ((stSel === "1" || stSel === "all") && missingS1.length) {
       mb.style.display = "block";
-      mb.innerHTML = `⚠️ <strong>Stage 1 欠落（113語）</strong>: ` + (BUNDLE.meta.missing_stage1||[]).map(r=>`#${r.from}–${r.to} (${r.pages})`).join(" / ");
+      mb.innerHTML = `⚠️ <strong>Stage 1 欠落（113語）</strong>: ` + missingS1.map(r => `#${esc(r.from)}–${esc(r.to)} (${esc(r.pages)})`).join(" / ");
     } else mb.style.display = "none";
 
     const batches = new Map();
     for (const w of allWords) {
       if (stSel !== "all" && String(w.s) !== stSel) continue;
-      if (!batches.has(w.b)) batches.set(w.b, { key:w.b, stage:w.s, words:[], dates:new Set() });
-      const b = batches.get(w.b); b.words.push(w); (w.dt||[]).forEach(d => b.dates.add(d));
+      const bk = w.b || `S${w.s || 1}-B1`;
+      if (!batches.has(bk)) batches.set(bk, { key:bk, stage:w.s || 1, words:[], dates:new Set() });
+      const b = batches.get(bk); b.words.push(w); (w.dt||[]).forEach(d => b.dates.add(d));
     }
     const grid = document.getElementById("batchGrid");
     grid.innerHTML = [...batches.values()].map(b => {
@@ -1645,7 +2204,7 @@ const EMBEDDED_BUNDLE = null;
       const tot = b.words.length, f = b.words[0].n, l = b.words[tot-1].n;
       const dateTxt = b.dates.size ? `教材日付: ${[...b.dates].join(", ")}` : (b.stage===2 && f===851 ? "★ 次の新規50語" : "未記録");
       return `<div class="batch-card ${b.stage===2&&f===851?"current-frontier":""}">
-        <div class="row space-between"><strong>Stage ${b.stage} #${f}–${l}</strong><span class="badge">${tot}語</span></div>
+        <div class="row space-between"><strong>Stage ${esc(b.stage)} #${esc(f)}–${esc(l)}</strong><span class="badge">${tot}語</span></div>
         <div class="muted" style="font-size:11px;">${esc(dateTxt)}</div>
         <div class="pbar"><div class="pseg-ok" style="width:${(ok/tot)*100}%"></div><div class="pseg-mid" style="width:${(mid/tot)*100}%"></div><div class="pseg-tri" style="width:${(tri/tot)*100}%"></div><div class="pseg-x" style="width:${(x/tot)*100}%"></div></div>
         <div class="row space-between" style="font-size:11px;"><span class="muted">レ${ok}/学習${mid}/🔺${tri}/❌${x}</span><button class="ghost" style="padding:3px 8px; font-size:12px; color:var(--accent); font-weight:700;" data-batch="${esc(b.key)}">演習 →</button></div>
@@ -1670,7 +2229,7 @@ const EMBEDDED_BUNDLE = null;
         else if (c.st==="audit") cls="st-audit";
         else if (c.iv>=7) cls="st-ok"; else cls="st-mid";
       }
-      return `<button class="hm-dot ${cls}" title="#${w.n} ${esc(w.w)}" data-wid="${w.id}"></button>`;
+      return `<button class="hm-dot ${cls}" title="#${esc(w.n)} ${esc(w.w)}" data-wid="${esc(w.id)}"></button>`;
     }).join("");
     wrap.querySelectorAll("[data-wid]").forEach(el => el.addEventListener("click", () => openWordModal(el.dataset.wid)));
   }
@@ -1687,16 +2246,18 @@ const EMBEDDED_BUNDLE = null;
     const filtered = allWords.filter(w => {
       if (stF !== "all" && String(w.s) !== stF) return false;
       const c = state.cards[w.id];
+      const tags = getErrTags(w.id);
       if (statusF === "pattern" && !(w.pt && w.pt.length)) return false;
       if (statusF === "weak" && w.mk !== "x" && w.mk !== "tri") return false;
-      if (statusF === "hooks" && !w.hk) return false;
+      if (statusF === "errtag" && !tags.length) return false;
+      if (statusF === "hooks" && !getMergedHooks(w.id).hasAny) return false;
       if (statusF === "leech" && (!c || (c.lapses||0) < 4)) return false;
       if (statusF === "due" && !isDueToday(c)) return false;
       if (statusF === "note" && (!c || !c.note)) return false;
       if (q) {
         const numMatch = q.startsWith("#") && String(w.n) === q.slice(1);
         const patMatch = (w.pt||[]).some(p => p.toLowerCase().includes(q));
-        if (!numMatch && !patMatch && !w.w.toLowerCase().includes(q) && !w.m.toLowerCase().includes(q) && !String(w.n).includes(q)) return false;
+        if (!numMatch && !patMatch && !(w.w || "").toLowerCase().includes(q) && !(w.m || "").toLowerCase().includes(q) && !String(w.n).includes(q)) return false;
       }
       return true;
     });
@@ -1704,23 +2265,26 @@ const EMBEDDED_BUNDLE = null;
     const listEl = document.getElementById("wordList");
     listEl.innerHTML = filtered.slice(0, 60).map(w => {
       const c = state.cards[w.id];
-      return `<div class="word-item" data-wid="${w.id}">
+      const tags = getErrTags(w.id);
+      const tagBadges = tags.map(t => ERR_TAG_META[t] ? `<span class="badge ${ERR_TAG_META[t].cls}">${esc(ERR_TAG_META[t].label)}</span>` : "").join("");
+      return `<div class="word-item word-row" data-wid="${esc(w.id)}">
         <div class="word-item-left">
           <div class="word-item-title">
-            <span class="muted mono" style="font-size:12px;">S${w.s}#${w.n}</span>
+            <span class="muted mono" style="font-size:12px;">S${esc(w.s)}#${esc(w.n)}</span>
             <span>${esc(w.w)}</span>
             ${w.mk==="x"?`<span class="badge x">❌</span>`:w.mk==="tri"?`<span class="badge tri">🔺</span>`:w.mk==="check"?`<span class="badge ok">レ</span>`:""}
             ${w.pt&&w.pt.length?`<span class="badge pat">📐 ${esc(fmtPat(w.pt[0]).slice(0,24))}</span>`:""}
+            ${tagBadges}
           </div>
           <div class="word-item-sub">${esc(w.m)}</div>
         </div>
-        <div class="muted" style="font-size:11px; flex-shrink:0;">${!c||c.st==="new"?"未学習":`次回:${c.due||"今日"}`}</div>
+        <div class="muted" style="font-size:11px; flex-shrink:0;">${!c||c.st==="new"?"未学習":`次回:${esc(c.due||"今日")}`}</div>
       </div>`;
     }).join("");
     listEl.querySelectorAll("[data-wid]").forEach(el => el.addEventListener("click", () => openWordModal(el.dataset.wid)));
   }
-  ["searchInput","filterStage","filterStatus"].forEach(id => {
-    document.getElementById(id).addEventListener("input", renderWordList);
+  document.getElementById("searchInput").addEventListener("input", renderWordList);
+  ["filterStage","filterStatus"].forEach(id => {
     document.getElementById(id).addEventListener("change", renderWordList);
   });
 
@@ -1729,31 +2293,52 @@ const EMBEDDED_BUNDLE = null;
   modalBg.addEventListener("click", e => { if (e.target === modalBg) modalBg.classList.remove("open"); });
   function openWordModal(id) {
     const w = wordsMap.get(id); if (!w) return;
-    const c = getCard(w.id), hk = w.hk || null;
+    const c = getCard(w.id);
+    const usrHk = (state.userHooks && state.userHooks[w.id]) || { kn: "", et: "", mn: "" };
+    const tags = getErrTags(w.id);
+    const logs = (state.latLog && state.latLog[w.id]) || [];
+    const lastLog = logs.length ? logs[logs.length - 1] : null;
     modalBox.innerHTML = `
       <div class="row space-between">
-        <div class="row" style="gap:8px;"><span class="badge accent">Stage ${w.s} #${w.n}</span><strong style="font-size:22px;">${esc(w.w)}</strong><button id="mAudio" class="ghost">🔊</button></div>
+        <div class="row" style="gap:8px;">
+          <span class="badge accent">Stage ${esc(w.s)} #${esc(w.n)}</span>
+          <strong style="font-size:22px;">${esc(w.w)}</strong>
+          <button id="mAudio" class="ghost">🔊</button>
+          ${tags.map(t => ERR_TAG_META[t] ? `<span class="badge ${ERR_TAG_META[t].cls}">${esc(ERR_TAG_META[t].label)}</span>` : "").join("")}
+        </div>
         <button id="mClose" class="ghost">✕</button>
       </div>
       <div style="font-size:16px; font-weight:800;">${esc(w.m)}</div>
       ${renderPatternHtml(w.pt)}
       ${w.ph ? `<div class="phrase-box"><div>${esc(w.ph)}</div></div>` : ""}
       ${w.rel ? `<div class="related-line"><strong>関連：</strong>${esc(w.rel)}</div>` : ""}
-      ${hk ? `<div class="hook-panel">
-        ${hk.et ? `<div style="font-size:13px;"><strong>🌱 語源:</strong> ${esc(hk.et)}</div>` : ""}
-        ${hk.kn ? `<div style="font-size:13px;"><strong>🔗 既知知識:</strong> ${esc(hk.kn)}</div>` : ""}
-        ${hk.mn ? `<div style="font-size:13px;"><strong>💡 語呂・連想:</strong> ${esc(hk.mn)}</div>` : ""}
-      </div>` : ""}
+      ${renderMergedHookPanelHtml(w.id, true)}
+      ${renderErrTagTogglesHtml(w.id)}
+      <div class="hook-workshop-grid">
+        <div style="font-size:12px; font-weight:800; color:var(--accent);">🧩 自分用の3軸記憶フック（入力すると最優先で表示）</div>
+        <div class="hw-field"><label>🔗 外来語・既知語</label><input id="mHkKn" type="text" placeholder="カタカナ語・派生語など（例: オンデマンド）" value="${esc(usrHk.kn||"")}" /></div>
+        <div class="hw-field"><label>🌱 語源分解</label><input id="mHkEt" type="text" placeholder="接頭辞＋語根（例: de[強く] + mand[命じる]）" value="${esc(usrHk.et||"")}" /></div>
+        <div class="hw-field"><label>💡 イメージ語呂</label><input id="mHkMn" type="text" placeholder="自分のイメージ・語呂合わせ..." value="${esc(usrHk.mn||"")}" /></div>
+      </div>
       <div class="stack" style="gap:6px;"><label style="font-size:12px; font-weight:700;">✏️ 自分メモ</label><textarea id="mNote" rows="2">${esc(c.note||"")}</textarea></div>
       <div class="row space-between">
-        <span class="muted" style="font-size:12px;">間隔: ${c.iv}日 ｜ ミス: ${c.lapses||0}回</span>
+        <span class="muted" style="font-size:12px;">間隔: ${c.iv}日 ｜ ミス: ${c.lapses||0}回${lastLog ? ` ｜ 直近想起: ${(lastLog.ms/1000).toFixed(1)}s` : ""}</span>
         <div class="row" style="gap:8px;"><button id="mQueueToday" class="primary" style="font-size:12px;">今日の復習に追加</button><button id="mSave" style="font-size:12px;">保存</button></div>
       </div>`;
     modalBg.classList.add("open");
+    bindErrTagToggles(modalBox, () => { renderWordList(); });
     document.getElementById("mClose").onclick = () => modalBg.classList.remove("open");
     document.getElementById("mAudio").onclick = () => speak(w.w);
-    document.getElementById("mSave").onclick = () => { c.note = document.getElementById("mNote").value.trim(); saveState(); toast("保存しました"); modalBg.classList.remove("open"); renderWordList(); };
-    document.getElementById("mQueueToday").onclick = () => { c.note = document.getElementById("mNote").value.trim(); c.st="learning"; c.step=1; c.iv=1; c.due=todayStr(0); c.dueTs=0; saveState(); toast(`「${w.w}」を今日の復習に追加`); modalBg.classList.remove("open"); renderStats(); };
+    const saveAllModal = () => {
+      c.note = document.getElementById("mNote").value.trim();
+      saveUserHook(w.id, {
+        kn: document.getElementById("mHkKn").value,
+        et: document.getElementById("mHkEt").value,
+        mn: document.getElementById("mHkMn").value
+      }, { deferSave: true });
+    };
+    document.getElementById("mSave").onclick = () => { saveAllModal(); saveState(); toast("保存しました"); modalBg.classList.remove("open"); renderWordList(); };
+    document.getElementById("mQueueToday").onclick = () => { saveAllModal(); c.st="learning"; c.step=1; c.iv=1; c.due=todayStr(0); c.dueTs=0; saveState(); toast(`「${w.w}」を今日の復習に追加`); modalBg.classList.remove("open"); renderStats(); };
   }
   document.getElementById("addWordBtn").addEventListener("click", () => {
     modalBox.innerHTML = `
@@ -1782,7 +2367,7 @@ const EMBEDDED_BUNDLE = null;
   // --- TAB 5: Wiki & Backup ---
   function renderWikiTab() {
     updateSyncUI();
-    const L = BUNDLE.meta.links || {};
+    const L = BUNDLE.meta?.links || {};
     const items = [
       { title:"📱 タブレット対応WebアプリURL", desc:"Safari/Chromeで開いてホーム画面に追加", url:L.tablet_app || PUBLIC_APP_URL },
       { title:"☁️ Google Drive 自動同期ガイド", desc:"2分で設定できるGASコード＆手順", url:"https://drive.google.com/file/d/1acIqqF-SKZ8x4_ddPxmA7gb91u0ctFPU/view?usp=drivesdk" },
@@ -1899,9 +2484,11 @@ const EMBEDDED_BUNDLE = null;
   }
   document.getElementById("exportJsonBtn").addEventListener("click", () => { downloadFile(`systan-srs-state-${todayStr(0)}.json`, JSON.stringify(state, null, 2), "application/json"); toast("履歴を保存しました"); });
   document.getElementById("importJsonInput").addEventListener("change", e => {
-    const f = e.target.files[0]; if (!f) return;
+    const f = e.target.files[0];
+    e.target.value = "";
+    if (!f) return;
     const r = new FileReader();
-    r.onload = () => { try { const p = JSON.parse(r.result); if (!p.cards) throw 0; state = p; rebuildIndex(); saveState(); toast("履歴を復元しました"); buildQueue("auto"); } catch (_) { toast("JSON読込失敗"); } };
+    r.onload = () => { try { const p = JSON.parse(r.result); if (!p.cards) throw 0; state = normalizeStateObj(p); rebuildIndex(); saveState(); toast("履歴を復元しました"); buildQueue("auto"); } catch (_) { toast("JSON読込失敗"); } };
     r.readAsText(f);
   });
   async function handleBundleFile(file) {
@@ -1912,18 +2499,46 @@ const EMBEDDED_BUNDLE = null;
       if (!parsed.words || !Array.isArray(parsed.words)) throw new Error("invalid");
       BUNDLE = parsed;
       await saveBundleToIDB(parsed);
+      // B11: Reset stale caches and narrow filters on bundle reload
+      patPairs = [];
+      pqDeck = [];
+      pqIdx = 0;
+      pqStarted = false;
+      pqRevealed = false;
+      loopState.initialized = false;
+      loopState.started = false;
+      loopState.finished = false;
+      loopState.target = "today_weak";
+      loopState.levelFilter = "all";
+      loopState.verbFamily = "all";
+      loopState.stageSel = "all";
+      loopState.batchSel = "all";
+      loopState.rangeFrom = "";
+      loopState.rangeTo = "";
+      loopState.customLabel = "";
+      loopState.setWords = [];
+      loopState.deck = [];
       toast(`単語データ ${parsed.words.length}語 を読み込みました！`);
       bootApp();
     } catch (_) { toast("systan_data.json の形式が正しくありません"); }
   }
-  document.getElementById("onboardFileInput").addEventListener("change", e => handleBundleFile(e.target.files[0]));
-  document.getElementById("reloadBundleInput").addEventListener("change", e => handleBundleFile(e.target.files[0]));
+  document.getElementById("bundleFileInput").addEventListener("change", async e => {
+    const f = e.target.files[0];
+    e.target.value = "";
+    await handleBundleFile(f);
+  });
+  document.getElementById("reloadBundleInput").addEventListener("change", async e => {
+    const f = e.target.files[0];
+    e.target.value = "";
+    await handleBundleFile(f);
+  });
 
   function exportAnki(onlyWeak) {
-    const list = onlyWeak ? allWords.filter(w => w.mk==="x"||w.mk==="tri") : allWords;
+    const list = onlyWeak ? allWords.filter(w => w.mk==="x"||w.mk==="tri"||getErrTags(w.id).length>0) : allWords;
     const rows = list.map(w => {
+      const hk = getMergedHooks(w.id);
       const front = `${w.w} ${w.ipa?"["+w.ipa+"]":""}`.trim();
-      const back = [`<b>${w.m}</b>`, w.pt&&w.pt.length?`<br>📐 ${w.pt.join(" / ")}`:"", w.ph?`<br><i>${w.ph}</i>`:"", w.hk&&w.hk.et?`<br>🌱 ${w.hk.et}`:"", w.hk&&w.hk.mn?`<br>💡 ${w.hk.mn}`:""].join("");
+      const back = [`<b>${w.m}</b>`, w.pt&&w.pt.length?`<br>📐 ${w.pt.join(" / ")}`:"", w.ph?`<br><i>${w.ph}</i>`:"", hk.kn?`<br>🔗 ${hk.kn}`:"", hk.et?`<br>🌱 ${hk.et}`:"", hk.mn?`<br>💡 ${hk.mn}`:""].join("");
       return `${front.replace(/\t|\n/g," ")}\t${back.replace(/\t|\n/g," ")}\tsystan stage${w.s}`;
     });
     downloadFile(`systan-anki-${onlyWeak?"weak":"all"}-${todayStr(0)}.tsv`, rows.join("\n"), "text/tab-separated-values;charset=utf-8");
@@ -1943,14 +2558,27 @@ const EMBEDDED_BUNDLE = null;
   function parsePatternPair(rawPat) {
     const pat = fmtPat(rawPat).trim();
     if (!pat || /^(⚠️|★|Q:|⇔|＝|=)/.test(pat)) return null;
-    const m = pat.match(/^([A-Za-z0-9\s\(\)\[\]\+\-\'\/\.~〜,]+?)\s*[（「](.+?)[）」]\s*$/);
-    if (!m) return null;
-    const en = m[1].replace(/\s+/g, " ").replace(/^[ ・/]+|[ ・/]+$/g, "");
-    let ja = m[2].replace(/^[ ・/]+|[ ・/]+$/g, "");
+    let en = "", ja = "", note = "";
+    const eqIdx = pat.search(/[＝=]/);
+    if (eqIdx > 0) {
+      let lhs = pat.slice(0, eqIdx).trim();
+      ja = pat.slice(eqIdx + 1).trim();
+      const trapM = lhs.match(/[（(]([^）)]*[×⚠️][^）)]*)[）)]/);
+      if (trapM) {
+        note = trapM[1].trim();
+        lhs = lhs.replace(trapM[0], "").trim();
+      }
+      en = lhs.replace(/\s+/g, " ").replace(/^[ ・/]+|[ ・/]+$/g, "");
+      ja = ja.replace(/^[ ・/]+|[ ・/]+$/g, "");
+    } else {
+      const m = pat.match(/^([A-Za-z0-9\s\(\)\[\]\+\-\'\/\.~〜,]+?)\s*[（「](.+?)[）」]\s*$/);
+      if (!m) return null;
+      en = m[1].replace(/\s+/g, " ").replace(/^[ ・/]+|[ ・/]+$/g, "");
+      ja = m[2].replace(/^[ ・/]+|[ ・/]+$/g, "");
+    }
     if (!/\s/.test(en) || !/[A-Za-z]{2,}/.test(en)) return null;
-    let note = "";
     const parts = ja.split(/[※★]/);
-    if (parts.length > 1) { ja = parts[0].replace(/[ 、。/／]+$/g, ""); note = parts.slice(1).join("・").trim(); }
+    if (parts.length > 1) { ja = parts[0].replace(/[ 、。/／]+$/g, ""); note = [note, ...parts.slice(1)].filter(Boolean).join("・").trim(); }
     if (ja.length < 2) return null;
     return { en, ja, note };
   }
@@ -2009,7 +2637,7 @@ const EMBEDDED_BUNDLE = null;
     if (!pqTimerOn) return;
     const tick = () => {
       if (pqRevealed || !pqStarted) return;
-      pqLatMs = performance.now() - pqStartTs;
+      pqLatMs = clampLatencyMs(performance.now() - pqStartTs);
       const f = document.getElementById("pqLatFill"), r = document.getElementById("pqLatTxt");
       if (f && r) {
         f.style.width = Math.min(100, (pqLatMs/4000)*100) + "%";
@@ -2181,7 +2809,9 @@ const EMBEDDED_BUNDLE = null;
     });
     const doReveal = () => {
       if (pqRevealed) return;
-      pqRevealed = true; stopPqTimer();
+      pqRevealed = true;
+      pqLatMs = clampLatencyMs(performance.now() - pqStartTs);
+      stopPqTimer();
       document.getElementById("pqPreBtns").style.display = "none";
       document.getElementById("pqAnsArea").style.display = "flex";
       if (!pqTimerOn && !pqHintUsed) return;
@@ -2215,8 +2845,7 @@ const EMBEDDED_BUNDLE = null;
   // Keyboard shortcuts for Pattern tab too
   document.addEventListener("keydown", e => {
     if (!document.getElementById("tab-pquiz").classList.contains("active")) return;
-    const tag = (e.target && e.target.tagName) || "";
-    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
+    if (isTypingOrModalOpen(e)) return;
     if (!pqStarted) {
       if ((e.code === "Space" || e.key === "Enter") && pqDeck.length && pqIdx < pqDeck.length) { e.preventDefault(); pqStarted = true; renderPatternQuiz(); }
       return;
@@ -2229,13 +2858,2553 @@ const EMBEDDED_BUNDLE = null;
     else if (e.key.toLowerCase() === "h" && !pqRevealed) document.getElementById("pqHintBtn")?.click();
   });
 
+  // =========================================================================
+  // --- TAB: HYBRID LOOP TRAINER (🔁 周回特訓：PWA高速周回 × 旧帝大・AI弱点特訓) ---
+  // =========================================================================
+  const VERB_FAMILIES = [
+    { id: "all",               label: "すべての型・カテゴリ" },
+    { id: "transitive_trap",   label: "他動詞の罠（前置詞不要）" },
+    { id: "intrans_prep",      label: "自動詞＋前置詞" },
+    { id: "svoo_vs_to",        label: "SVOO vs to/for型" },
+    { id: "svoc",              label: "SVOC・that節" },
+    { id: "from_family",       label: "from（妨害・区別）" },
+    { id: "with_family",       label: "with（供給・装備）" },
+    { id: "of_family",         label: "of（奪取・通知）" },
+    { id: "as_family",         label: "as（みなす・描写）" },
+    { id: "vocab_confusable",  label: "紛らわしい語彙・類義語" },
+    { id: "inanimate_subject", label: "🏛 無生物主語×動詞の型" },
+    { id: "stage5_polysemy",   label: "🏛 Stage 5 多義語文脈" },
+    { id: "stage3_usage",      label: "🏛 Stage 3 難関語法" },
+    { id: "composition_trap",  label: "🏛 英作文減点トラップ" }
+  ];
+
+  const LEVEL_META = {
+    national: { label: "🏛 旧帝大・難関国立", cls: "lvl-national" },
+    march:    { label: "MARCH・関関同立",     cls: "lvl-march" },
+    common:   { label: "共通テスト",           cls: "lvl-common" }
+  };
+
+  function getFamilyLabel(fid) {
+    const norm = normalizeFamilyId(fid);
+    const found = VERB_FAMILIES.find(x => x.id === norm);
+    return found ? found.label : (norm || "");
+  }
+
+  const VT_TRAP_MAP = {
+    discuss:  ["discuss about", "discuss on", "discuss with"],
+    mention:  ["mention about", "mention on", "be mentioned about"],
+    marry:    ["marry with", "marry to", "marry for"],
+    approach: ["approach to", "approach at", "approach into"],
+    reach:    ["reach at", "reach to", "arrive"],
+    enter:    ["enter into", "enter to", "enter at"],
+    attend:   ["attend to", "attend at", "attend in"],
+    resemble: ["resemble with", "resemble to", "be resembled"],
+    survive:  ["survive from", "survive after", "survive through"],
+    await:    ["await for", "await at", "await to"],
+    obey:     ["obey to", "obey for", "obey with"],
+    contact:  ["contact with", "contact to", "contact at"],
+    inhabit:  ["inhabit in", "inhabit at", "inhabit on"],
+    accompany:["accompany with", "accompany to", "accompany by"],
+    exceed:   ["exceed over", "exceed beyond", "exceed than"],
+    oppose:   ["oppose to", "oppose against", "oppose with"]
+  };
+
+  function buildVtTrapRegex(base) {
+    const low = String(base || "").toLowerCase();
+    const escBase = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    if (low.endsWith("e")) {
+      const stem = escBase(low.slice(0, -1));
+      return new RegExp(`\\b(${stem}(?:e|es|ed|ing))\\b`, "i");
+    }
+    if (/[^aeiou]y$/.test(low)) {
+      const stem = escBase(low.slice(0, -1));
+      return new RegExp(`\\b(${stem}(?:y|ies|ied|ying))\\b`, "i");
+    }
+    if (/(?:ch|sh|ss|x|z)$/.test(low)) {
+      return new RegExp(`\\b(${escBase(low)}(?:es|ed|ing)?)\\b`, "i");
+    }
+    return new RegExp(`\\b(${escBase(low)}(?:s|ed|ing)?)\\b`, "i");
+  }
+
+  function isVerbWord(w) {
+    if (!w) return false;
+    const p = w.pos || "";
+    return p.includes("動詞") || (w.s === 5 && (w.m || "").includes("[動]"));
+  }
+
+  function classifyVerbFamilies(w) {
+    if (!w) return [];
+    const fams = new Set();
+    const hw = (w.w || "").toLowerCase();
+
+    // 1. Always consult imported extPack.cloze items (covers all 13 canonical families, Stage 3-5, non-verb POS)
+    for (const q of ((extPack && extPack.cloze) || [])) {
+      if (q && q.wid === w.id && q.family) {
+        const nf = normalizeFamilyId(q.family);
+        if (nf) fams.add(nf);
+      }
+    }
+
+    // 2. Include VT_TRAP_MAP verbs even when w.pt is empty/missing
+    if (VT_TRAP_MAP[hw]) {
+      fams.add("transitive_trap");
+    }
+
+    // 3. Pattern-based classification when w.pt exists
+    if (w.pt && w.pt.length) {
+      const pts = w.pt.join(" / ");
+      const low = pts.toLowerCase();
+      if (/about\s*a.*不可|前置詞.*不要|他動詞だから|他動詞用法に注意/.test(pts)) {
+        fams.add("transitive_trap");
+      }
+      if (/他動詞.*不可|直接目的語.*不可/.test(pts) || /\b(refer to|reply to|respond to|insist on|depend on|rely on|consist of|consist in|belong to|apologize to|graduate from|object to|contribute to|participate in|result in|result from|lead to|adapt to|adjust to|comply with|cope with|deal with|account for|concentrate on|focus on|differ from|suffer from|refrain from|abstain from|approve of|escape from|wonder at|cheer for|struggle with)\b/i.test(low)) {
+        fams.add("intrans_prep");
+      }
+      if (/svoo|人\s*モノ|\ba\s+to\s+b\b|\bb\s+to\s+a\b|\bb\s+for\s*\[?to\]?\s*a\b|\ba\s+b\s*\//i.test(low)) {
+        fams.add("svoo_vs_to");
+      }
+      if (/should\s*原形|人\s*to\s*v.*不可|\ba\s+to\s+v\b|\bthat\s+s\b|\bthat〜|\(that\)〜/i.test(pts)) {
+        fams.add("svoc");
+      }
+      if (/\bfrom\s+ving\b|\(from\)\s*ving|\ba\s+from\s+b\b|\bfrom\s+a\b/i.test(low)) {
+        fams.add("from_family");
+      }
+      if (/\ba\s+with\s+b\b|\bbe\s+\w+ed\s+with\b|\bwith\s+a\b/i.test(low)) {
+        fams.add("with_family");
+      }
+      if (/\ba\s+of\s*(\[[^\]]+\]\s*)?b\b|\bbe\s+convinced\s+of\b|\bapprove\s+of\b|\bconsist\s+of\b|\bof\s+a\b/i.test(low)) {
+        fams.add("of_family");
+      }
+      if (/\bas\s+b\b|\(to\s*be\s*\/\s*as\)\s*b|\(as\)\s*b/i.test(low)) {
+        fams.add("as_family");
+      }
+    }
+
+    // 4. Synonym-group / confusable vocabulary
+    if (w.sg && w.sg.length) {
+      fams.add("vocab_confusable");
+    }
+
+    return [...fams];
+  }
+
+  function extractVerbSkeletons(w) {
+    if (!w) return [];
+    const out = [];
+    const seen = new Set();
+    for (const raw of (w.pt || [])) {
+      let s = fmtPat(raw).trim();
+      if (!s || /^(⚠️|★|Q:|⇔|＝|=)/.test(s)) continue;
+      s = s.replace(/\(should\s*原形\)/g, "(should + V)");
+      s = s.replace(/[（「][^）」]*[）」]/g, "");
+      s = s.replace(/[\u3040-\u30ff\u3400-\u9fff]+.*$/g, "").trim();
+      s = s.replace(/\s+/g, " ").replace(/^[ ・/.,]+|[ ・/.,]+$/g, "");
+      if (s.length >= 3 && /[A-Za-z]{2,}/.test(s)) {
+        const k = s.toLowerCase();
+        if (!seen.has(k)) { seen.add(k); out.push(s); }
+      }
+    }
+    if (!out.length && isVerbWord(w)) {
+      const hw = (w.w || "").toLowerCase();
+      const joined = (w.pt || []).join(" ");
+      if (/avoid\s*\+\s*Ving/i.test(joined)) out.push("avoid Ving");
+      else if (/quit\s+drinking|動名詞を目的語/i.test(joined)) out.push(`${w.w} Ving`);
+      else if (/\+\s*to\s*V.*Vingは不可/i.test(joined)) out.push(`${w.w} to V`);
+      else if (VT_TRAP_MAP[hw]) out.push(`${w.w} A`);
+      else if (w.rel) {
+        for (const chunk of w.rel.split("/").map(x => x.trim())) {
+          const clean = chunk.replace(/[（「][^）」]*[）」]/g, "").replace(/[\u3040-\u30ff\u3400-\u9fff]+.*$/g, "").trim();
+          if (clean.toLowerCase().startsWith(hw + " ") && clean.length <= 32) { out.push(clean); break; }
+        }
+      }
+    }
+    return out.slice(0, 3);
+  }
+
+  function extractJapanesePatPrompts(w) {
+    if (!w || !w.pt || !w.pt.length) return [];
+    const out = [];
+    for (const raw of w.pt) {
+      const r = parsePatternPair(raw);
+      if (!r || !r.ja) continue;
+      const maskedJa = r.ja.replace(new RegExp((w.w || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&"), "gi"), "〜");
+      if (!out.includes(maskedJa)) out.push(maskedJa);
+    }
+    return out.slice(0, 2);
+  }
+
+  function interleaveWords(words) {
+    if (!words || words.length <= 2) return [...(words || [])];
+    const pool = [...words].sort(() => Math.random() - 0.5);
+    const sigOf = (w) => {
+      const vf = classifyVerbFamilies(w);
+      if (vf.length) return "vf:" + vf[0];
+      if (w.sg && w.sg.length) return "sg:" + w.sg[0];
+      return "pos:" + (w.pos || "");
+    };
+    const result = [];
+    let lastSig = "";
+    while (pool.length) {
+      let idx = pool.findIndex(w => sigOf(w) !== lastSig);
+      if (idx < 0) idx = 0;
+      const picked = pool.splice(idx, 1)[0];
+      lastSig = sigOf(picked);
+      result.push(picked);
+    }
+    return result;
+  }
+
+  const loopState = {
+    initialized: false,
+    style: "spiral",
+    singleFmt: "en2ja",
+    setSize: 10,
+    target: "today_weak",
+    levelFilter: "all",
+    errFilter: "all",
+    verbFamily: "all",
+    stageSel: "2",
+    batchSel: "all",
+    rangeFrom: "",
+    rangeTo: "",
+    customLabel: "",
+    fallbackNotice: "",
+    started: false,
+    finished: false,
+    timerOn: true,
+    round: 1,
+    setWords: [],
+    extClozeEntries: [],
+    deck: [],
+    idx: 0,
+    fastClearedIds: new Set(),
+    weakIds: new Set(),
+    round2AllPreview: false,
+    revealed: false,
+    hintStep: 0,
+    hintUsed: false,
+    mcqChosenIdx: -1,
+    cardStartTs: 0,
+    latMs: 0,
+    rafId: null,
+    sessionLogs: [],
+    mcqRotateCounter: 0,
+    aiPanelOpen: true,
+    aiPromptMode: "json_pack",
+    aiWordCount: 15,
+    aiCustomWids: null
+  };
+
+  function stopLoopTimer() {
+    if (loopState.rafId) cancelAnimationFrame(loopState.rafId);
+    loopState.rafId = null;
+  }
+  function startLoopTimer(fmt) {
+    stopLoopTimer();
+    loopState.cardStartTs = performance.now();
+    loopState.latMs = 0;
+    if (!loopState.timerOn) return;
+    const th = getLatThresholds(fmt);
+    const maxScale = Math.max(th.pass * 1.25, 4000);
+    const tick = () => {
+      if (!loopState.started || loopState.revealed || loopState.mcqChosenIdx >= 0) return;
+      loopState.latMs = clampLatencyMs(performance.now() - loopState.cardStartTs);
+      const fill = document.getElementById("loopLatFill");
+      const txt = document.getElementById("loopLatTxt");
+      if (fill && txt) {
+        fill.style.width = Math.min(100, (loopState.latMs / maxScale) * 100) + "%";
+        fill.style.background = loopState.latMs <= th.fast ? "var(--ok-fg)" : loopState.latMs <= th.pass ? "var(--tri-fg)" : "var(--x-fg)";
+        txt.textContent = (loopState.latMs / 1000).toFixed(1) + "s" + (loopState.latMs > th.pass ? " 🐢" : "");
+      }
+      loopState.rafId = requestAnimationFrame(tick);
+    };
+    loopState.rafId = requestAnimationFrame(tick);
+  }
+
+  function updateExtStatusBadge() {
+    const el = document.getElementById("loopExtBadge");
+    if (!el) return;
+    const hCnt = Object.keys((extPack && extPack.hooks) || {}).length;
+    const cCnt = ((extPack && extPack.cloze) || []).length;
+    const natCnt = ((extPack && extPack.cloze) || []).filter(q => normalizeLevel(q && q.level) === "national").length;
+    el.textContent = natCnt > 0
+      ? `🧩 拡張フック ${hCnt}語 / 📝 4択 ${cCnt}問 (旧帝大 ${natCnt}問)`
+      : `🧩 拡張フック ${hCnt}語 / 📝 4択 ${cCnt}問`;
+  }
+
+  function getWordWeakScore(w) {
+    const c = state.cards[w.id];
+    const tags = getErrTags(w.id);
+    const logs = (state.latLog && state.latLog[w.id]) || [];
+    let score = 0;
+    if (w.mk === "x") score += 45;
+    else if (w.mk === "tri") score += 28;
+    if (c) {
+      score += (c.lapses || 0) * 18;
+      if (c.lastGrade === "x") score += 35;
+      else if (c.lastGrade === "tri") score += 16;
+      if (isDueToday(c)) score += 20;
+    }
+    if (tags.includes("knowledge_gap")) score += 32;
+    if (tags.includes("misunderstanding")) score += 34;
+    if (tags.includes("confusion")) score += 32;
+    if (tags.includes("order_error")) score += 28;
+    if (tags.includes("misreading")) score += 24;
+    if (tags.includes("careless")) score += 18;
+    if (tags.includes("prep_pattern")) score += 30;
+    if (tags.includes("confusable")) score += 30;
+    if (tags.includes("slow")) score += 22;
+    if (tags.includes("unlearned")) score += 24;
+    if (logs.length) {
+      const last = logs[logs.length - 1];
+      if (!last.ok) score += 20;
+      else if (last.ms > 3500) score += 14;
+    }
+    return score;
+  }
+
+  function getFilteredExtCloze(opts = {}) {
+    const lvl = opts.level !== undefined ? opts.level : loopState.levelFilter;
+    const famRaw = opts.family !== undefined ? opts.family : loopState.verbFamily;
+    const fam = famRaw === "all" ? "all" : normalizeFamilyId(famRaw);
+    return ((extPack && extPack.cloze) || []).filter(q => {
+      if (!q || !q.wid || !wordsMap.has(q.wid)) return false;
+      if (!Array.isArray(q.choices) || q.choices.length !== 4 || !q.stem) return false;
+      if (lvl !== "all" && normalizeLevel(q.level) !== lvl) return false;
+      if (fam !== "all" && normalizeFamilyId(q.family) !== fam) return false;
+      return true;
+    });
+  }
+
+  function selectLoopCandidates() {
+    loopState.fallbackNotice = "";
+    loopState.extClozeEntries = [];
+    const t = loopState.target;
+    const lvl = loopState.levelFilter;
+    const applyLevelFilter = (wordList) => {
+      if (lvl === "all") return wordList;
+      const fam = (t === "verb_family" || t === "ext_cloze") ? loopState.verbFamily : "all";
+      const matchingCloze = getFilteredExtCloze({ level: lvl, family: fam });
+      const allowedWids = new Set(matchingCloze.map(q => q.wid));
+      return wordList.filter(w => allowedWids.has(w.id));
+    };
+
+    if (t === "ext_cloze") {
+      const matching = getFilteredExtCloze({ level: lvl, family: loopState.verbFamily });
+      const shuffled = shuffleArr(matching);
+      // Prioritize weak words slightly while keeping variety across stages S1-S5 & unmarked words
+      shuffled.sort((a, b) => {
+        const wa = wordsMap.get(a.wid), wb = wordsMap.get(b.wid);
+        const sa = wa ? getWordWeakScore(wa) : 0;
+        const sb = wb ? getWordWeakScore(wb) : 0;
+        return (sb > 0 ? 1 : 0) - (sa > 0 ? 1 : 0);
+      });
+      // Interleave by family so consecutive items vary
+      const pool = [...shuffled];
+      const ordered = [];
+      let lastFam = "";
+      while (pool.length) {
+        let idx = pool.findIndex(q => normalizeFamilyId(q.family) !== lastFam);
+        if (idx < 0) idx = 0;
+        const picked = pool.splice(idx, 1)[0];
+        lastFam = normalizeFamilyId(picked.family);
+        ordered.push(picked);
+      }
+      loopState.extClozeEntries = ordered.map(q => ({ wid: q.wid, clozeItem: q, word: wordsMap.get(q.wid) })).filter(x => x.word);
+      return loopState.extClozeEntries.map(x => x.word);
+    }
+
+    if (t === "today_weak") {
+      const scored = allWords
+        .map(w => ({ w, sc: getWordWeakScore(w) }))
+        .filter(x => x.sc > 0)
+        .sort((a, b) => b.sc - a.sc || a.w.s - b.w.s || a.w.n - b.w.n);
+      const base = scored.length ? scored.map(x => x.w) : allWords.slice(0, 50);
+      return applyLevelFilter(base);
+    }
+    if (t === "err_reason") {
+      const ef = loopState.errFilter;
+      let matched = [];
+      if (ef === "all") {
+        matched = allWords.filter(w => {
+          const c = state.cards[w.id];
+          return getErrTags(w.id).length > 0 || (c && (c.lapses || 0) >= 2) || w.mk === "x" || w.mk === "tri";
+        });
+      } else if (ef === "leech") {
+        matched = allWords.filter(w => {
+          const c = state.cards[w.id];
+          return c && (c.lapses || 0) >= 3;
+        });
+        if (!matched.length) {
+          matched = allWords.filter(w => (state.cards[w.id] && (state.cards[w.id].lapses || 0) >= 1) || w.mk === "x");
+          if (matched.length) loopState.fallbackNotice = "Leech記録がまだ少ないため、教材❌・ミス経験語を優先抽出しました";
+        }
+      } else {
+        matched = allWords.filter(w => getErrTags(w.id).includes(ef));
+        if (!matched.length) {
+          if (ef === "prep_pattern" || ef === "misunderstanding") {
+            matched = allWords.filter(w => w.pt && w.pt.length && (w.mk === "x" || w.mk === "tri" || w.pt.some(p => p.includes("⚠️"))));
+            loopState.fallbackNotice = "該当タグ履歴が0件のため、前置詞・語法トラップ要注意語を抽出しました";
+          } else if (ef === "confusable" || ef === "confusion") {
+            matched = allWords.filter(w => ((w.sg && w.sg.length) || getMergedHooks(w.id).cf.length) && (w.mk === "x" || w.mk === "tri"));
+            if (!matched.length) matched = allWords.filter(w => w.sg && w.sg.length);
+            loopState.fallbackNotice = "混同ミス履歴が0件のため、類義語グループ・混同注意ペア語を抽出しました";
+          } else if (ef === "slow") {
+            matched = allWords.filter(w => {
+              const logs = (state.latLog && state.latLog[w.id]) || [];
+              return logs.some(l => l.ms > 3000) || (state.cards[w.id] && state.cards[w.id].lastGrade === "tri") || w.mk === "tri";
+            });
+            loopState.fallbackNotice = "想起遅延タグが0件のため、🔺（迷い）単語を抽出しました";
+          }
+        }
+      }
+      return applyLevelFilter(matched.sort((a, b) => getWordWeakScore(b) - getWordWeakScore(a)));
+    }
+    if (t === "verb_family") {
+      const vf = loopState.verbFamily === "all" ? "all" : normalizeFamilyId(loopState.verbFamily);
+      const extWidsInFam = new Set(
+        ((extPack && extPack.cloze) || [])
+          .filter(q => q && (vf === "all" || normalizeFamilyId(q.family) === vf))
+          .map(q => q.wid)
+      );
+      const list = allWords.filter(w => {
+        const fams = classifyVerbFamilies(w);
+        if (vf === "all") return fams.length > 0 || (w.pt && w.pt.length > 0) || extWidsInFam.has(w.id);
+        return fams.includes(vf) || extWidsInFam.has(w.id);
+      });
+      return applyLevelFilter(list.sort((a, b) =>
+        (extWidsInFam.has(b.id) ? 1 : 0) - (extWidsInFam.has(a.id) ? 1 : 0) ||
+        getWordWeakScore(b) - getWordWeakScore(a)
+      ));
+    }
+    if (t === "stage_batch") {
+      const stSel = loopState.stageSel;
+      const bSel = loopState.batchSel;
+      const rFrom = Number(loopState.rangeFrom) || 0;
+      const rTo = Number(loopState.rangeTo) || 0;
+      const list = allWords.filter(w => {
+        if (stSel !== "all" && String(w.s) !== stSel) return false;
+        if (bSel !== "all" && (w.b || "") !== bSel) return false;
+        if (rFrom > 0 && w.n < rFrom) return false;
+        if (rTo > 0 && w.n > rTo) return false;
+        return true;
+      });
+      return applyLevelFilter(list);
+    }
+    return applyLevelFilter(allWords.slice(0, 30));
+  }
+
+  function maskSpoilerInHint(txt, w, fmt) {
+    let s = String(txt || "").trim();
+    if (!s) return "";
+    if (fmt === "ja2en" || fmt === "mcq") {
+      const stem = w.w.length > 4 ? w.w.slice(0, w.w.length - 1) : w.w;
+      const rx = new RegExp(`\\b${stem.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[a-zA-Z]*\\b`, "gi");
+      s = s.replace(rx, `${w.w[0]}____`);
+    } else if (fmt === "en2ja") {
+      const cleanM = (w.m || "").replace(/（.*?）|\(.*?\)|\[.*?\]|[①②③④⑤〜~(=)=]/g, " ");
+      const glosses = cleanM.split(/[、,／/；;\s]+/).map(x => x.trim()).filter(x => x.length >= 2);
+      for (const g of glosses.slice(0, 3)) {
+        const core = g.replace(/^(する|な|に|を|と|の)+|(する|な|だ|である)+$/g, "");
+        if (core.length >= 2) {
+          s = s.split(core).join("【？】");
+        }
+      }
+    }
+    return s;
+  }
+
+  function buildThreeStepHints(w, fmt) {
+    const hk = getMergedHooks(w.id);
+    const sgs = (w.sg || []).map(gid => synGroupMap.get(gid)).filter(Boolean);
+    const enPh = (w.ph || "").split("（")[0].trim();
+
+    let h1 = maskSpoilerInHint(hk.kn, w, fmt);
+    if (!h1) {
+      if (fmt === "en2ja" && w.rel) {
+        h1 = `関連表現・派生語: ${w.rel.split("/").slice(0, 2).join(" / ")}`;
+      } else if (sgs.length) {
+        h1 = `意味グループ「${sgs[0].title}」の仲間（品詞: ${w.pos}）`;
+      } else if (fmt === "en2ja" && enPh) {
+        h1 = `ミニフレーズ英語: ${enPh}`;
+      } else {
+        h1 = `品詞: ${w.pos} ｜ Stage ${w.s} #${w.n}（語数: ${w.w.length}文字）`;
+      }
+    }
+
+    let h2 = "";
+    if (hk.mp && hk.mp.length) {
+      h2 = hk.mp.map(m => `${fmt === "en2ja" ? m.part : m.part[0] + ".."}（${m.gloss}）`).join(" ＋ ");
+      if (hk.et) h2 += ` ｜ ${maskSpoilerInHint(hk.et, w, fmt)}`;
+    } else if (hk.et) {
+      h2 = maskSpoilerInHint(hk.et, w, fmt);
+    } else if (sgs.length) {
+      const it = (sgs[0].items || []).find(x => x.id === w.id);
+      h2 = it && it.nuance ? `コアニュアンス: ${maskSpoilerInHint(it.nuance, w, fmt)}` : `グループ要点: ${sgs[0].summary}`;
+    } else if (fmt === "en2ja" && enPh) {
+      h2 = `文脈ヒント: "${enPh}" の中で使われる語`;
+    } else {
+      h2 = `先頭2文字ヒント: "${w.w.slice(0, Math.min(2, w.w.length))}..."（全${w.w.length}文字）`;
+    }
+
+    let h3 = "";
+    const mnMasked = maskSpoilerInHint(hk.mn, w, fmt);
+    if (fmt === "ja2en" || fmt === "mcq") {
+      const skels = extractVerbSkeletons(w);
+      const wordMask = (w.w[0] || "") + "_".repeat(Math.max(2, w.w.length - 1));
+      const patMask = skels.length ? ` ｜ 型骨格: ${makePatternHint(skels[0])}` : "";
+      h3 = `頭文字: ${wordMask}${patMask}${mnMasked ? ` ｜ 💡 ${mnMasked}` : ""}`;
+    } else {
+      h3 = mnMasked ? `${mnMasked}${enPh ? `（例: ${enPh}）` : ""}` : (enPh ? `例文ヒント: ${enPh}` : `意味の先頭ヒント: 「${(w.m || "").slice(0, 3)}…」`);
+    }
+
+    return [
+      { step: 1, title: "🔗 外来語・既知語", text: h1 },
+      { step: 2, title: "🌱 語源パーツ", text: h2 },
+      { step: 3, title: "🎭 イメージ語呂 / 頭文字", text: h3 }
+    ];
+  }
+
+  function shuffleArr(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function inferDistractorErrType(w, choiceStr, correctStr, confusableWordsSet) {
+    const cLow = String(choiceStr || "").trim().toLowerCase();
+    const ansLow = String(correctStr || "").trim().toLowerCase();
+    const prepSet = new Set(["to","of","from","with","as","on","in","for","into","about","at","by","against","upon","over","out"]);
+    if (prepSet.has(cLow) && prepSet.has(ansLow)) return "prep_pattern";
+    const wLow = (w.w || "").toLowerCase();
+    const wStem = wLow.length >= 4 ? wLow.slice(0, wLow.length - 1) : wLow;
+    if ((cLow.includes(" ") && cLow.startsWith(wStem)) || (/^(to\s+\w+|\w+ing|from\s+\w+ing)$/.test(cLow) && /^(to\s+\w+|\w+ing|from\s+\w+ing)$/.test(ansLow))) {
+      return "prep_pattern";
+    }
+    for (const cw of confusableWordsSet) {
+      const cwStem = cw.length >= 4 ? cw.slice(0, cw.length - 1) : cw;
+      if (cLow === cw || (cwStem.length >= 3 && cLow.startsWith(cwStem))) return "confusable";
+    }
+    return "unlearned";
+  }
+
+  function getConfusablePoolForWord(w) {
+    const res = [];
+    const seen = new Set([(w.w || "").toLowerCase()]);
+    for (const gid of (w.sg || [])) {
+      const g = synGroupMap.get(gid);
+      if (!g) continue;
+      for (const it of (g.items || [])) {
+        const cand = wordsMap.get(it.id);
+        if (cand && !seen.has(cand.w.toLowerCase())) {
+          seen.add(cand.w.toLowerCase());
+          res.push(cand);
+        }
+      }
+    }
+    const hk = getMergedHooks(w.id);
+    for (const cfEntry of (hk.cf || [])) {
+      const cw = String(cfEntry).split(/[:：／/\s（(]/)[0].trim().toLowerCase();
+      if (!cw || seen.has(cw)) continue;
+      const found = allWords.find(x => (x.w || "").toLowerCase() === cw);
+      if (found) {
+        seen.add(cw);
+        res.push(found);
+      }
+    }
+    return res;
+  }
+
+  function tryBuildGrammarPatternMcq(w) {
+    const rawPh = w.ph || "";
+    const idxP = rawPh.indexOf("（");
+    const en = (idxP >= 0 ? rawPh.slice(0, idxP) : rawPh).trim();
+    const jp = (idxP >= 0 ? rawPh.slice(idxP).replace(/^[（(]|[）)]$/g, "") : (w.m || "")).trim();
+    const hw = (w.w || "").toLowerCase();
+    const traps = (w.pt || []).filter(p => p.startsWith("⚠️")).map(fmtPat);
+    const skels = extractVerbSkeletons(w);
+
+    if (VT_TRAP_MAP[hw] && en) {
+      // B9: Guard intransitive "survive in/on/without/by..." so it is NOT misclassified as transitive trap
+      const isIntransSurvive = hw === "survive" &&
+        (/\bsurviv(?:e|es|ed|ing)\s+(?:in|on|without|by|at|for|with|until|through|from)\b/i.test(en) ||
+         /\bsurviv(?:e|es|ed|ing)\s*[.!?,;]?$/i.test(en));
+      if (!isIntransSurvive) {
+        const rx = buildVtTrapRegex(hw);
+        const m = en.match(rx);
+        if (m) {
+          const matchedVerb = m[1];
+          const cap = matchedVerb[0] === matchedVerb[0].toUpperCase();
+          const fmtCase = s => cap ? s[0].toUpperCase() + s.slice(1) : s;
+          const stem = en.slice(0, m.index) + "(     )" + en.slice(m.index + m[0].length);
+          const matchedLow = matchedVerb.toLowerCase();
+          const dummies = VT_TRAP_MAP[hw].slice(0, 3).map(d => {
+            const adapted = d.toLowerCase().startsWith(hw + " ")
+              ? matchedLow + d.slice(hw.length)
+              : d;
+            return { text: fmtCase(adapted), isCorrect: false, errType: "prep_pattern" };
+          });
+          const opts = shuffleArr([
+            { text: matchedVerb, isCorrect: true, errType: "" },
+            ...dummies
+          ]);
+          return {
+            wid: w.id, source: "dynamic_pat", qType: "prep_pattern",
+            family: "transitive_trap", level: "",
+            stem, ja: jp,
+            options: opts,
+            answer: opts.findIndex(o => o.isCorrect),
+            why: `「${w.w}」は他動詞のため直後に前置詞を置かず目的語を直接とります（${skels[0] || w.w + " + O"}）。`,
+            trap: traps[0] || `⚠️ 日本語につられて不要な前置詞（about / to / with 等）をつけないよう注意！`
+          };
+        }
+      }
+    }
+
+    if (!w.pt || !w.pt.length) return null;
+    const allPtText = w.pt.join(" / ");
+    const validPreps = new Set();
+    for (const pm of allPtText.matchAll(/\b(to|of|from|with|as|on|upon|in|into|for|about|at|by|against)\b/gi)) {
+      validPreps.add(pm[1].toLowerCase());
+    }
+    const prepCandidates = ["with", "of", "from", "as", "on", "for", "into", "against", "at", "by", "to"];
+    for (const prep of prepCandidates) {
+      const ptHasPrep = new RegExp(`\\b${prep}\\b`, "i").test(skels.join(" / "));
+      if (!ptHasPrep) continue;
+      const stemPrefix = w.w.length > 4 ? w.w.slice(0, w.w.length - 1) : w.w;
+      const afterHwIdx = en.toLowerCase().indexOf(stemPrefix.toLowerCase());
+      if (afterHwIdx < 0) continue;
+      const tail = en.slice(afterHwIdx);
+      const prepRx = new RegExp(`\\b(${prep})\\b`, "i");
+      const pm = tail.match(prepRx);
+      if (!pm) continue;
+      if (prep === "to" && !/\bto\s+[AB]\b/i.test(skels.join(" / "))) continue;
+      const blankedTail = tail.replace(prepRx, "(     )");
+      const stem = en.slice(0, afterHwIdx) + blankedTail;
+      const distractorPool = ["to", "of", "from", "with", "as", "on", "for", "about", "in", "at", "by", "against", "into", "over"]
+        .filter(p => p !== prep && !validPreps.has(p));
+      if (distractorPool.length >= 3) {
+        const pickedDummies = shuffleArr(distractorPool).slice(0, 3).map(d => ({
+          text: d, isCorrect: false, errType: "prep_pattern"
+        }));
+        const opts = shuffleArr([
+          { text: pm[1], isCorrect: true, errType: "" },
+          ...pickedDummies
+        ]);
+        return {
+          wid: w.id, source: "dynamic_pat", qType: "prep_pattern",
+          family: classifyVerbFamilies(w)[0] || "", level: "",
+          stem, ja: jp,
+          options: opts,
+          answer: opts.findIndex(o => o.isCorrect),
+          why: `型の骨格「${skels[0] || w.pt[0]}」とセットで前置詞「${pm[1]}」を即答できるようにしましょう。`,
+          trap: traps[0] || ""
+        };
+      }
+    }
+
+    for (const raw of w.pt) {
+      const pair = parsePatternPair(raw);
+      if (!pair) continue;
+      if (/\bfrom\s+Ving\b|\(from\)\s*Ving/i.test(pair.en)) {
+        const stem = `${w.w} A (          )（${pair.ja}）`;
+        const opts = shuffleArr([
+          { text: "from Ving", isCorrect: true, errType: "" },
+          { text: "to V", isCorrect: false, errType: "prep_pattern" },
+          { text: "of Ving", isCorrect: false, errType: "prep_pattern" },
+          { text: "that S V", isCorrect: false, errType: "prep_pattern" }
+        ]);
+        return {
+          wid: w.id, source: "dynamic_pat", qType: "prep_pattern",
+          family: "from_family", level: "",
+          stem, ja: `「${pair.ja}」を表す正しい動詞の型を選べ`,
+          options: opts, answer: opts.findIndex(o => o.isCorrect),
+          why: `妨害・抑止の型「${pair.en}」は from Ving をとります（to V は不可）。`,
+          trap: traps[0] || ""
+        };
+      }
+      const prepMatch = pair.en.match(/^([A-Za-z]+\s+A\s+)(with|of|as|to|from|on|into)(\s+B)$/);
+      if (prepMatch) {
+        const correctP = prepMatch[2].toLowerCase();
+        const stem = `${prepMatch[1]}(     )${prepMatch[3]}`;
+        const distractorPool = ["to", "of", "from", "with", "as", "on", "for", "about", "in", "at", "by", "against", "into", "over"]
+          .filter(p => p !== correctP && !validPreps.has(p));
+        if (distractorPool.length >= 3) {
+          const opts = shuffleArr([
+            { text: correctP, isCorrect: true, errType: "" },
+            ...shuffleArr(distractorPool).slice(0, 3).map(d => ({ text: d, isCorrect: false, errType: "prep_pattern" }))
+          ]);
+          return {
+            wid: w.id, source: "dynamic_pat", qType: "prep_pattern",
+            family: classifyVerbFamilies(w)[0] || "", level: "",
+            stem, ja: `意味：「${pair.ja}」`,
+            options: opts, answer: opts.findIndex(o => o.isCorrect),
+            why: `「${pair.en}（${pair.ja}）」の型で覚えます。`,
+            trap: traps[0] || ""
+          };
+        }
+      }
+    }
+    return null;
+  }
+
+  function buildVocabClozeMcq(w, sessionPool = []) {
+    const rawPh = w.ph || "";
+    const idxP = rawPh.indexOf("（");
+    const en = (idxP >= 0 ? rawPh.slice(0, idxP) : rawPh).trim();
+    const jp = (idxP >= 0 ? rawPh.slice(idxP).replace(/^[（(]|[）)]$/g, "") : (w.m || "")).trim();
+
+    let stem = "";
+    let capFirst = false;
+    let baseNote = "";
+    const exactRx = new RegExp(`\\b(${(w.w || "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})\\b`, "i");
+    const exactM = en.match(exactRx);
+    if (exactM) {
+      capFirst = exactM[1][0] === exactM[1][0].toUpperCase() && w.w[0] === w.w[0].toLowerCase();
+      stem = en.replace(exactRx, "(          )");
+    } else if (en) {
+      const stemStr = w.w.length > 4 ? w.w.slice(0, w.w.length - 1) : w.w;
+      const inflRx = new RegExp(`\\b(${stemStr.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}[a-zA-Z]*)\\b`, "i");
+      if (inflRx.test(en)) {
+        stem = en.replace(inflRx, "(          )");
+        baseNote = " ※原形を選択";
+      } else {
+        stem = `空欄に入る最も適切な英単語（原形）を選べ： ${en}`;
+      }
+    } else {
+      stem = `次の意味を表す英単語を選べ`;
+    }
+
+    const fmtWord = s => capFirst ? (s[0] || "").toUpperCase() + s.slice(1) : s;
+    const confCands = getConfusablePoolForWord(w);
+    const chosenDummies = [];
+    const usedWords = new Set([(w.w || "").toLowerCase()]);
+
+    for (const cw of shuffleArr(confCands)) {
+      if (chosenDummies.length >= 2) break;
+      if (!usedWords.has(cw.w.toLowerCase())) {
+        usedWords.add(cw.w.toLowerCase());
+        chosenDummies.push({ text: fmtWord(cw.w), isCorrect: false, errType: "confusable", dwid: cw.id });
+      }
+    }
+
+    const samePosPool = [
+      ...shuffleArr(sessionPool.filter(x => x.id !== w.id && x.pos === w.pos)),
+      ...shuffleArr(allWords.filter(x => x.id !== w.id && x.pos === w.pos && x.s === w.s)),
+      ...shuffleArr(allWords.filter(x => x.id !== w.id && x.pos === w.pos))
+    ];
+    for (const cand of samePosPool) {
+      if (chosenDummies.length >= 3) break;
+      const lw = (cand.w || "").toLowerCase();
+      if (!lw || usedWords.has(lw)) continue;
+      usedWords.add(lw);
+      const isConf = confCands.some(c => c.id === cand.id);
+      chosenDummies.push({ text: fmtWord(cand.w), isCorrect: false, errType: isConf ? "confusable" : "unlearned", dwid: cand.id });
+    }
+
+    // B9: Fallback across ALL_WORDS (any POS) so custom words (pos: "追加") still get 4 unique choices
+    if (chosenDummies.length < 3) {
+      const anyPosPool = shuffleArr(allWords.filter(x => x.id !== w.id));
+      for (const cand of anyPosPool) {
+        if (chosenDummies.length >= 3) break;
+        const lw = (cand.w || "").toLowerCase();
+        if (!lw || usedWords.has(lw)) continue;
+        usedWords.add(lw);
+        chosenDummies.push({ text: fmtWord(cand.w), isCorrect: false, errType: "unlearned", dwid: cand.id });
+      }
+    }
+
+    const opts = shuffleArr([
+      { text: fmtWord(w.w), isCorrect: true, errType: "" },
+      ...chosenDummies.slice(0, 3)
+    ]);
+
+    const sgs = (w.sg || []).map(gid => synGroupMap.get(gid)).filter(Boolean);
+    let why = `正解は「${w.w}」（${(w.m || "").split("（")[0]}）。`;
+    if (sgs.length) {
+      const it = (sgs[0].items || []).find(x => x.id === w.id);
+      if (it && it.nuance) why += ` ニュアンス：${it.nuance}`;
+    }
+    const traps = (w.pt || []).filter(p => p.startsWith("⚠️")).map(fmtPat);
+
+    return {
+      wid: w.id, source: "dynamic_vocab", qType: "vocab_cloze",
+      family: classifyVerbFamilies(w)[0] || "vocab_confusable", level: "",
+      stem: stem + baseNote, ja: jp,
+      options: opts,
+      answer: opts.findIndex(o => o.isCorrect),
+      why,
+      trap: traps[0] || (w.pt && w.pt[0] ? `📐 型: ${fmtPat(w.pt[0])}` : "")
+    };
+  }
+
+  function buildMcqFromExtItem(w, picked) {
+    const ansIdx = Number.isInteger(picked.answer) && picked.answer >= 0 && picked.answer < 4 ? picked.answer : 0;
+    const correctStr = picked.choices[ansIdx];
+    const confSet = new Set(getConfusablePoolForWord(w).map(x => (x.w || "").toLowerCase()));
+    for (const cwid of (picked.confusable_wids || [])) {
+      const cw = wordsMap.get(cwid);
+      if (cw) confSet.add((cw.w || "").toLowerCase());
+    }
+    const normFam = normalizeFamilyId(picked.family || "");
+    const normLvl = normalizeLevel(picked.level || "");
+    // B4: vocab_confusable and stage5_polysemy MUST map to "confusable", never "prep_pattern"
+    const qType = (normFam === "vocab_confusable" || normFam === "stage5_polysemy")
+      ? "confusable"
+      : (normFam ? "prep_pattern" : "ext_cloze");
+    const opts = shuffleArr(picked.choices.map((ch, idx) => ({
+      text: String(ch),
+      isCorrect: idx === ansIdx,
+      errType: idx === ansIdx ? "" : (qType === "confusable" ? "confusable" : inferDistractorErrType(w, ch, correctStr, confSet))
+    })));
+    return {
+      wid: w.id, source: "ext", clozeId: picked.id || "",
+      family: normFam, level: normLvl, qType,
+      stem: String(picked.stem || ""),
+      ja: String(picked.ja || w.m || ""),
+      options: opts,
+      answer: opts.findIndex(o => o.isCorrect),
+      why: String(picked.why || `正解は「${correctStr}」（${w.w}: ${w.m || ""}）`),
+      trap: String(picked.trap || "")
+    };
+  }
+
+  function buildMcqForWord(w, sessionPool = [], forcedClozeItem = null) {
+    loopState.mcqRotateCounter++;
+    if (forcedClozeItem && Array.isArray(forcedClozeItem.choices) && forcedClozeItem.choices.length === 4) {
+      return buildMcqFromExtItem(w, forcedClozeItem);
+    }
+
+    const lvl = loopState.levelFilter;
+    const fam = (loopState.target === "verb_family" || loopState.target === "ext_cloze")
+      ? (loopState.verbFamily === "all" ? "all" : normalizeFamilyId(loopState.verbFamily))
+      : "all";
+
+    let extMatches = ((extPack && extPack.cloze) || []).filter(q =>
+      q && q.wid === w.id && Array.isArray(q.choices) && q.choices.length === 4
+    );
+    if (lvl !== "all") {
+      extMatches = extMatches.filter(q => normalizeLevel(q.level) === lvl);
+    }
+    if (fam !== "all") {
+      const famFiltered = extMatches.filter(q => normalizeFamilyId(q.family) === fam);
+      if (famFiltered.length || loopState.target === "ext_cloze") extMatches = famFiltered;
+    }
+    if (extMatches.length) {
+      const picked = extMatches[loopState.mcqRotateCounter % extMatches.length];
+      return buildMcqFromExtItem(w, picked);
+    }
+
+    const isConfusableFam = fam === "vocab_confusable" || fam === "stage5_polysemy";
+    const preferPattern = !isConfusableFam && (
+      loopState.target === "verb_family" ||
+      (loopState.target === "err_reason" && (loopState.errFilter === "prep_pattern" || loopState.errFilter === "misunderstanding")) ||
+      (VT_TRAP_MAP[(w.w || "").toLowerCase()]) ||
+      (w.pt && w.pt.length && (loopState.mcqRotateCounter % 3 !== 0))
+    );
+    if (preferPattern) {
+      const patMcq = tryBuildGrammarPatternMcq(w);
+      if (patMcq) return patMcq;
+    }
+    return buildVocabClozeMcq(w, sessionPool);
+  }
+
+  function buildSpiralRoundDeck(roundNum) {
+    loopState.round = roundNum;
+    loopState.idx = 0;
+    loopState.revealed = false;
+    loopState.hintStep = 0;
+    loopState.hintUsed = false;
+    loopState.mcqChosenIdx = -1;
+
+    if (roundNum === 1) {
+      loopState.deck = loopState.setWords.map(w => ({ wid: w.id, fmt: "en2ja" }));
+    } else if (roundNum === 2) {
+      const weakWords = loopState.setWords.filter(w => loopState.weakIds.has(w.id));
+      loopState.round2AllPreview = false;
+      loopState.deck = weakWords.map(w => ({ wid: w.id, fmt: "workshop" }));
+    } else if (roundNum === 3) {
+      const weakWords = loopState.setWords.filter(w => loopState.weakIds.has(w.id));
+      const fastWords = loopState.setWords.filter(w => !loopState.weakIds.has(w.id));
+      const sampleFastCnt = weakWords.length === 0
+        ? fastWords.length
+        : Math.min(fastWords.length, Math.max(2, Math.ceil(fastWords.length * 0.4)));
+      const fastSample = shuffleArr(fastWords).slice(0, sampleFastCnt);
+      const combined = interleaveWords([...weakWords, ...fastSample]);
+      loopState.deck = combined.map(w => ({ wid: w.id, fmt: "ja2en" }));
+    } else if (roundNum === 4) {
+      if (loopState.target === "ext_cloze" && loopState.extClozeEntries.length) {
+        const sliced = shuffleArr(loopState.extClozeEntries.slice(0, loopState.setSize));
+        loopState.deck = sliced.map(ent => ({
+          wid: ent.wid, fmt: "mcq", clozeItem: ent.clozeItem,
+          mcqObj: buildMcqForWord(ent.word, loopState.setWords, ent.clozeItem)
+        }));
+      } else {
+        const ordered = interleaveWords(loopState.setWords);
+        loopState.deck = ordered.map(w => ({
+          wid: w.id, fmt: "mcq", mcqObj: buildMcqForWord(w, loopState.setWords)
+        }));
+      }
+    }
+  }
+
+  function buildLoopSession(customWordsList = null, customLabel = "") {
+    stopLoopTimer();
+    loopState.initialized = true;
+    loopState.started = false;
+    loopState.finished = false;
+    loopState.customLabel = customLabel;
+    loopState.fastClearedIds = new Set();
+    loopState.weakIds = new Set();
+    loopState.sessionLogs = [];
+    loopState.idx = 0;
+
+    const candidates = customWordsList ? customWordsList : selectLoopCandidates();
+    if (customWordsList) loopState.extClozeEntries = [];
+    // Deduplicate setWords by wid for flashcard rounds while preserving extClozeEntries for exact MCQ binding
+    if (!customWordsList && loopState.target === "ext_cloze" && loopState.extClozeEntries.length) {
+      const slicedEntries = loopState.extClozeEntries.slice(0, loopState.setSize);
+      loopState.extClozeEntries = slicedEntries;
+      const seenWids = new Set();
+      const uniqWords = [];
+      for (const ent of slicedEntries) {
+        if (!seenWids.has(ent.wid)) { seenWids.add(ent.wid); uniqWords.push(ent.word); }
+      }
+      loopState.setWords = uniqWords;
+    } else {
+      loopState.setWords = candidates.slice(0, loopState.setSize);
+    }
+
+    if (loopState.style === "spiral") {
+      buildSpiralRoundDeck(1);
+    } else {
+      const fmt = loopState.singleFmt;
+      if (fmt === "mcq" && !customWordsList && loopState.target === "ext_cloze" && loopState.extClozeEntries.length) {
+        loopState.deck = loopState.extClozeEntries.map(ent => ({
+          wid: ent.wid, fmt: "mcq", clozeItem: ent.clozeItem,
+          mcqObj: buildMcqForWord(ent.word, loopState.setWords, ent.clozeItem)
+        }));
+      } else {
+        const ordered = (fmt === "ja2en" || fmt === "mcq") ? interleaveWords(loopState.setWords) : [...loopState.setWords];
+        if (fmt === "mcq" && loopState.target === "verb_family" && loopState.verbFamily !== "all") {
+          const vf = normalizeFamilyId(loopState.verbFamily);
+          const extMatchWids = new Set(
+            ((extPack && extPack.cloze) || [])
+              .filter(q => q && normalizeFamilyId(q.family) === vf)
+              .map(q => q.wid)
+          );
+          if (extMatchWids.size) {
+            ordered.sort((a, b) => (extMatchWids.has(b.id) ? 1 : 0) - (extMatchWids.has(a.id) ? 1 : 0));
+          }
+        }
+        loopState.deck = ordered.map(w => ({
+          wid: w.id,
+          fmt,
+          ...(fmt === "mcq" ? { mcqObj: buildMcqForWord(w, loopState.setWords) } : {})
+        }));
+      }
+    }
+    renderLoopControlsUI();
+    renderLoopTab();
+  }
+
+  function advanceSpiralOrFinish() {
+    if (loopState.style !== "spiral") {
+      loopState.finished = true;
+      loopState.started = false;
+      renderLoopTab();
+      return;
+    }
+    if (loopState.round < 4) {
+      buildSpiralRoundDeck(loopState.round + 1);
+      renderLoopTab();
+    } else {
+      loopState.finished = true;
+      loopState.started = false;
+      renderLoopTab();
+    }
+  }
+
+  function renderLoopControlsUI() {
+    updateExtStatusBadge();
+    const modeSel = document.getElementById("loopModeSel");
+    const focusSel = document.getElementById("loopFocusSel");
+    const sizeSel = document.getElementById("loopSizeSel");
+    const targetSel = document.getElementById("loopTargetSel");
+    const levelSel = document.getElementById("loopLevelSel");
+    const vfSel = document.getElementById("loopVerbFamilySel");
+    if (modeSel) modeSel.value = loopState.style;
+    if (focusSel) focusSel.value = loopState.singleFmt;
+    if (sizeSel) sizeSel.value = String(loopState.setSize);
+    if (targetSel) targetSel.value = loopState.target;
+    if (levelSel) levelSel.value = loopState.levelFilter;
+    if (vfSel) vfSel.value = loopState.verbFamily === "all" ? "all" : normalizeFamilyId(loopState.verbFamily);
+
+    const sub = document.getElementById("loopSubFilterArea");
+    if (!sub) return;
+    if (loopState.target === "today_weak") {
+      const tagTotal = Object.values(state.errTags || {}).filter(a => Array.isArray(a) && a.length).length;
+      sub.innerHTML = `<div class="muted" style="font-size:12px;">📌 教材❌/🔺・Leech・今日が復習日の語・記憶博士ミス原因タグ付（現在 ${tagTotal}語）から優先度順に抽出します。</div>`;
+    } else if (loopState.target === "ext_cloze") {
+      const matchCnt = getFilteredExtCloze().length;
+      const lvlTxt = LEVEL_META[loopState.levelFilter]?.label || "全レベル";
+      const famTxt = getFamilyLabel(loopState.verbFamily);
+      sub.innerHTML = `<div class="muted" style="font-size:12px;">🤖 取り込み済みのAI実戦4択パックから <strong>${esc(lvlTxt)}</strong> × <strong>${esc(famTxt)}</strong> に一致する問題（<strong>${matchCnt}問</strong>）を全Stage横断で直接出題します。</div>`;
+    } else if (loopState.target === "err_reason") {
+      const reasons = [
+        { id: "all", label: "すべての誤答・弱点タグ" },
+        ...KIOKU_ERR_TAGS.map(t => ({ id: t.id, label: t.label })),
+        { id: "prep_pattern", label: "📐 前置詞・型ズレ（自動）" },
+        { id: "confusable", label: "🔀 類義語混同（自動）" },
+        { id: "slow", label: "🐢 想起遅延（自動）" },
+        { id: "unlearned", label: "📕 単語未定着（自動）" },
+        { id: "leech", label: "🩸 Leech（3回以上ミス）" }
+      ];
+      sub.innerHTML = `<div class="row" style="gap:8px;">
+        <label for="loopErrReasonSel" class="muted" style="font-size:12px; font-weight:700;">誤答原因フィルタ:</label>
+        <select id="loopErrReasonSel" style="font-size:13px; min-height:36px;">
+          ${reasons.map(r => `<option value="${esc(r.id)}" ${loopState.errFilter === r.id ? "selected" : ""}>${esc(r.label)}</option>`).join("")}
+        </select>
+      </div>`;
+      document.getElementById("loopErrReasonSel")?.addEventListener("change", e => {
+        loopState.errFilter = e.target.value;
+        buildLoopSession();
+      });
+    } else if (loopState.target === "verb_family") {
+      const famTxt = getFamilyLabel(loopState.verbFamily);
+      sub.innerHTML = `<div class="muted" style="font-size:12px;">📐 スタサプ動詞の型9系統＋旧帝大4カテゴリ（現在: <strong>${esc(famTxt)}</strong>）で絞り込みます。取り込み済みAI 4択パックのカテゴリ・無型他動詞トラップ語も含めて抽出します。</div>`;
+    } else if (loopState.target === "stage_batch") {
+      const batches = [];
+      const seenB = new Set();
+      for (const w of allWords) {
+        if (loopState.stageSel !== "all" && String(w.s) !== loopState.stageSel) continue;
+        const bk = w.b || `S${w.s || 1}-B1`;
+        if (!seenB.has(bk)) { seenB.add(bk); batches.push({ key: bk, s: w.s || 1 }); }
+      }
+      sub.innerHTML = `<div class="row" style="gap:8px;">
+        <select id="loopStageSel" style="font-size:13px;">
+          <option value="all" ${loopState.stageSel==="all"?"selected":""}>全Stage</option>
+          <option value="1" ${loopState.stageSel==="1"?"selected":""}>Stage 1 (1–600)</option>
+          <option value="2" ${loopState.stageSel==="2"?"selected":""}>Stage 2 (601–1200)</option>
+          <option value="3" ${loopState.stageSel==="3"?"selected":""}>Stage 3 (1201–1700)</option>
+          <option value="4" ${loopState.stageSel==="4"?"selected":""}>Stage 4 (1701–2027)</option>
+          <option value="5" ${loopState.stageSel==="5"?"selected":""}>Stage 5 (多義語)</option>
+        </select>
+        <select id="loopBatchSel" style="font-size:13px;">
+          <option value="all" ${loopState.batchSel==="all"?"selected":""}>全バッチ</option>
+          ${batches.map(b => `<option value="${esc(b.key)}" ${loopState.batchSel===b.key?"selected":""}>Stage ${esc(b.s)} ${esc(b.key)}</option>`).join("")}
+        </select>
+        <input id="loopRangeFrom" type="number" placeholder="開始# (任意)" value="${esc(loopState.rangeFrom)}" style="width:115px; font-size:13px;" />
+        <span class="muted">〜</span>
+        <input id="loopRangeTo" type="number" placeholder="終了# (任意)" value="${esc(loopState.rangeTo)}" style="width:115px; font-size:13px;" />
+        <button id="loopApplyRangeBtn" style="font-size:12px;">範囲適用</button>
+      </div>`;
+      document.getElementById("loopStageSel")?.addEventListener("change", e => {
+        // B15: Reset rangeFrom/rangeTo & batchSel when stage changes
+        loopState.stageSel = e.target.value;
+        loopState.batchSel = "all";
+        loopState.rangeFrom = "";
+        loopState.rangeTo = "";
+        const rf = document.getElementById("loopRangeFrom");
+        const rt = document.getElementById("loopRangeTo");
+        if (rf) rf.value = "";
+        if (rt) rt.value = "";
+        buildLoopSession();
+      });
+      document.getElementById("loopBatchSel")?.addEventListener("change", e => {
+        loopState.batchSel = e.target.value; buildLoopSession();
+      });
+      document.getElementById("loopApplyRangeBtn")?.addEventListener("click", () => {
+        loopState.rangeFrom = document.getElementById("loopRangeFrom").value.trim();
+        loopState.rangeTo = document.getElementById("loopRangeTo").value.trim();
+        buildLoopSession();
+      });
+    }
+  }
+
+  function renderSpiralStepper() {
+    const bar = document.getElementById("loopStepperBar");
+    if (!bar) return;
+    if (loopState.style !== "spiral") {
+      bar.style.display = "none";
+      return;
+    }
+    bar.style.display = "grid";
+    const steps = [
+      { r: 1, num: "Round 1", title: "⚡ 10秒プレテスト（英[型]→日）" },
+      { r: 2, num: "Round 2", title: "🧩 記憶フック工房（弱点補強）" },
+      { r: 3, num: "Round 3", title: "🔄 逆引き（日→英＋動詞の型）" },
+      { r: 4, num: "Round 4", title: "📝 入試4択穴埋め（実戦仕上げ）" }
+    ];
+    bar.innerHTML = steps.map(st => {
+      const cls = loopState.finished ? "done" : st.r < loopState.round ? "done" : st.r === loopState.round ? "active" : "";
+      return `<div class="spiral-step ${cls}">
+        <span class="spiral-step-num">${st.num} ${cls === "done" ? "✓" : cls === "active" ? "● 現在" : ""}</span>
+        <span class="spiral-step-title">${st.title}</span>
+      </div>`;
+    }).join("");
+  }
+
+  function renderLoopTab() {
+    stopLoopTimer();
+    updateExtStatusBadge();
+    renderSpiralStepper();
+    if (loopState.aiPanelOpen) renderAiAssistantPanel();
+
+    const host = document.getElementById("loopCardArea");
+    const metaEl = document.getElementById("loopQueueMeta");
+
+    if (!loopState.setWords.length) {
+      metaEl.textContent = "";
+      const isExtOrLevelEmpty = loopState.target === "ext_cloze" || loopState.levelFilter !== "all";
+      host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center;">
+        <div style="font-size:32px;">${isExtOrLevelEmpty ? "🤖" : "🔍"}</div>
+        <h3 style="margin:0; font-size:18px;">${isExtOrLevelEmpty ? "該当するAI実戦4択問題が見つかりません" : "条件に一致する単語がありません"}</h3>
+        <p class="muted" style="margin:0; max-width:480px; font-size:13px;">${isExtOrLevelEmpty
+          ? "下のAI弱点連携パネルから <code>systan_ai_pack.json</code> を取り込むか、入試レベル・型カテゴリの絞り込み条件を緩めてください。"
+          : "別の出題ターゲットやフィルタを選択してください。"}</p>
+        <div class="row" style="justify-content:center; gap:8px;">
+          ${isExtOrLevelEmpty ? `<button id="loopJumpAiBtn" class="primary">📥 AIパックを取込む</button>` : ""}
+          <button id="loopResetTargetBtn" class="${isExtOrLevelEmpty ? "" : "primary"}">🔥 フィルタをリセット</button>
+        </div>
+      </div>`;
+      document.getElementById("loopJumpAiBtn")?.addEventListener("click", () => {
+        loopState.aiPanelOpen = true;
+        const p = document.getElementById("loopAiPanel");
+        if (p) { p.style.display = "flex"; renderAiAssistantPanel(); p.scrollIntoView({ behavior: "smooth", block: "start" }); }
+      });
+      document.getElementById("loopResetTargetBtn")?.addEventListener("click", () => {
+        loopState.target = "today_weak";
+        loopState.levelFilter = "all";
+        loopState.verbFamily = "all";
+        buildLoopSession();
+      });
+      return;
+    }
+
+    if (loopState.finished) {
+      metaEl.textContent = "周回完了サマリー";
+      renderLoopSummary(host);
+      return;
+    }
+
+    if (!loopState.started) {
+      const lvlSuffix = loopState.levelFilter !== "all" ? ` [${LEVEL_META[loopState.levelFilter]?.label || loopState.levelFilter}]` : "";
+      const targetNames = {
+        today_weak: "🔥 今日の要特訓" + lvlSuffix,
+        ext_cloze: `🤖 AI実戦4択 / 旧帝大特訓${lvlSuffix} (${getFamilyLabel(loopState.verbFamily)})`,
+        err_reason: "⚠️ 間違えやすい単語" + lvlSuffix,
+        verb_family: `📐 ${getFamilyLabel(loopState.verbFamily)}${lvlSuffix}`,
+        stage_batch: `📚 Stage ${loopState.stageSel === "all" ? "全" : loopState.stageSel} (${loopState.batchSel})${lvlSuffix}`
+      };
+      const fmtNames = {
+        en2ja: "⚡ 英(型)→日 スピード仕分け",
+        ja2en: "🔄 日→英(型) 逆引きアウトプット",
+        mcq: "📝 入試4択穴埋め道場",
+        workshop: "🧩 記憶フック工房"
+      };
+      const heading = loopState.customLabel || (loopState.style === "spiral"
+        ? `🅰 4周スパイラル特訓 ｜ ${targetNames[loopState.target] || ""}`
+        : `🅱 ${fmtNames[loopState.singleFmt]} ｜ ${targetNames[loopState.target] || ""}`);
+      const thEn = getLatThresholds("en2ja"), thJa = getLatThresholds("ja2en"), thMcq = getLatThresholds("mcq");
+      const totalItemsCount = loopState.style === "single" ? loopState.deck.length : loopState.setWords.length;
+      metaEl.textContent = `待機中（対象 ${totalItemsCount}問）`;
+      host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center; padding:36px 20px;">
+        <span class="badge accent" style="font-size:12px; padding:4px 12px;">準備完了・待機中</span>
+        <h2 style="margin:2px 0 0; font-size:20px;">${esc(heading)}</h2>
+        <div style="font-size:28px; font-weight:800; color:var(--accent); font-variant-numeric:tabular-nums;">
+          ${loopState.idx > 0 || (loopState.style === "spiral" && loopState.round > 1)
+            ? `Round ${loopState.round}（${loopState.idx + 1} / ${Math.max(1, loopState.deck.length)}枚目から再開）`
+            : `1セット ${totalItemsCount} ${loopState.style === "single" && loopState.singleFmt === "mcq" ? "問" : "語"}`}
+        </div>
+        ${loopState.fallbackNotice ? `<div class="badge tri" style="padding:5px 12px; font-size:12px;">💡 ${esc(loopState.fallbackNotice)}</div>` : ""}
+        <p class="muted" style="margin:0; max-width:520px; font-size:13px;">
+          「スタート」を押すまで問題もタイマーも動きません。<br>
+          基準秒：英→日 <strong>≤${(thEn.fast/1000).toFixed(1)}s即答</strong> / 日→英 <strong>≤${(thJa.fast/1000).toFixed(1)}s即答</strong> / 4択 <strong>≤${(thMcq.fast/1000).toFixed(1)}s即答</strong>
+        </p>
+        <label class="muted" style="font-size:13px; display:flex; align-items:center; gap:6px; cursor:pointer;">
+          <input type="checkbox" id="loopTimerChk" ${loopState.timerOn ? "checked" : ""} /> 想起スピード計測バーを表示する
+        </label>
+        <div class="row" style="justify-content:center; margin-top:6px; gap:10px;">
+          <button id="loopStartBtn" class="primary" style="min-width:220px; padding:13px 28px; font-size:16px;">▶ ${loopState.idx > 0 || loopState.round > 1 ? "続きから再開" : "スタート"}</button>
+          ${loopState.idx > 0 || loopState.round > 1 ? `<button id="loopRestartBtn">🔄 最初から組み直す</button>` : ""}
+        </div>
+      </div>`;
+      document.getElementById("loopTimerChk")?.addEventListener("change", e => { loopState.timerOn = e.target.checked; });
+      document.getElementById("loopStartBtn")?.addEventListener("click", () => { loopState.started = true; renderLoopTab(); });
+      document.getElementById("loopRestartBtn")?.addEventListener("click", () => buildLoopSession(loopState.customLabel ? loopState.setWords : null, loopState.customLabel));
+      return;
+    }
+
+    if (loopState.style === "spiral" && loopState.round === 2 && loopState.deck.length === 0) {
+      metaEl.textContent = "Round 2 / 全問一発即答クリア！";
+      host.innerHTML = `<div class="flashcard empty-state stack" style="align-items:center; padding:34px 20px;">
+        <div style="font-size:36px;">⚡🎉</div>
+        <h3 style="margin:0; font-size:20px;">Round 1 全問一発クリア！（迷い・誤答 0語）</h3>
+        <p class="muted" style="margin:0; max-width:460px; font-size:13px;">記憶フック工房（Round 2）をスキップして、そのまま Round 3（逆方向アウトプット：日→英＋型）へ進めます。</p>
+        <div class="row" style="justify-content:center; margin-top:8px; gap:10px;">
+          <button id="r2SkipBtn" class="primary" style="padding:12px 22px;">🔄 Round 3（逆引き）へ進む ▶</button>
+          <button id="r2ShowAllBtn">🧩 念のため全語のフックを確認する</button>
+        </div>
+      </div>`;
+      document.getElementById("r2SkipBtn")?.addEventListener("click", () => advanceSpiralOrFinish());
+      document.getElementById("r2ShowAllBtn")?.addEventListener("click", () => {
+        loopState.round2AllPreview = true;
+        loopState.deck = loopState.setWords.map(w => ({ wid: w.id, fmt: "workshop" }));
+        loopState.idx = 0;
+        renderLoopTab();
+      });
+      return;
+    }
+
+    if (loopState.idx >= loopState.deck.length) {
+      advanceSpiralOrFinish();
+      return;
+    }
+
+    const cur = loopState.deck[loopState.idx];
+    const w = wordsMap.get(cur.wid);
+    if (!w) { loopState.idx++; renderLoopTab(); return; }
+
+    metaEl.textContent = `${loopState.style === "spiral" ? `Round ${loopState.round}/4 ｜ ` : ""}${loopState.idx + 1} / ${loopState.deck.length} 問目`;
+
+    if (cur.fmt === "workshop") {
+      renderHookWorkshopCard(host, w);
+    } else if (cur.fmt === "mcq") {
+      renderLoopMcqCard(host, w, cur);
+    } else {
+      renderLoopFlashCard(host, w, cur.fmt);
+    }
+  }
+
+  function renderHookWorkshopCard(host, w) {
+    const usr = (state.userHooks && state.userHooks[w.id]) || { kn: "", et: "", mn: "" };
+    const tags = getErrTags(w.id);
+    host.innerHTML = `<div class="flashcard stack">
+      <div class="row space-between">
+        <div class="row" style="gap:6px;">
+          <span class="badge accent">🧩 記憶フック工房</span>
+          <span class="badge">Stage ${esc(w.s)} #${esc(w.n)}</span>
+          <span class="badge">${esc(w.pos)}</span>
+          ${tags.map(t => ERR_TAG_META[t] ? `<span class="badge ${ERR_TAG_META[t].cls}">${esc(ERR_TAG_META[t].label)}</span>` : "").join("")}
+        </div>
+        <div class="row" style="gap:8px;">
+          <span class="badge">${loopState.idx + 1} / ${loopState.deck.length}</span>
+          <button id="hwPauseBtn" class="ghost" style="font-size:12px; padding:4px 8px; min-height:30px;">⏸ 待機へ</button>
+        </div>
+      </div>
+
+      <div class="row space-between" style="align-items:baseline; border-bottom:1px solid var(--border); padding-bottom:10px;">
+        <div>
+          <div class="row" style="gap:10px; align-items:baseline;">
+            <span style="font-size:32px; font-weight:800;">${esc(w.w)}</span>
+            ${w.ipa ? `<span class="ipa">[${esc(w.ipa)}]</span>` : ""}
+            <button id="hwSpkBtn" class="ghost" style="font-size:13px;">🔊 発音</button>
+          </div>
+          <div class="meaning-main" style="margin-top:4px;">${esc(w.m)}</div>
+        </div>
+      </div>
+
+      ${renderPatternHtml(w.pt)}
+      ${w.ph ? `<div class="phrase-box"><div><div style="font-size:11px; font-weight:700; color:var(--ink-muted);">MINIMAL PHRASE</div><div class="phrase-en">${esc(w.ph)}</div></div><button id="hwSpkPhBtn" class="ghost" style="font-size:12px;">🔊</button></div>` : ""}
+
+      <div id="hwPreviewPanel">${renderMergedHookPanelHtml(w.id, true) || `<div class="muted" style="font-size:12.5px;">💡 まだ記憶フックが未登録の単語です。下の欄に自分用の連想を1つ入れるか、🤖 AI弱点連携で一括生成できます！</div>`}</div>
+
+      <div class="hook-workshop-grid">
+        <div class="row space-between">
+          <strong style="font-size:13px; color:var(--accent);">✏️ 自分用の3軸フックメモ（入力すると自動保存・最優先表示）</strong>
+          <span class="muted" style="font-size:11px;" id="hwSaveIndicator">自動保存ON</span>
+        </div>
+        <div class="hw-field">
+          <label>🔗 外来語・既知語フック（カタカナ語・知っている派生語からつなぐ）</label>
+          <input id="hwInKn" type="text" placeholder="例: オンデマンド(要求に応じて) → 要求する" value="${esc(usr.kn || "")}" />
+        </div>
+        <div class="hw-field">
+          <label>🌱 語源分解フック（接頭辞＋語根＋接尾辞のコアイメージ）</label>
+          <input id="hwInEt" type="text" placeholder="例: pre(前に) + vent(来る) → 前に立ちはだかって妨げる" value="${esc(usr.et || "")}" />
+        </div>
+        <div class="hw-field">
+          <label>💡 イメージ語呂・場面フック（音や情景で一発連想）</label>
+          <input id="hwInMn" type="text" placeholder="例: 泥棒がロブ(rob)してAからBを奪う (rob A of B)" value="${esc(usr.mn || "")}" />
+        </div>
+      </div>
+
+      <div class="row space-between" style="margin-top:4px;">
+        <button id="hwPrevBtn" ${loopState.idx === 0 ? "disabled" : ""}>◀ 前の語</button>
+        <div class="row" style="gap:8px;">
+          <button id="hwSkipRoundBtn" class="ghost" style="font-size:12px;">${loopState.style === "spiral" ? "Round 3 へスキップ ⏭" : "スキップして完了 ⏭"}</button>
+          <button id="hwNextBtn" class="primary" style="padding:11px 22px;">${loopState.idx + 1 >= loopState.deck.length ? (loopState.style === "spiral" ? "🔄 Round 3（逆引き）へ進む ▶" : "完了サマリーへ ▶") : "フック確認OK・次へ ▶"}</button>
+        </div>
+      </div>
+    </div>`;
+
+    const onEdit = () => {
+      saveUserHook(w.id, {
+        kn: document.getElementById("hwInKn").value,
+        et: document.getElementById("hwInEt").value,
+        mn: document.getElementById("hwInMn").value
+      }, { debounce: true });
+      const prevEl = document.getElementById("hwPreviewPanel");
+      if (prevEl) prevEl.innerHTML = renderMergedHookPanelHtml(w.id, true) || "";
+      const ind = document.getElementById("hwSaveIndicator");
+      if (ind) ind.textContent = "✅ 保存予定";
+    };
+    const onBlurSave = () => {
+      flushDebouncedSave();
+      const ind = document.getElementById("hwSaveIndicator");
+      if (ind) ind.textContent = "✅ 保存済み";
+    };
+    ["hwInKn", "hwInEt", "hwInMn"].forEach(id => {
+      const inp = document.getElementById(id);
+      inp?.addEventListener("input", onEdit);
+      inp?.addEventListener("blur", onBlurSave);
+    });
+    document.getElementById("hwPauseBtn")?.addEventListener("click", () => { flushDebouncedSave(); loopState.started = false; renderLoopTab(); });
+    document.getElementById("hwSpkBtn")?.addEventListener("click", () => speak(w.w));
+    document.getElementById("hwSpkPhBtn")?.addEventListener("click", () => speak(w.ph.split("（")[0]));
+    document.getElementById("hwPrevBtn")?.addEventListener("click", () => { flushDebouncedSave(); if (loopState.idx > 0) { loopState.idx--; renderLoopTab(); } });
+    document.getElementById("hwSkipRoundBtn")?.addEventListener("click", () => { flushDebouncedSave(); advanceSpiralOrFinish(); });
+    document.getElementById("hwNextBtn")?.addEventListener("click", () => { flushDebouncedSave(); loopState.idx++; renderLoopTab(); });
+  }
+
+  function renderStepHintsSectionHtml(hints) {
+    const step = loopState.hintStep;
+    return `
+      <div class="step-hints-bar">
+        ${hints.map(h => {
+          const unlocked = step >= h.step;
+          const canClick = step === h.step - 1;
+          return `<button class="step-hint-btn ${unlocked ? "unlocked" : ""}" data-hstep="${h.step}" ${!canClick ? "disabled" : ""}>
+            💡 ヒント${h.step}: ${esc(h.title)}
+          </button>`;
+        }).join("")}
+      </div>
+      ${step > 0 ? `<div class="step-hint-list">
+        ${hints.filter(h => h.step <= step).map(h => `<div class="step-hint-item"><strong>${esc(h.title)}:</strong> ${esc(h.text)}</div>`).join("")}
+      </div>` : ""}`;
+  }
+
+  function renderLoopFlashCard(host, w, fmt) {
+    const isEn2Ja = fmt === "en2ja";
+    const c = getCard(w.id);
+    const th = getLatThresholds(fmt);
+    const skels = extractVerbSkeletons(w);
+    const jaPrompts = extractJapanesePatPrompts(w);
+    const hasVerbPat = isVerbWord(w) && (skels.length > 0 || (w.pt && w.pt.length > 0));
+    const hints = buildThreeStepHints(w, fmt);
+    const tags = getErrTags(w.id);
+
+    loopState.revealed = false;
+    loopState.hintStep = 0;
+    loopState.hintUsed = false;
+
+    const pX = previewNext(c, "x", 3000);
+    const pTri = previewNext(c, "tri", 3000);
+    const pOk = previewNext(c, "ok", 1100);
+
+    const frontStageHtml = isEn2Ja ? `
+      <div class="headword">${esc(w.w)}</div>
+      <div class="row" style="justify-content:center; gap:8px;">
+        ${w.ipa ? `<span class="ipa">[${esc(w.ipa)}]</span>` : ""}
+        <button id="lfSpkFront" class="ghost" style="font-size:13px;">🔊 発音</button>
+      </div>
+      ${skels.length ? `
+        <div class="skeleton-wrap">
+          ${skels.map(sk => `<span class="skeleton-chip">📐 ${esc(sk)}</span>`).join("")}
+        </div>
+        <div class="muted" style="font-size:12px; margin-top:4px;">💡 <strong>単語＋型の骨格</strong>から日本語（「誰に・何を〜するか」）を即答しよう！</div>
+      ` : ""}
+    ` : `
+      <div style="font-size:clamp(21px, 3.8vw, 29px); font-weight:800; line-height:1.42; margin:6px auto; max-width:640px;">${esc(w.m)}</div>
+      <div class="row" style="justify-content:center; gap:6px; margin-top:6px;">
+        <span class="badge">${esc(w.pos)}</span>
+        ${hasVerbPat ? `<span class="badge pat" style="font-size:12px; padding:4px 10px;">📐 動詞の型ごと答えよう（前置詞・Ving/to Vに注意）</span>` : ""}
+      </div>
+      ${jaPrompts.length ? `<div class="ja-pat-prompt">🎯 型の日本語：${jaPrompts.map(jp => `「${esc(jp)}」`).join(" ／ ")}</div>` : ""}
+    `;
+
+    host.innerHTML = `<div class="flashcard">
+      ${loopState.timerOn ? `<div class="latency-track"><div class="latency-fill" id="loopLatFill"></div></div>` : ""}
+      <div class="row space-between" style="margin-bottom:8px;">
+        <div class="row" style="gap:6px;">
+          <span class="badge accent">${isEn2Ja ? "⚡ 英(型) → 日" : "🔄 日 → 英(＋型)"}</span>
+          <span class="badge">Stage ${esc(w.s)} #${esc(w.n)}</span>
+          <span class="badge">${esc(w.pos)}</span>
+          ${w.mk==="x"?`<span class="badge x">教材:❌</span>`:w.mk==="tri"?`<span class="badge tri">教材:🔺</span>`:""}
+          ${tags.map(t => ERR_TAG_META[t] ? `<span class="badge ${ERR_TAG_META[t].cls}">${esc(ERR_TAG_META[t].label)}</span>` : "").join("")}
+        </div>
+        <div class="row" style="gap:8px;">
+          ${loopState.timerOn ? `<span id="loopLatTxt" class="mono muted" style="font-size:12px;">0.0s</span>` : ""}
+          <button id="lfPauseBtn" class="ghost" style="font-size:12px; padding:4px 8px; min-height:30px;">⏸ 待機へ</button>
+        </div>
+      </div>
+
+      <div class="word-stage">
+        ${frontStageHtml}
+        <div id="lfHintsHost">${renderStepHintsSectionHtml(hints)}</div>
+      </div>
+
+      <div id="lfPreActions" class="row" style="justify-content:center; gap:10px; margin-top:6px;">
+        <button id="lfRevealBtn" class="primary" style="min-width:210px; padding:13px 26px; font-size:15px;">答えを見る</button>
+      </div>
+
+      <div id="lfAnsArea" class="answer-section" style="display:none;">
+        <div class="row space-between" style="align-items:flex-start;">
+          <div>
+            ${!isEn2Ja ? `
+              <div style="font-size:28px; font-weight:800; color:var(--accent);">${esc(w.w)} ${w.ipa ? `<span class="ipa" style="font-size:14px;">[${esc(w.ipa)}]</span>` : ""}</div>
+              ${skels.length ? `<div class="skeleton-wrap" style="justify-content:flex-start; margin:6px 0;"><span style="font-size:12px; font-weight:800; color:var(--pat-fg);">正解の型:</span>${skels.map(sk => `<span class="skeleton-chip">📐 ${esc(sk)}</span>`).join("")}</div>` : ""}
+            ` : `<div class="meaning-main">${esc(w.m)}</div>`}
+          </div>
+          <button id="lfSpkAns" style="font-size:12px;">🔊 単語発音</button>
+        </div>
+
+        <div id="lfLatencyBanner"></div>
+        ${renderPatternHtml(w.pt)}
+        ${w.ph ? `<div class="phrase-box"><div><div style="font-size:11px; font-weight:700; color:var(--ink-muted);">MINIMAL PHRASE</div><div class="phrase-en">${esc(w.ph)}</div></div><button id="lfSpkPh" class="ghost" style="font-size:12px;">🔊</button></div>` : ""}
+        ${renderMergedHookPanelHtml(w.id, true)}
+        ${renderErrTagTogglesHtml(w.id)}
+
+        <div class="grade-bar">
+          <button class="grade-btn g-x" id="lfGradeX">
+            <span class="grade-main" style="color:var(--x-fg);">❌ ${isEn2Ja ? "忘れた" : "言えなかった"}</span>
+            <span class="grade-next">→ ${pX.label}</span>
+          </button>
+          <button class="grade-btn g-tri" id="lfGradeTri">
+            <span class="grade-main" style="color:var(--tri-fg);">🔺 ${!isEn2Ja && hasVerbPat ? "型あやふや/迷い" : `迷った/>${(th.fast/1000).toFixed(1)}s`}</span>
+            <span class="grade-next">→ ${pTri.label}</span>
+            <span class="grade-rec-tag" id="lfRecTri" style="display:none;">推奨</span>
+          </button>
+          <button class="grade-btn g-ok" id="lfGradeOk">
+            <span class="grade-main" style="color:var(--ok-fg);">レ ${!isEn2Ja && hasVerbPat ? "単語＋型まで即答" : `即答/≤${(th.fast/1000).toFixed(1)}s`}</span>
+            <span class="grade-next">→ ${pOk.label}</span>
+            <span class="grade-rec-tag" id="lfRecOk" style="display:none;">推奨</span>
+          </button>
+        </div>
+      </div>
+    </div>`;
+
+    bindErrTagToggles(document.getElementById("lfAnsArea"));
+
+    const bindHintClicks = () => {
+      document.querySelectorAll("#lfHintsHost [data-hstep]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (loopState.revealed) return;
+          const targetStep = Number(btn.dataset.hstep);
+          // B14: Enforce strict sequential step unlocking (1 -> 2 -> 3)
+          if (targetStep !== loopState.hintStep + 1) return;
+          loopState.hintStep = targetStep;
+          loopState.hintUsed = true;
+          document.getElementById("lfHintsHost").innerHTML = renderStepHintsSectionHtml(hints);
+          bindHintClicks();
+        });
+      });
+    };
+    bindHintClicks();
+
+    const doReveal = () => {
+      if (loopState.revealed) return;
+      loopState.revealed = true;
+      const timed = !!loopState.timerOn;
+      loopState.latMs = timed ? clampLatencyMs(performance.now() - loopState.cardStartTs) : null;
+      stopLoopTimer();
+      document.getElementById("lfPreActions").style.display = "none";
+      document.getElementById("lfAnsArea").style.display = "flex";
+      // B10: Respect #autoAudioChk on ja2en reveal
+      if (!isEn2Ja && document.getElementById("autoAudioChk")?.checked) speak(w.w);
+
+      const isSlow = timed && loopState.latMs > th.pass;
+      const isFast = !loopState.hintUsed && (!timed || loopState.latMs <= th.fast);
+      const banner = document.getElementById("lfLatencyBanner");
+      if (banner) {
+        if (timed) {
+          const sec = (loopState.latMs / 1000).toFixed(2);
+          if (loopState.hintUsed) {
+            banner.innerHTML = `<span class="badge tri">💡 段階ヒント使用（${sec}s）→ 🔺迷い相当として復習推奨</span>`;
+          } else if (isSlow) {
+            banner.innerHTML = `<span class="badge x">🐢 想起遅延 ${sec}s（基準 ${(th.pass/1000).toFixed(1)}s 超え）→ 正解でも控えめ間隔＆遅延タグ記録</span>`;
+          } else if (isFast) {
+            banner.innerHTML = `<span class="badge ok">⚡ 即答 ${sec}s（基準 ≤${(th.fast/1000).toFixed(1)}s クリア！）</span>`;
+          } else {
+            banner.innerHTML = `<span class="badge tri">⏱ 想起 ${sec}s（合格圏 ≤${(th.pass/1000).toFixed(1)}s）</span>`;
+          }
+        } else if (loopState.hintUsed) {
+          banner.innerHTML = `<span class="badge tri">💡 段階ヒント使用 → 🔺迷い相当として復習推奨</span>`;
+        }
+      }
+      // B1: When timerOn === false and no hint used, do NOT falsely highlight recTri
+      if (loopState.hintUsed || (timed && !isFast)) {
+        document.getElementById("lfGradeTri")?.classList.add("recommended");
+        const r = document.getElementById("lfRecTri");
+        if (r) { r.style.display = "inline"; r.textContent = loopState.hintUsed ? "ヒント使用・推奨" : `${(loopState.latMs/1000).toFixed(1)}s・推奨`; }
+      } else if (timed) {
+        document.getElementById("lfGradeOk")?.classList.add("recommended");
+        const r = document.getElementById("lfRecOk");
+        if (r) { r.style.display = "inline"; r.textContent = `${(loopState.latMs/1000).toFixed(1)}s・即答！`; }
+      }
+    };
+
+    const submitFlashGrade = (rawGrade) => {
+      if (!loopState.revealed) return;
+      const timed = !!loopState.timerOn;
+      const ms = timed ? clampLatencyMs(loopState.latMs || 0) : null;
+      const isOk = rawGrade === "ok";
+      const isSlow = timed && ms > th.pass;
+      // B1: When timerOn === false, ok without hint counts as isFast = true for spiral flow
+      const isFast = isOk && !loopState.hintUsed && (!timed || ms <= th.fast);
+
+      // B1: Never record fake latency when timerOn === false
+      if (timed) recordLatency(w.id, fmt, ms, rawGrade !== "x");
+      let errTagRecorded = "";
+      if (isSlow && rawGrade !== "x") {
+        addErrTag(w.id, "slow");
+        errTagRecorded = "slow";
+      }
+      if (rawGrade === "x") {
+        if (!isEn2Ja && hasVerbPat) { addErrTag(w.id, "prep_pattern"); errTagRecorded = "prep_pattern"; }
+        else { addErrTag(w.id, "unlearned"); errTagRecorded = "unlearned"; }
+      } else if (rawGrade === "tri" && !isEn2Ja && hasVerbPat && !loopState.hintUsed && (!timed || ms <= th.pass)) {
+        addErrTag(w.id, "prep_pattern");
+        errTagRecorded = "prep_pattern";
+      }
+
+      const effectiveGrade = (rawGrade === "ok" && (isSlow || loopState.hintUsed)) ? "tri" : rawGrade;
+      state.cards[w.id] = previewNext(c, effectiveGrade, timed ? (isFast ? 1000 : ms) : 1500).next;
+
+      const t = todayStr(0);
+      if (!state.daily[t]) state.daily[t] = { done:0, ok:0, tri:0, x:0 };
+      state.daily[t].done += 1;
+      state.daily[t][effectiveGrade] += 1;
+
+      if (isFast) {
+        loopState.fastClearedIds.add(w.id);
+      } else {
+        loopState.weakIds.add(w.id);
+      }
+
+      loopState.sessionLogs.push({
+        wid: w.id, fmt, ms, timed, ok: rawGrade !== "x", rawGrade, effectiveGrade,
+        fast: isFast, slow: isSlow, errTag: errTagRecorded, hintUsed: loopState.hintUsed
+      });
+
+      if (rawGrade === "x" && (loopState.style === "single" || loopState.round === 3)) {
+        loopState.deck.splice(Math.min(loopState.deck.length, loopState.idx + 5), 0, { wid: w.id, fmt });
+        toast(`❌「${w.w}」を数枚後に再テストします`);
+      }
+
+      saveState();
+      loopState.idx++;
+      renderLoopTab();
+    };
+
+    document.getElementById("lfPauseBtn")?.addEventListener("click", () => { loopState.started = false; renderLoopTab(); });
+    document.getElementById("lfSpkFront")?.addEventListener("click", () => speak(w.w));
+    document.getElementById("lfSpkAns")?.addEventListener("click", () => speak(w.w));
+    document.getElementById("lfSpkPh")?.addEventListener("click", () => speak(w.ph.split("（")[0]));
+    document.getElementById("lfRevealBtn")?.addEventListener("click", doReveal);
+    document.getElementById("lfGradeX")?.addEventListener("click", () => submitFlashGrade("x"));
+    document.getElementById("lfGradeTri")?.addEventListener("click", () => submitFlashGrade("tri"));
+    document.getElementById("lfGradeOk")?.addEventListener("click", () => submitFlashGrade("ok"));
+    if (document.getElementById("autoAudioChk")?.checked && isEn2Ja) speak(w.w);
+    startLoopTimer(fmt);
+  }
+
+  function renderLoopMcqCard(host, w, deckEntry) {
+    const mcq = deckEntry.mcqObj || (deckEntry.mcqObj = buildMcqForWord(w, loopState.setWords, deckEntry.clozeItem || null));
+    const c = getCard(w.id);
+    const th = getLatThresholds("mcq");
+    const hints = buildThreeStepHints(w, "mcq");
+    const circNums = ["①", "②", "③", "④"];
+
+    const lvlMeta = mcq.level && LEVEL_META[mcq.level] ? LEVEL_META[mcq.level] : null;
+    const lvlLabel = lvlMeta ? lvlMeta.label : "自動生成";
+    const lvlCls = lvlMeta ? lvlMeta.cls : "";
+    const famLabel = mcq.family ? getFamilyLabel(mcq.family)
+      : (mcq.qType === "prep_pattern" ? "📐 語法・前置詞4択" : "🔀 文脈・類義語4択");
+
+    loopState.revealed = !!deckEntry.answered;
+    loopState.hintStep = deckEntry.answered ? (deckEntry.hintStep || 0) : 0;
+    loopState.hintUsed = !!deckEntry.hintUsed;
+    loopState.mcqChosenIdx = deckEntry.answered ? deckEntry.chosenIdx : -1;
+
+    host.innerHTML = `<div class="flashcard">
+      ${loopState.timerOn ? `<div class="latency-track"><div class="latency-fill" id="loopLatFill"></div></div>` : ""}
+      <div class="row space-between" style="margin-bottom:8px;">
+        <div class="row" style="gap:6px;">
+          <span class="badge accent">📝 入試4択チェック</span>
+          <span class="badge ${lvlCls}" data-testid="mcq-level-badge">${esc(lvlLabel)}</span>
+          <span class="badge pat" data-testid="mcq-family-badge">${esc(famLabel)}</span>
+          <span class="badge">Stage ${esc(w.s)} #${esc(w.n)}</span>
+        </div>
+        <div class="row" style="gap:8px;">
+          ${loopState.timerOn ? `<span id="loopLatTxt" class="mono muted" style="font-size:12px;">${deckEntry.answered && typeof deckEntry.elapsedMs === "number" ? (deckEntry.elapsedMs / 1000).toFixed(1) + "s" : "0.0s"}</span>` : ""}
+          <button id="mcqPauseBtn" class="ghost" style="font-size:12px; padding:4px 8px; min-height:30px;">⏸ 待機へ</button>
+        </div>
+      </div>
+
+      <div class="mcq-stem-box">
+        <div class="mcq-stem-en">${esc(mcq.stem).replace(/\(\s{2,}\)|_{3,}/g, '<span class="cloze-blank">(    )</span>')}</div>
+        ${mcq.ja ? `<div class="mcq-stem-ja">訳・ヒント：${esc(mcq.ja)}</div>` : ""}
+      </div>
+
+      <div class="mcq-grid" id="mcqChoicesGrid">
+        ${mcq.options.map((opt, idx) => `
+          <button class="mcq-btn" data-cidx="${idx}">
+            <span class="mcq-num">${circNums[idx] || (idx + 1)}</span>
+            <span>${esc(opt.text)}</span>
+          </button>
+        `).join("")}
+      </div>
+
+      <div id="mcqHintsHost" style="margin-top:8px;">${renderStepHintsSectionHtml(hints)}</div>
+
+      <div id="mcqFeedbackArea" class="answer-section" style="display:none;"></div>
+    </div>`;
+
+    const renderMcqFeedbackUI = () => {
+      const chosenIdx = deckEntry.chosenIdx;
+      const isCorrect = !!deckEntry.isCorrect;
+      const timed = !!deckEntry.timed;
+      const ms = deckEntry.elapsedMs;
+      const isFast = !!deckEntry.isFast;
+      const isSlow = !!deckEntry.isSlow;
+      const recordedTag = deckEntry.recordedTag || "";
+      const srsLabel = deckEntry.srsLabel || "";
+
+      document.querySelectorAll("#mcqChoicesGrid .mcq-btn").forEach((btn, idx) => {
+        btn.disabled = true;
+        if (mcq.options[idx].isCorrect) btn.classList.add("correct");
+        else if (idx === chosenIdx) btn.classList.add("wrong");
+        else btn.classList.add("dimmed");
+      });
+      document.querySelectorAll("#mcqHintsHost [data-hstep]").forEach(btn => { btn.disabled = true; });
+
+      const timeStr = (timed && typeof ms === "number") ? `${(ms / 1000).toFixed(2)}s` : "タイマーOFF";
+      const fb = document.getElementById("mcqFeedbackArea");
+      fb.style.display = "flex";
+      fb.innerHTML = `
+        <div class="row space-between" style="align-items:center;">
+          <div class="row" style="gap:8px;">
+            ${isCorrect
+              ? `<span class="badge ok" style="font-size:13px; padding:5px 12px;">⭕ 正解！（${esc(timeStr)} ${timed && isFast ? "⚡即答" : isSlow ? "🐢想起遅延" : ""}）</span>`
+              : `<span class="badge x" style="font-size:13px; padding:5px 12px;">❌ 不正解（${esc(timeStr)}）｜ 正解: ${esc(mcq.options[mcq.answer].text)}</span>`}
+            ${recordedTag && ERR_TAG_META[recordedTag] ? `<span class="badge ${ERR_TAG_META[recordedTag].cls}">記録: ${esc(ERR_TAG_META[recordedTag].label)}</span>` : ""}
+            <span class="muted" style="font-size:12px;">SRS自動反映: <strong>${esc(srsLabel)}</strong></span>
+          </div>
+          <button id="mcqSpkWordBtn" style="font-size:12px;">🔊 ${esc(w.w)} を発音</button>
+        </div>
+
+        <div class="phrase-box" style="flex-direction:column; gap:4px;">
+          <div style="font-weight:800; font-size:14.5px;">💡 1行解説：${esc(mcq.why)}</div>
+          ${mcq.trap ? `<div style="font-size:13px; color:var(--x-fg); font-weight:700;">${esc(mcq.trap)}</div>` : ""}
+          <div class="muted" style="font-size:12.5px;">見出し語：<strong>${esc(w.w)}</strong>（${esc(w.m)}）</div>
+        </div>
+
+        ${renderErrTagTogglesHtml(w.id)}
+        ${renderPatternHtml(w.pt)}
+        ${renderMergedHookPanelHtml(w.id, true)}
+
+        <div class="row" style="justify-content:flex-end; margin-top:4px;">
+          <button id="mcqNextBtn" class="primary" style="min-width:190px; padding:12px 24px; font-size:15px;">${loopState.idx + 1 >= loopState.deck.length ? "📊 周回サマリーを見る ▶" : "次の問題へ ▶"}</button>
+        </div>
+      `;
+      bindErrTagToggles(fb);
+      document.getElementById("mcqSpkWordBtn")?.addEventListener("click", () => speak(w.w));
+      document.getElementById("mcqNextBtn")?.addEventListener("click", () => {
+        loopState.idx++;
+        renderLoopTab();
+      });
+    };
+
+    const bindMcqHints = () => {
+      document.querySelectorAll("#mcqHintsHost [data-hstep]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          if (deckEntry.answered || loopState.mcqChosenIdx >= 0) return;
+          const targetStep = Number(btn.dataset.hstep);
+          // B14: Strict sequential hint step-locking
+          if (targetStep !== loopState.hintStep + 1) return;
+          loopState.hintStep = targetStep;
+          loopState.hintUsed = true;
+          document.getElementById("mcqHintsHost").innerHTML = renderStepHintsSectionHtml(hints);
+          bindMcqHints();
+        });
+      });
+    };
+    bindMcqHints();
+
+    const handleChoice = (chosenIdx) => {
+      // B2: Strict double-grade guard on deckEntry.answered
+      if (deckEntry.answered || loopState.mcqChosenIdx >= 0) return;
+      loopState.mcqChosenIdx = chosenIdx;
+      loopState.revealed = true;
+      const timed = !!loopState.timerOn;
+      const ms = timed ? clampLatencyMs(performance.now() - loopState.cardStartTs) : null;
+      loopState.latMs = ms;
+      stopLoopTimer();
+
+      const chosenOpt = mcq.options[chosenIdx];
+      const isCorrect = !!chosenOpt.isCorrect;
+      const isSlow = timed && ms > th.pass;
+      const isFast = isCorrect && !loopState.hintUsed && (!timed || ms <= th.fast);
+
+      if (timed) recordLatency(w.id, "mcq", ms, isCorrect);
+      let recordedTag = "";
+      if (!isCorrect) {
+        recordedTag = chosenOpt.errType || (mcq.qType === "confusable" ? "confusable" : mcq.qType === "prep_pattern" ? "prep_pattern" : "unlearned");
+        addErrTag(w.id, recordedTag);
+        loopState.weakIds.add(w.id);
+      } else if (isSlow) {
+        recordedTag = "slow";
+        addErrTag(w.id, "slow");
+        loopState.weakIds.add(w.id);
+      } else if (loopState.hintUsed) {
+        loopState.weakIds.add(w.id);
+      }
+
+      const effectiveGrade = !isCorrect ? "x" : (isSlow || loopState.hintUsed) ? "tri" : "ok";
+      const srsRes = previewNext(c, effectiveGrade, timed ? (isFast ? 1000 : ms) : 1500);
+      state.cards[w.id] = srsRes.next;
+
+      const t = todayStr(0);
+      if (!state.daily[t]) state.daily[t] = { done:0, ok:0, tri:0, x:0 };
+      state.daily[t].done += 1;
+      state.daily[t][effectiveGrade] += 1;
+
+      // Persist answered state directly on deckEntry so pause/resume/tab-switch/settings-save never double-grade
+      deckEntry.answered = true;
+      deckEntry.chosenIdx = chosenIdx;
+      deckEntry.isCorrect = isCorrect;
+      deckEntry.elapsedMs = ms;
+      deckEntry.timed = timed;
+      deckEntry.isFast = isFast;
+      deckEntry.isSlow = isSlow;
+      deckEntry.recordedTag = recordedTag;
+      deckEntry.srsLabel = srsRes.label;
+      deckEntry.hintUsed = loopState.hintUsed;
+      deckEntry.hintStep = loopState.hintStep;
+
+      loopState.sessionLogs.push({
+        wid: w.id, fmt: "mcq", ms, timed, ok: isCorrect, rawGrade: isCorrect ? "ok" : "x",
+        effectiveGrade, fast: isFast, slow: isSlow, errTag: recordedTag, hintUsed: loopState.hintUsed
+      });
+      saveState();
+
+      renderMcqFeedbackUI();
+    };
+
+    document.querySelectorAll("#mcqChoicesGrid .mcq-btn").forEach(btn => {
+      btn.addEventListener("click", () => handleChoice(Number(btn.dataset.cidx)));
+    });
+    document.getElementById("mcqPauseBtn")?.addEventListener("click", () => { loopState.started = false; renderLoopTab(); });
+
+    if (deckEntry.answered) {
+      // B2: Restore answered feedback state cleanly without restarting timer or re-grading
+      renderMcqFeedbackUI();
+    } else {
+      startLoopTimer("mcq");
+    }
+  }
+
+  function renderLoopSummary(host) {
+    const logs = loopState.sessionLogs;
+    const fmtStats = ["en2ja", "ja2en", "mcq"].map(f => {
+      const sub = logs.filter(l => l.fmt === f);
+      if (!sub.length) return null;
+      const timedSub = sub.filter(l => l.timed !== false && typeof l.ms === "number");
+      const avgSec = timedSub.length
+        ? (Math.round(timedSub.reduce((a, b) => a + b.ms, 0) / timedSub.length) / 1000).toFixed(2) + "s"
+        : "—";
+      const fastRate = Math.round((sub.filter(l => l.fast).length / sub.length) * 100);
+      const accRate = Math.round((sub.filter(l => l.ok).length / sub.length) * 100);
+      const name = { en2ja: "⚡ 英(型)→日", ja2en: "🔄 日→英(型)", mcq: "📝 入試4択" }[f];
+      return { f, name, cnt: sub.length, avgSec, fastRate, accRate };
+    }).filter(Boolean);
+
+    const correctSlowMap = new Map();
+    for (const l of logs) {
+      if (!l.ok || l.timed === false || typeof l.ms !== "number") continue;
+      const th = getLatThresholds(l.fmt);
+      const ratio = l.ms / th.fast;
+      const prev = correctSlowMap.get(l.wid);
+      if (!prev || l.ms > prev.ms) {
+        correctSlowMap.set(l.wid, { ...l, ratio, isOverPass: l.ms > th.pass });
+      }
+    }
+    const dangerSlowTop5 = [...correctSlowMap.values()]
+      .filter(x => x.isOverPass || x.ratio > 1.0)
+      .sort((a, b) => b.ms - a.ms)
+      .slice(0, 5);
+
+    const errBreakdown = { wrong: 0, prep_pattern: 0, confusable: 0, slow: 0, hint: 0 };
+    const retryWidSet = new Set();
+    for (const l of logs) {
+      if (!l.ok) { errBreakdown.wrong++; retryWidSet.add(l.wid); }
+      if (l.errTag === "prep_pattern") errBreakdown.prep_pattern++;
+      if (l.errTag === "confusable") errBreakdown.confusable++;
+      if (l.slow) { errBreakdown.slow++; retryWidSet.add(l.wid); }
+      if (l.hintUsed) { errBreakdown.hint++; retryWidSet.add(l.wid); }
+      if (l.rawGrade === "tri") retryWidSet.add(l.wid);
+    }
+    const kiokuCounts = {};
+    for (const kt of KIOKU_ERR_TAGS) kiokuCounts[kt.id] = 0;
+    for (const w of loopState.setWords) {
+      for (const tg of getErrTags(w.id)) {
+        if (kiokuCounts[tg] !== undefined) kiokuCounts[tg]++;
+      }
+    }
+    const kiokuBadgesHtml = KIOKU_ERR_TAGS
+      .filter(kt => kiokuCounts[kt.id] > 0)
+      .map(kt => `<span class="badge ${kt.cls}">${esc(kt.label)}: ${kiokuCounts[kt.id]}語</span>`)
+      .join("");
+
+    const retryWords = loopState.setWords.filter(w => retryWidSet.has(w.id));
+
+    host.innerHTML = `<div class="flashcard stack">
+      <div style="text-align:center;">
+        <div style="font-size:36px;">🏁</div>
+        <h2 style="margin:4px 0 2px; font-size:21px;">周回セッション完了サマリー</h2>
+        <div class="muted" style="font-size:13px;">セット ${loopState.setWords.length}語 ｜ 総回答 ${logs.length}問</div>
+      </div>
+
+      ${fmtStats.length ? `<div class="summary-kpi-grid">
+        ${fmtStats.map(s => `<div class="stat-box">
+          <div class="stat-label">${s.name}（${s.cnt}問）</div>
+          <div class="stat-val" style="color:var(--accent);">${s.avgSec}</div>
+          <div class="stat-sub">即答率 <strong>${s.fastRate}%</strong> ／ 正答率 ${s.accRate}%</div>
+        </div>`).join("")}
+      </div>` : `<div class="muted" style="text-align:center;">フック工房の確認が完了しました！</div>`}
+
+      <div class="hook-panel">
+        <strong style="font-size:13.5px;">📊 今回の誤答・混同・遅延の内訳</strong>
+        <div class="row" style="gap:8px; margin-top:4px;">
+          <span class="badge x">❌ 誤答: ${errBreakdown.wrong}件</span>
+          <span class="badge pat">📐 前置詞・型ズレ: ${errBreakdown.prep_pattern}件</span>
+          <span class="badge x">🔀 類義語混同: ${errBreakdown.confusable}件</span>
+          <span class="badge tri">🐢 想起遅延: ${errBreakdown.slow}件</span>
+          <span class="badge">💡 ヒント使用: ${errBreakdown.hint}件</span>
+          ${kiokuBadgesHtml}
+        </div>
+      </div>
+
+      <div class="stack" style="gap:8px;">
+        <div class="row space-between">
+          <strong style="font-size:14px;">🐢 正解したけど遅かった危険語 TOP5（試験本番で時間切れ・迷いやすい語）</strong>
+          ${dangerSlowTop5.length ? `<button id="sumRetestSlowBtn" style="font-size:12px;">⚡ この${dangerSlowTop5.length}語をその場で再テスト</button>` : ""}
+        </div>
+        ${dangerSlowTop5.length ? dangerSlowTop5.map(item => {
+          const w = wordsMap.get(item.wid);
+          if (!w) return "";
+          return `<div class="danger-word-row">
+            <div>
+              <div class="row" style="gap:6px;">
+                <span class="mono muted" style="font-size:12px;">S${esc(w.s)}#${esc(w.n)}</span>
+                <strong>${esc(w.w)}</strong>
+                <span class="badge ${item.isOverPass ? "x" : "tri"}">${(item.ms/1000).toFixed(2)}s ${item.isOverPass ? "🐢遅延" : "△やや遅"}</span>
+                ${w.pt && w.pt[0] ? `<span class="badge pat">📐 ${esc(fmtPat(w.pt[0]).slice(0, 26))}</span>` : ""}
+              </div>
+              <div class="muted" style="font-size:12px;">${esc(w.m)}</div>
+            </div>
+            <button class="ghost sum-single-retest" data-wid="${esc(w.id)}" style="font-size:12px; color:var(--accent); font-weight:700;">再テスト →</button>
+          </div>`;
+        }).join("") : `<div class="muted" style="font-size:13px; padding:8px 0;">✨ 素晴らしい！基準秒を超えた遅延語はありませんでした！</div>`}
+      </div>
+
+      <div class="row" style="justify-content:center; gap:10px; margin-top:6px;">
+        ${retryWords.length ? `<button id="sumRetryWeakBtn" class="primary" style="padding:12px 20px;">🔥 間違えた＆遅かった語だけもう1周（${retryWords.length}語）</button>` : ""}
+        <button id="sumOpenAiBtn" class="${retryWords.length ? "" : "primary"}" style="padding:12px 18px;">🤖 AIでこの弱点語の特訓問題・語呂を作る</button>
+        <button id="sumNextSetBtn">🔁 次のセットを準備</button>
+      </div>
+    </div>`;
+
+    document.getElementById("sumRetestSlowBtn")?.addEventListener("click", () => {
+      const slowWords = dangerSlowTop5.map(x => wordsMap.get(x.wid)).filter(Boolean);
+      buildLoopSession(slowWords, `🐢 遅延危険語 TOP${slowWords.length} 再テスト`);
+    });
+    host.querySelectorAll(".sum-single-retest").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const w = wordsMap.get(btn.dataset.wid);
+        if (w) buildLoopSession([w], `⚡ ピンポイント再テスト: ${w.w}`);
+      });
+    });
+    document.getElementById("sumRetryWeakBtn")?.addEventListener("click", () => {
+      buildLoopSession(retryWords, `🔥 弱点・遅延リカバリー周回（${retryWords.length}語）`);
+    });
+    document.getElementById("sumOpenAiBtn")?.addEventListener("click", () => {
+      const targetWids = retryWords.length ? retryWords.map(w => w.id) : loopState.setWords.map(w => w.id);
+      loopState.aiCustomWids = targetWids;
+      loopState.aiPanelOpen = true;
+      const panel = document.getElementById("loopAiPanel");
+      panel.style.display = "flex";
+      renderAiAssistantPanel();
+      panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+    document.getElementById("sumNextSetBtn")?.addEventListener("click", () => buildLoopSession());
+  }
+
+  document.getElementById("loopThresholdBtn")?.addEventListener("click", () => {
+    const tEn = getLatThresholds("en2ja"), tJa = getLatThresholds("ja2en"), tMcq = getLatThresholds("mcq");
+    modalBox.innerHTML = `
+      <div class="row space-between">
+        <strong style="font-size:16px;">⏱ 形式別・想起スピード基準秒カスタマイズ</strong>
+        <button id="mClose" class="ghost">✕</button>
+      </div>
+      <div class="muted" style="font-size:12.5px;">即答（レ推奨）と合格上限（これを超えると 🐢想起遅延タグ＆控えめ間隔）を秒単位で調整できます。</div>
+      <div class="stack" style="gap:10px;">
+        <div class="step-box">
+          <strong>⚡ 英(型) → 日（初期値: 即答 2.0s / 合格 3.5s）</strong>
+          <div class="row" style="gap:10px;">
+            <label style="font-size:12px;">即答(秒): <input id="thEnFast" type="number" step="0.1" min="0.1" max="15" value="${(tEn.fast/1000).toFixed(1)}" style="width:85px;" /></label>
+            <label style="font-size:12px;">合格上限(秒): <input id="thEnPass" type="number" step="0.1" min="0.1" max="30" value="${(tEn.pass/1000).toFixed(1)}" style="width:85px;" /></label>
+          </div>
+        </div>
+        <div class="step-box">
+          <strong>🔄 日 → 英＋動詞の型（初期値: 即答 3.5s / 合格 5.5s）</strong>
+          <div class="row" style="gap:10px;">
+            <label style="font-size:12px;">即答(秒): <input id="thJaFast" type="number" step="0.1" min="0.1" max="20" value="${(tJa.fast/1000).toFixed(1)}" style="width:85px;" /></label>
+            <label style="font-size:12px;">合格上限(秒): <input id="thJaPass" type="number" step="0.1" min="0.1" max="40" value="${(tJa.pass/1000).toFixed(1)}" style="width:85px;" /></label>
+          </div>
+        </div>
+        <div class="step-box">
+          <strong>📝 入試4択穴埋め（初期値: 即答 5.0s / 合格 8.0s）</strong>
+          <div class="row" style="gap:10px;">
+            <label style="font-size:12px;">即答(秒): <input id="thMcqFast" type="number" step="0.1" min="0.1" max="30" value="${(tMcq.fast/1000).toFixed(1)}" style="width:85px;" /></label>
+            <label style="font-size:12px;">合格上限(秒): <input id="thMcqPass" type="number" step="0.1" min="0.1" max="60" value="${(tMcq.pass/1000).toFixed(1)}" style="width:85px;" /></label>
+          </div>
+        </div>
+      </div>
+      <div class="row space-between">
+        <button id="thResetDef" class="ghost" style="font-size:12px;">初期値に戻す</button>
+        <button id="thSaveBtn" class="primary">保存して反映</button>
+      </div>`;
+    modalBg.classList.add("open");
+    document.getElementById("mClose").onclick = () => modalBg.classList.remove("open");
+    document.getElementById("thResetDef").onclick = () => {
+      state.latThresholds = JSON.parse(JSON.stringify(DEFAULT_LAT_THRESHOLDS));
+      saveState(); modalBg.classList.remove("open"); toast("基準秒を初期値に戻しました"); renderLoopTab();
+    };
+    document.getElementById("thSaveBtn").onclick = () => {
+      const readMs = (id, fb) => {
+        const raw = parseFloat(document.getElementById(id).value);
+        const sec = Number.isFinite(raw) && raw > 0 ? raw : fb;
+        return Math.max(50, Math.round(sec * 1000));
+      };
+      const ef = readMs("thEnFast", 2.0), ep = Math.max(ef, readMs("thEnPass", 3.5));
+      const jf = readMs("thJaFast", 3.5), jp = Math.max(jf, readMs("thJaPass", 5.5));
+      const mf = readMs("thMcqFast", 5.0), mp = Math.max(mf, readMs("thMcqPass", 8.0));
+      state.latThresholds = { en2ja: { fast: ef, pass: ep }, ja2en: { fast: jf, pass: jp }, mcq: { fast: mf, pass: mp } };
+      saveState(); modalBg.classList.remove("open"); toast("基準秒を保存しました"); renderLoopTab();
+    };
+  });
+
+  // --- 🤖 AI Weakness Assistant (Prompt Generator & Flexible JSON Import) ---
+  function getAiTargetWords(limit = 15) {
+    if (loopState.aiCustomWids && loopState.aiCustomWids.length) {
+      return loopState.aiCustomWids.map(id => wordsMap.get(id)).filter(Boolean).slice(0, limit);
+    }
+    const scored = allWords.map(w => {
+      let sc = getWordWeakScore(w);
+      if (!getMergedHooks(w.id).hasAny && (w.mk === "x" || w.mk === "tri" || sc > 0)) sc += 15;
+      return { w, sc };
+    }).filter(x => x.sc > 0).sort((a, b) => b.sc - a.sc);
+    return (scored.length ? scored.map(x => x.w) : allWords).slice(0, limit);
+  }
+
+  function buildAiPromptText(mode, targetWords) {
+    const normMode = mode === "self_lecture" ? "teach_chat" : (mode || "json_pack");
+    const wordLines = targetWords.map(w => {
+      const tags = getErrTags(w.id).map(t => ERR_TAG_META[t] ? ERR_TAG_META[t].label : t).join(", ");
+      const pats = (w.pt || []).slice(0, 2).map(fmtPat).join(" / ");
+      const logs = (state.latLog && state.latLog[w.id]) || [];
+      const avgMs = logs.length ? Math.round(logs.reduce((a, x) => a + (x.ms || 0), 0) / logs.length) : null;
+      return `- wid: "${w.id}" | 単語: ${w.w} (${w.pos}) | 意味: ${w.m}${pats ? ` | 型: ${pats}` : ""}${tags ? ` | 弱点タグ: ${tags}` : ""}${avgMs ? ` | 平均想起: ${(avgMs / 1000).toFixed(1)}s` : ""}`;
+    }).join("\n");
+
+    const commonRules = [
+      `### 全モード共通の厳守ルール（記憶博士5原則）`,
+      `1. **答え・解説を先出ししない**：私の予想・説明・回答が来るまで正解や長い解説を出さないでください。`,
+      `2. **責めない**：ミスやズレを責めず、「理解の入口・次の練習材料」として扱ってください。`,
+      `3. **教材根拠の最優先**：システム英単語・スタディサプリ英語の記述を優先し、根拠がない語源やルールは断定せず不明と明記してください。`,
+      `4. **学習者の主体性を奪わない**：1回の出力で情報を出しすぎず、最後に必ず自分で答える確認質問または小さな行動を1つ示してください。`,
+      `5. **部分肯定と焦点化**：「合っている部分」と「ズレている部分」を必ず分け、全部やり直させず直すポイントを1つに絞ってください。`,
+      `※本チャットは対話練習専用（エフェメラル運用）とし、Wiki全体の書き換えは行いません。`
+    ].join("\n");
+
+    if (normMode === "json_pack") {
+      return [
+        `あなたは旧帝国大学（東大・京大・阪大・東北大・名大・九大・北大）入試対策の専門英語教材クリエイターです。`,
+        `目標は旧帝国大学の二次試験（和訳・英作文・難関長文精読）と共通テストの得点力向上です。`,
+        `以下の私の弱点英単語リスト（${targetWords.length}語）について、PWAアプリにそのまま取り込める「3軸記憶フック（外来語・語源分解・イメージ語呂）」と「旧帝大〜標準入試4択空所補充問題（語法・無生物主語・多義語・英作文減点トラップ）」をJSON形式で生成してください。`,
+        ``,
+        `### 対象弱点単語リスト`,
+        wordLines,
+        ``,
+        `### 厳守する出力JSONスキーマ（必ず JSON のみ出力。不確かな語源は捏造せず et:"" / mp:[] にすること）`,
+        `{`,
+        `  "version": "1.1",`,
+        `  "hooks": {`,
+        `    "<wid>": {`,
+        `      "kn": "🔗日本語の外来語・カタカナ語・既知語とのリンク",`,
+        `      "et": "🌱接頭辞＋語根＋接尾辞の確実な語源解説（不確かなら空文字）",`,
+        `      "mn": "💡分解イメージ・情景が浮かぶ語呂合わせ",`,
+        `      "co": "コアイメージ（15文字以内）",`,
+        `      "mp": [{ "part": "pre-", "role": "prefix", "gloss": "前に" }, { "part": "vent", "role": "root", "gloss": "来る" }],`,
+        `      "cf": ["混同しやすい英単語: 意味・型の違い"],`,
+        `      "src": "ai"`,
+        `    }`,
+        `  },`,
+        `  "cloze": [`,
+        `    {`,
+        `      "id": "ai-<wid>-1",`,
+        `      "wid": "<wid>",`,
+        `      "family": "次の13系統のいずれか: transitive_trap / intrans_prep / svoo_vs_to / svoc / from_family / with_family / of_family / as_family / vocab_confusable / inanimate_subject / stage5_polysemy / stage3_usage / composition_trap",`,
+        `      "stem": "空欄 (    ) を1つ含む旧帝大・難関大レベルの自然なオリジナル英文（14〜25語）",`,
+        `      "ja": "自然な日本語訳",`,
+        `      "choices": ["選択肢0", "選択肢1", "選択肢2", "選択肢3"],`,
+        `      "answer": 0,`,
+        `      "why": "正解の根拠と他選択肢が不可な理由（動詞の型・前置詞・無生物主語・英作減点観点）を1〜2文で簡潔に",`,
+        `      "trap": "⚠️ 受験生が引っかかりやすい罠1行",`,
+        `      "level": "common | march | national（旧帝大二次レベルは national）",`,
+        `      "confusable_wids": []`,
+        `    }`,
+        `  ]`,
+        `}`,
+        `※全対象語（${targetWords.length}語）に hooks と cloze（複数正解にならない厳密4択、answerは0〜3の整数）を漏れなく出力してください。`
+      ].join("\n");
+    }
+
+    if (normMode === "mistake_review") {
+      return [
+        `あなたは私の専属AI復習トレーナー（記憶博士・タブ1 AIミス整理モード／目標：旧帝国大学入試）です。`,
+        `以下の弱点・誤答単語リストをもとに、単なる正解解説ではなく「6分類の原因分析 → 再発防止の最小ポイント → 実戦類題1問」へ変換してください。`,
+        ``,
+        commonRules,
+        ``,
+        `### 必須6分類（誤答原因）`,
+        `①知識不足（knowledge_gap） ②理解のズレ（misunderstanding） ③読み間違い（misreading） ④ケアレスミス（careless） ⑤似た概念との混同（confusion） ⑥解き方・考え方の順番ミス（order_error）`,
+        ``,
+        `### 初回出力（8項目）`,
+        `1. 今回のミス分類（主原因／副原因／判断理由）`,
+        `2. 何が分かっていれば解けたか（重要順に3つ以内）`,
+        `3. 私の回答で合っていた部分`,
+        `4. ズレていた部分（責めず次に直す場所として）`,
+        `5. 同じミスが起きやすい場面（旧帝大の和訳・英作文・長文での罠）`,
+        `6. 直すための最小復習ポイント（1つに絞る）`,
+        `7. 同じミスを防ぐための確認フレーズ（1つ）`,
+        `8. 類題を1問（答え・解説は絶対非表示にし、末尾に定型結び文「まずは自分で解いてください。あなたの回答後に、同じミスが残っているかを確認します。」を必ず付ける）`,
+        ``,
+        `### 私の回答後の出力（5項目）`,
+        `①正解（簡潔） ②同じミスが残っているか ③改善できている部分 ④まだ残っている課題（1つ） ⑤明日もう一度やるべき復習（1問または1テーマ）`,
+        ``,
+        `### 対象弱点単語リスト`,
+        wordLines,
+        ``,
+        `まずは上から最も優先度の高い1〜2語について初回出力（8項目）を作成し、類題1問の末尾を必ず「まずは自分で解いてください。あなたの回答後に、同じミスが残っているかを確認します。」で止めてください。`
+      ].join("\n");
+    }
+
+    if (normMode === "pretest_chat") {
+      return [
+        `あなたは私の専属AI学習コーチ（記憶博士・タブ3 10秒AIプレテストモード／目標：旧帝国大学入試）です。`,
+        `以下の弱点・混同しやすい英単語リストをもとに、予想とズレから学ぶ入口（スタサプ動詞の型・無生物主語・多義語・英作文トラップ）を作ってください。`,
+        ``,
+        commonRules,
+        ``,
+        `### 出題ルール`,
+        `- **3問だけ**出題（1問10秒で予想可能）。`,
+        `- 単なる丸暗記確認にせず、**選択式だけにせず自分の言葉で答える問いを含める**こと。`,
+        `- 回答が来るまで答え・解説は絶対に出さず、過度な誘導も禁止。`,
+        ``,
+        `### 私の回答後の出力（6項目）`,
+        `①正解 ②合っていた部分 ③正解とのズレ ④ズレから分かる理解ポイント ⑤次に読むべき教材の場所（システム英単語／スタディサプリ文法・読解） ⑥次に使う質問文（1つ）`,
+        ``,
+        `### 私の弱点単語データ（教師用控え・問題文で答えを漏らさないこと）`,
+        wordLines,
+        ``,
+        `まずはプレテスト1〜3（問題＋私の予想欄）だけを出題し、末尾を必ず「まずは正解を気にせず、10秒だけ考えて答えてください。あなたの回答後に、正解とズレを整理します。」で結んで待機してください。`
+      ].join("\n");
+    }
+
+    // teach_chat (Tab 5: AI Solo Lecture)
+    return [
+      `あなたは私の専属AI学習パートナー（記憶博士・タブ5 AI一人講義モード／目標：旧帝国大学入試）です。`,
+      `採点者ではなく説明練習の相手として、私が自分の言葉で「外来語・語源イメージ・類義語の使い分け・スタサプ動詞の型（前置詞や to V / Ving・無生物主語）」を説明するのを聞いて整理してください。`,
+      ``,
+      commonRules,
+      ``,
+      `### 私の説明後の出力（7項目）`,
+      `1. 合っている部分`,
+      `2. 曖昧な部分（言葉不足・旧帝大英作や和訳で誤解しやすい点）`,
+      `3. 補足するとよくなる部分（3つ以内）`,
+      `4. 説明の順番の改善（結論→理由→具体例→よくある誤解→一言まとめ）`,
+      `5. もう一度説明するための型（短いテンプレート）`,
+      `6. 教材の該当箇所（システム英単語／スタディサプリ英語）`,
+      `7. 確認問題を1問（答え・解説は絶対非表示にし、末尾を必ず「まずは自分の力で答えてください。あなたの回答後に、どの知識を使えばよかったかを整理します。」で結ぶ）`,
+      ``,
+      `### 確認問題への回答後の出力（4項目）`,
+      `①正解 ②合っていた部分 ③使うべき知識 ④次に直すポイント（1つ）`,
+      ``,
+      `### 今回の対象弱点単語（教師用控え）`,
+      wordLines,
+      ``,
+      `まずは上から重要な2〜3語を選び、私が自分の言葉で説明しやすいお題を1つ振ってください（まだ解説や模範解答は書かないでください）。`
+    ].join("\n");
+  }
+
+  function extractJsonStringFromRaw(rawText) {
+    const src = String(rawText || "").trim();
+    if (!src) throw new Error("JSONが空です");
+    // 1. Direct JSON parse attempt
+    try { JSON.parse(src); return src; } catch (_) {}
+    // 2. Prose-wrapped markdown code fences (```json ... ``` or ``` ... ```)
+    const fenceRe = /`{3}(?:json|javascript|js)?\s*([\s\S]*?)`{3}/gi;
+    let m;
+    while ((m = fenceRe.exec(src)) !== null) {
+      const inner = (m[1] || "").trim();
+      if (!inner) continue;
+      try { JSON.parse(inner); return inner; } catch (_) {}
+    }
+    // 3. Fallback: extract balanced outermost {...} or [...] slice
+    const firstObj = src.indexOf("{");
+    const firstArr = src.indexOf("[");
+    let start = -1, openCh = "", closeCh = "";
+    if (firstObj >= 0 && (firstArr < 0 || firstObj < firstArr)) { start = firstObj; openCh = "{"; closeCh = "}"; }
+    else if (firstArr >= 0) { start = firstArr; openCh = "["; closeCh = "]"; }
+    if (start >= 0) {
+      const end = src.lastIndexOf(closeCh);
+      if (end > start) {
+        const cand = src.slice(start, end + 1).trim();
+        try { JSON.parse(cand); return cand; } catch (_) {}
+      }
+    }
+    throw new Error("有効なJSON形式が見つかりませんでした");
+  }
+
+  function parseAndMergeExtJsonText(rawText) {
+    const cleaned = extractJsonStringFromRaw(rawText);
+    const parsed = JSON.parse(cleaned);
+    if (!parsed || typeof parsed !== "object") throw new Error("JSONオブジェクトまたは配列ではありません");
+
+    const nextHooks = { ...((extPack && extPack.hooks) || {}) };
+    const nextCloze = [...((extPack && extPack.cloze) || [])];
+    let addedHooks = 0, updatedHooks = 0, addedCloze = 0, updatedCloze = 0, rejectedCloze = 0;
+
+    const resolveWid = (keyOrWord) => {
+      const k = String(keyOrWord || "").trim();
+      if (!k) return "";
+      if (wordsMap.has(k)) return k;
+      const byWord = allWords.find(w => w.w.toLowerCase() === k.toLowerCase());
+      return byWord ? byWord.id : k;
+    };
+
+    const mergeHookItem = (widKey, hObj) => {
+      if (!hObj || typeof hObj !== "object") return;
+      const wid = resolveWid(widKey || hObj.wid || hObj.id);
+      if (!wid) return;
+      const existed = Boolean(nextHooks[wid]);
+      const prev = nextHooks[wid] || {};
+      nextHooks[wid] = {
+        ...prev,
+        ...(hObj.kn !== undefined && String(hObj.kn).trim() ? { kn: String(hObj.kn).trim() } : {}),
+        ...(hObj.et !== undefined ? { et: String(hObj.et).trim() } : {}),
+        ...(hObj.mn !== undefined && String(hObj.mn).trim() ? { mn: String(hObj.mn).trim() } : {}),
+        ...(hObj.co !== undefined && String(hObj.co).trim() ? { co: String(hObj.co).trim() } : {}),
+        ...(Array.isArray(hObj.mp) ? { mp: hObj.mp } : {}),
+        ...(Array.isArray(hObj.cf) ? { cf: hObj.cf } : {}),
+        src: String(hObj.src || prev.src || "ai")
+      };
+      if (existed) updatedHooks++;
+      else addedHooks++;
+    };
+
+    const mergeClozeItem = (cObj, idx) => {
+      if (!cObj || typeof cObj !== "object") { rejectedCloze++; return; }
+      const rawChoices = Array.isArray(cObj.choices) ? cObj.choices : Array.isArray(cObj.options) ? cObj.options : null;
+      const stem = String(cObj.stem || cObj.q || cObj.question || "").trim();
+      if (!rawChoices || rawChoices.length !== 4 || !stem) { rejectedCloze++; return; }
+      const choices = rawChoices.map(ch => String(ch ?? "").trim());
+      if (choices.some(ch => !ch) || new Set(choices).size !== 4) { rejectedCloze++; return; }
+      const wid = resolveWid(cObj.wid || cObj.word_id || cObj.word || "");
+      if (!wid) { rejectedCloze++; return; }
+
+      // B12: Strictly validate answer — reject null/undefined/empty/out-of-range
+      const rawAns = cObj.answer !== undefined ? cObj.answer : cObj.ans;
+      if (rawAns === undefined || rawAns === null || rawAns === "") { rejectedCloze++; return; }
+      let ans = -1;
+      if (typeof rawAns === "number" && Number.isInteger(rawAns) && rawAns >= 0 && rawAns <= 3) {
+        ans = rawAns;
+      } else if (typeof rawAns === "string") {
+        const trimmedAns = rawAns.trim();
+        if (/^[0-3]$/.test(trimmedAns)) {
+          ans = Number(trimmedAns);
+        } else {
+          const strIdx = choices.findIndex(ch => ch === trimmedAns);
+          if (strIdx >= 0) ans = strIdx;
+        }
+      }
+      if (ans < 0 || ans > 3) { rejectedCloze++; return; }
+
+      const id = String(cObj.id || `ext-${wid}-${Date.now().toString(36)}-${idx}`);
+      const normItem = {
+        id, wid,
+        family: normalizeFamilyId(cObj.family || ""),
+        stem,
+        ja: String(cObj.ja || cObj.translation || ""),
+        choices,
+        answer: ans,
+        why: String(cObj.why || cObj.explanation || ""),
+        trap: String(cObj.trap || ""),
+        level: normalizeLevel(cObj.level || ""),
+        confusable_wids: Array.isArray(cObj.confusable_wids) ? cObj.confusable_wids : []
+      };
+      const dupIdx = nextCloze.findIndex(x => x.id === id || (x.wid === wid && x.stem === stem));
+      if (dupIdx >= 0) {
+        nextCloze[dupIdx] = normItem;
+        updatedCloze++;
+      } else {
+        nextCloze.push(normItem);
+        addedCloze++;
+      }
+    };
+
+    if (Array.isArray(parsed)) {
+      parsed.forEach((item, i) => {
+        if (item && (Array.isArray(item.choices) || Array.isArray(item.options) || item.stem)) mergeClozeItem(item, i);
+        else if (item && (item.kn || item.et || item.mn || item.mp)) mergeHookItem(item.wid || item.id, item);
+      });
+    } else {
+      const hooksContainer = parsed.hooks || parsed.extHooks || parsed.ext_hooks;
+      const clozeContainer = parsed.cloze || parsed.extCloze || parsed.ext_cloze || parsed.questions;
+      if (hooksContainer !== undefined || clozeContainer !== undefined) {
+        if (Array.isArray(hooksContainer)) hooksContainer.forEach(it => mergeHookItem(it && (it.wid || it.id), it));
+        else if (hooksContainer && typeof hooksContainer === "object") {
+          for (const [k, v] of Object.entries(hooksContainer)) mergeHookItem(k, v);
+        }
+        if (Array.isArray(clozeContainer)) clozeContainer.forEach((it, i) => mergeClozeItem(it, i));
+      } else if (Array.isArray(parsed.choices) || Array.isArray(parsed.options) || parsed.stem) {
+        mergeClozeItem(parsed, 0);
+      } else {
+        for (const [k, v] of Object.entries(parsed)) {
+          if (v && typeof v === "object" && (v.kn || v.et || v.mn || v.mp || v.co)) mergeHookItem(k, v);
+        }
+      }
+    }
+
+    if (addedHooks === 0 && updatedHooks === 0 && addedCloze === 0 && updatedCloze === 0) {
+      throw new Error(rejectedCloze > 0
+        ? `有効なデータがありませんでした（不正な4択 ${rejectedCloze}件をスキップ）`
+        : "有効な hooks または cloze(4択) データが見つかりませんでした");
+    }
+    return { pack: { hooks: nextHooks, cloze: nextCloze }, addedHooks, updatedHooks, addedCloze, updatedCloze, rejectedCloze };
+  }
+
+  function renderAiAssistantPanel() {
+    const panel = document.getElementById("loopAiPanel");
+    if (!panel) return;
+    if (loopState.aiPromptMode === "self_lecture") loopState.aiPromptMode = "teach_chat";
+    const targetWords = getAiTargetWords(loopState.aiWordCount);
+    const promptTxt = buildAiPromptText(loopState.aiPromptMode, targetWords);
+    const hCnt = Object.keys((extPack && extPack.hooks) || {}).length;
+    const cCnt = ((extPack && extPack.cloze) || []).length;
+    const natCnt = ((extPack && extPack.cloze) || []).filter(q => normalizeLevel(q && q.level) === "national").length;
+
+    panel.innerHTML = `
+      <div class="row space-between">
+        <div>
+          <div class="row" style="gap:8px;">
+            <h3 style="margin:0; font-size:16px;">🤖 AI弱点特訓アシスタント（旧帝大対応プロンプト ＆ JSON拡張取込）</h3>
+            <span class="badge accent">現在取込済: フック ${hCnt}語 / 4択 ${cCnt}問${natCnt ? ` (旧帝大 ${natCnt}問)` : ""}</span>
+          </div>
+          <div class="muted" style="font-size:12px; margin-top:2px;">弱点語から記憶博士・旧帝大向けプロンプトを1タップ生成 → AI出力JSONを貼るだけでアプリ内の記憶フック＆4択道場が進化します。</div>
+        </div>
+        <button id="aiClosePanelBtn" class="ghost">✕ 閉じる</button>
+      </div>
+
+      <div class="step-box">
+        <div class="row space-between">
+          <div class="row" style="gap:6px;">
+            <span class="step-num">1</span>
+            <strong>AI特訓プロンプトをワンタップ生成＆コピー</strong>
+            ${loopState.aiCustomWids ? `<span class="badge tri">直前セッション弱点 ${targetWords.length}語を選択中</span><button id="aiClearCustomBtn" class="ghost" style="font-size:11px;">全体上位に戻す</button>` : ""}
+          </div>
+          <div class="row" style="gap:6px;">
+            <label for="loopAiPromptType" class="muted" style="font-size:12px;">モード:</label>
+            <select id="loopAiPromptType" style="font-size:12px; min-height:32px; padding:4px 8px;">
+              <option value="json_pack" ${loopState.aiPromptMode==="json_pack"?"selected":""}>🧩 ① 3軸フック＋入試4択 JSON一括生成</option>
+              <option value="mistake_review" ${loopState.aiPromptMode==="mistake_review"?"selected":""}>🩺 ② 記憶博士タブ1：AIミス整理（6分類＋類題）</option>
+              <option value="pretest_chat" ${loopState.aiPromptMode==="pretest_chat"?"selected":""}>⚡ ③ 記憶博士タブ3：10秒AIプレテスト対話</option>
+              <option value="teach_chat" ${loopState.aiPromptMode==="teach_chat"?"selected":""}>🗣️ ④ 記憶博士タブ5：AI一人講義（説明練習）</option>
+            </select>
+            <span class="muted" style="font-size:12px;">抽出語数:</span>
+            <select id="aiCountSel" style="font-size:12px; min-height:32px; padding:4px 8px;">
+              <option value="10" ${loopState.aiWordCount===10?"selected":""}>上位 10語</option>
+              <option value="15" ${loopState.aiWordCount===15?"selected":""}>上位 15語</option>
+              <option value="20" ${loopState.aiWordCount===20?"selected":""}>上位 20語</option>
+            </select>
+          </div>
+        </div>
+
+        <textarea id="loopAiPromptOut" rows="6" class="mono" style="width:100%; font-size:12px;" readonly>${esc(promptTxt)}</textarea>
+        <div class="row space-between">
+          <span class="muted" style="font-size:11.5px;">対象例: ${targetWords.slice(0, 6).map(w => esc(w.w)).join(", ")}${targetWords.length > 6 ? " ほか" : ""}</span>
+          <button id="aiCopyPromptBtn" class="primary" style="font-size:13px;">📋 このプロンプトをコピー</button>
+        </div>
+      </div>
+
+      <div class="step-box">
+        <div class="row space-between">
+          <div class="row" style="gap:6px;">
+            <span class="step-num">2</span>
+            <strong>AI拡張データの柔軟取込（ファイル選択 ＆ JSONテキスト直接貼り付け両対応）</strong>
+          </div>
+          <div class="row" style="gap:6px;">
+            <label style="display:inline-block;">
+              <span style="display:inline-block; padding:6px 12px; border-radius:9px; background:var(--surface); border:1px solid var(--border); font-size:12px; font-weight:700; cursor:pointer;">📂 .json ファイルを選択して取込</span>
+              <input id="loopExtFileInput" type="file" accept=".json,application/json" multiple style="display:none;" />
+            </label>
+            ${(hCnt > 0 || cCnt > 0) ? `<button id="aiExportExtBtn" style="font-size:12px; min-height:34px; padding:5px 10px;">💾 拡張JSON保存</button><button id="aiResetExtBtn" class="ghost" style="font-size:12px; color:var(--x-fg);">🗑 リセット</button>` : ""}
+          </div>
+        </div>
+        <div class="muted" style="font-size:12px;"><code>ext_hooks.json</code> / <code>ext_cloze.json</code> / 統合JSON <code>systan_ai_pack.json</code> いずれも自動判別してIndexedDBに永続マージします（前後に説明文が付いたコードブロックも自動抽出）。</div>
+        <textarea id="loopExtJsonInput" rows="4" class="mono" style="width:100%; font-size:12px;" placeholder='AIが出力した JSON コード（{ "hooks": ..., "cloze": ... }）をここにそのままペースト...'></textarea>
+        <div class="row" style="justify-content:flex-end;">
+          <button id="loopExtImportBtn" class="primary" style="font-size:13px;">📥 ペーストしたJSONを取り込む</button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("aiClosePanelBtn")?.addEventListener("click", () => {
+      loopState.aiPanelOpen = false;
+      panel.style.display = "none";
+    });
+    document.getElementById("aiClearCustomBtn")?.addEventListener("click", () => {
+      loopState.aiCustomWids = null;
+      renderAiAssistantPanel();
+    });
+    document.getElementById("aiCountSel")?.addEventListener("change", e => {
+      loopState.aiWordCount = Number(e.target.value) || 15;
+      renderAiAssistantPanel();
+    });
+    document.getElementById("loopAiPromptType")?.addEventListener("change", e => {
+      loopState.aiPromptMode = e.target.value;
+      renderAiAssistantPanel();
+    });
+    document.getElementById("aiCopyPromptBtn")?.addEventListener("click", async () => {
+      const ta = document.getElementById("loopAiPromptOut");
+      try { await navigator.clipboard.writeText(ta.value); toast("📋 AIプロンプトをコピーしました！"); }
+      catch (_) { ta.select(); document.execCommand("copy"); toast("📋 AIプロンプトをコピーしました！"); }
+    });
+    const formatImportSummary = (r) => {
+      const parts = [];
+      if (r.addedHooks || r.updatedHooks) parts.push(`フック 新規+${r.addedHooks}${r.updatedHooks ? `/更新${r.updatedHooks}` : ""}`);
+      if (r.addedCloze || r.updatedCloze) parts.push(`4択 新規+${r.addedCloze}${r.updatedCloze ? `/更新${r.updatedCloze}` : ""}`);
+      if (r.rejectedCloze) parts.push(`不正スキップ${r.rejectedCloze}`);
+      return parts.join(" / ");
+    };
+    document.getElementById("loopExtImportBtn")?.addEventListener("click", async () => {
+      const inp = document.getElementById("loopExtJsonInput");
+      try {
+        const res = parseAndMergeExtJsonText(inp.value);
+        await saveExtPackToIDB(res.pack);
+        inp.value = "";
+        toast(`🤖 取込完了！（${formatImportSummary(res)}）`);
+        if (!loopState.started) buildLoopSession(loopState.customLabel ? loopState.setWords : null, loopState.customLabel);
+        renderAiAssistantPanel();
+      } catch (err) {
+        toast(`⚠️ JSON取込エラー: ${err.message || "形式を確認してください"}`);
+      }
+    });
+    document.getElementById("loopExtFileInput")?.addEventListener("change", async e => {
+      const files = [...(e.target.files || [])];
+      if (!files.length) return;
+      const tot = { addedHooks: 0, updatedHooks: 0, addedCloze: 0, updatedCloze: 0, rejectedCloze: 0 };
+      try {
+        for (const f of files) {
+          const txt = await f.text();
+          const res = parseAndMergeExtJsonText(txt);
+          await saveExtPackToIDB(res.pack);
+          tot.addedHooks += res.addedHooks;
+          tot.updatedHooks += res.updatedHooks;
+          tot.addedCloze += res.addedCloze;
+          tot.updatedCloze += res.updatedCloze;
+          tot.rejectedCloze += res.rejectedCloze;
+        }
+        toast(`🤖 ファイル取込完了！（${formatImportSummary(tot)}）`);
+        if (!loopState.started) buildLoopSession(loopState.customLabel ? loopState.setWords : null, loopState.customLabel);
+        renderAiAssistantPanel();
+      } catch (err) {
+        toast(`⚠️ ファイル取込エラー: ${err.message || "JSON形式を確認してください"}`);
+      } finally {
+        // B12: Reset file input so re-uploading the same filename triggers change again
+        e.target.value = "";
+      }
+    });
+    document.getElementById("aiExportExtBtn")?.addEventListener("click", () => {
+      downloadFile(`systan-ext-pack-${todayStr(0)}.json`, JSON.stringify({ version: "1.1", generated_at: todayStr(0), ...extPack }, null, 2), "application/json");
+      toast("拡張データJSONを保存しました");
+    });
+    document.getElementById("aiResetExtBtn")?.addEventListener("click", async () => {
+      if (!confirm("取り込み済みのAI拡張データ（拡張フック・拡張4択）をリセットしますか？（学習履歴や自分用メモは消えません）")) return;
+      await saveExtPackToIDB({ hooks: {}, cloze: [] });
+      toast("拡張データをリセットしました");
+      if (!loopState.started) buildLoopSession();
+      renderAiAssistantPanel();
+    });
+  }
+
+  document.getElementById("loopToggleAiBtn")?.addEventListener("click", () => {
+    loopState.aiPanelOpen = !loopState.aiPanelOpen;
+    const panel = document.getElementById("loopAiPanel");
+    panel.style.display = loopState.aiPanelOpen ? "flex" : "none";
+    if (loopState.aiPanelOpen) renderAiAssistantPanel();
+  });
+
+  // Wire canonical Loop <select> controls (F9, F11, F12)
+  document.getElementById("loopModeSel")?.addEventListener("change", e => {
+    loopState.style = e.target.value;
+    buildLoopSession();
+  });
+  document.getElementById("loopFocusSel")?.addEventListener("change", e => {
+    loopState.singleFmt = e.target.value;
+    if (loopState.style !== "single") loopState.style = "single";
+    buildLoopSession();
+  });
+  document.getElementById("loopSizeSel")?.addEventListener("change", e => {
+    loopState.setSize = Number(e.target.value) || 10;
+    buildLoopSession();
+  });
+  document.getElementById("loopTargetSel")?.addEventListener("change", e => {
+    loopState.target = e.target.value;
+    buildLoopSession();
+  });
+  document.getElementById("loopLevelSel")?.addEventListener("change", e => {
+    loopState.levelFilter = e.target.value;
+    buildLoopSession();
+  });
+  document.getElementById("loopVerbFamilySel")?.addEventListener("change", e => {
+    loopState.verbFamily = e.target.value === "all" ? "all" : normalizeFamilyId(e.target.value);
+    buildLoopSession();
+  });
+
+  // B5: Pause active recall timers during background/hidden tab intervals & flush cloud sync on pagehide
+  let tabHiddenSinceTs = 0;
+  document.addEventListener("visibilitychange", () => {
+    if (document.hidden) {
+      tabHiddenSinceTs = performance.now();
+      stopLatency();
+      stopPqTimer();
+      stopLoopTimer();
+    } else if (tabHiddenSinceTs > 0) {
+      const hiddenDelta = Math.max(0, performance.now() - tabHiddenSinceTs);
+      tabHiddenSinceTs = 0;
+      if (sessionStarted && !cardRevealed && cardStartTs > 0) {
+        cardStartTs += hiddenDelta;
+        if (timerEnabled) {
+          const resumeStudyTick = () => {
+            if (cardRevealed || !sessionStarted || document.hidden) return;
+            cardLatencyMs = clampLatencyMs(performance.now() - cardStartTs);
+            const fill = document.getElementById("latencyFill"), ro = document.getElementById("latencyReadout");
+            if (fill && ro) {
+              fill.style.width = Math.min(100, (cardLatencyMs / 4000) * 100) + "%";
+              fill.style.background = cardLatencyMs <= 2000 ? "var(--ok-fg)" : cardLatencyMs <= 4000 ? "var(--tri-fg)" : "var(--x-fg)";
+              ro.textContent = (cardLatencyMs / 1000).toFixed(1) + "s";
+            }
+            latencyRaf = requestAnimationFrame(resumeStudyTick);
+          };
+          latencyRaf = requestAnimationFrame(resumeStudyTick);
+        }
+      }
+      if (pqStarted && !pqRevealed && pqStartTs > 0) {
+        pqStartTs += hiddenDelta;
+      }
+      if (loopState.started && !loopState.revealed && loopState.mcqChosenIdx < 0 && loopState.cardStartTs > 0) {
+        loopState.cardStartTs += hiddenDelta;
+        const cur = loopState.deck[loopState.idx];
+        if (loopState.timerOn && cur && cur.fmt !== "workshop") {
+          const th = getLatThresholds(cur.fmt);
+          const maxScale = Math.max(th.pass * 1.25, 4000);
+          const resumeLoopTick = () => {
+            if (!loopState.started || loopState.revealed || loopState.mcqChosenIdx >= 0 || document.hidden) return;
+            loopState.latMs = clampLatencyMs(performance.now() - loopState.cardStartTs);
+            const fill = document.getElementById("loopLatFill"), txt = document.getElementById("loopLatTxt");
+            if (fill && txt) {
+              fill.style.width = Math.min(100, (loopState.latMs / maxScale) * 100) + "%";
+              fill.style.background = loopState.latMs <= th.fast ? "var(--ok-fg)" : loopState.latMs <= th.pass ? "var(--tri-fg)" : "var(--x-fg)";
+              txt.textContent = (loopState.latMs / 1000).toFixed(1) + "s" + (loopState.latMs > th.pass ? " 🐢" : "");
+            }
+            loopState.rafId = requestAnimationFrame(resumeLoopTick);
+          };
+          loopState.rafId = requestAnimationFrame(resumeLoopTick);
+        }
+      }
+    }
+  });
+  window.addEventListener("pagehide", () => {
+    if (pendingCloudUpload && syncCfg.enabled && syncCfg.url && syncCfg.key) {
+      try { pushStateToCloud(false); } catch (_) {}
+    }
+  });
+
+  document.addEventListener("keydown", e => {
+    if (!document.getElementById("tab-loop").classList.contains("active")) return;
+    if (isTypingOrModalOpen(e)) return;
+    if (loopState.finished) return;
+    if (!loopState.started) {
+      if ((e.code === "Space" || e.key === "Enter") && loopState.setWords.length) {
+        e.preventDefault(); loopState.started = true; renderLoopTab();
+      }
+      return;
+    }
+    const cur = loopState.deck[loopState.idx];
+    if (!cur) return;
+    if (cur.fmt === "workshop") {
+      if (e.key === "ArrowRight" || e.key === "Enter") { e.preventDefault(); document.getElementById("hwNextBtn")?.click(); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); document.getElementById("hwPrevBtn")?.click(); }
+      else if (e.key.toLowerCase() === "a") document.getElementById("hwSpkBtn")?.click();
+      return;
+    }
+    if (cur.fmt === "mcq") {
+      if (loopState.mcqChosenIdx < 0) {
+        if (["1","2","3","4"].includes(e.key)) {
+          const idx = Number(e.key) - 1;
+          document.querySelector(`#mcqChoicesGrid .mcq-btn[data-cidx="${idx}"]`)?.click();
+        } else if (e.key.toLowerCase() === "h") {
+          const nextH = Math.min(3, loopState.hintStep + 1);
+          document.querySelector(`#mcqHintsHost [data-hstep="${nextH}"]`)?.click();
+        }
+      } else {
+        if (e.code === "Space" || e.key === "Enter") { e.preventDefault(); document.getElementById("mcqNextBtn")?.click(); }
+        else if (e.key.toLowerCase() === "a") document.getElementById("mcqSpkWordBtn")?.click();
+      }
+      return;
+    }
+    if (!loopState.revealed) {
+      if (e.code === "Space" || e.key === "Enter") { e.preventDefault(); document.getElementById("lfRevealBtn")?.click(); }
+      else if (e.key.toLowerCase() === "h") {
+        const nextH = Math.min(3, loopState.hintStep + 1);
+        document.querySelector(`#lfHintsHost [data-hstep="${nextH}"]`)?.click();
+      } else if (e.key.toLowerCase() === "a" && cur.fmt === "en2ja") {
+        document.getElementById("lfSpkFront")?.click();
+      }
+    } else {
+      if (e.key === "1") document.getElementById("lfGradeX")?.click();
+      else if (e.key === "2") document.getElementById("lfGradeTri")?.click();
+      else if (e.key === "3") document.getElementById("lfGradeOk")?.click();
+      else if (e.key.toLowerCase() === "a") document.getElementById("lfSpkAns")?.click();
+    }
+  });
+
   // --- Tabs ---
   function switchTab(name) {
     if (name !== "study" && sessionStarted) { sessionStarted = false; stopLatency(); }
+    if (name !== "loop" && loopState.started) { loopState.started = false; stopLoopTimer(); }
     if (name !== "pquiz" && pqStarted) { pqStarted = false; stopPqTimer(); }
     document.querySelectorAll(".nav-tab").forEach(b => b.classList.toggle("active", b.dataset.tab === name));
     document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `tab-${name}`));
     if (name === "study") renderStudy();
+    if (name === "loop") { if (!loopState.initialized) buildLoopSession(); else renderLoopTab(); }
     if (name === "pquiz") { if (!pqDeck.length && !pqStarted) buildPqDeck(pqFilter); else renderPatternQuiz(); }
     if (name === "synonyms") renderSynonyms();
     if (name === "schedule") renderSchedule();
@@ -2251,6 +5420,7 @@ const EMBEDDED_BUNDLE = null;
     document.getElementById("mainNav").style.display = "flex";
     loadState();
     updateSyncUI();
+    updateExtStatusBadge();
     tickOneHourTimer();
     buildQueue("auto");
     if (syncCfg.enabled && syncCfg.url && syncCfg.key) {
@@ -2258,9 +5428,15 @@ const EMBEDDED_BUNDLE = null;
     }
   }
 
+  // B3: Register Service Worker for offline PWA shell caching
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("./sw.js").catch(() => {});
+  }
+
   (async () => {
     const gotHash = parseMagicHash();
     updateSyncUI();
+    extPack = await loadExtPackFromIDB();
     if (!BUNDLE) BUNDLE = await loadBundleFromIDB();
     if (BUNDLE && BUNDLE.words && BUNDLE.words.length) {
       bootApp();

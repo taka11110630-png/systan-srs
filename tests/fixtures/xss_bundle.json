@@ -1,0 +1,125 @@
+{
+  "bundle": {
+    "meta": {
+      "generated_at": "2026-11-27",
+      "total_words": 4,
+      "hook_count": 1,
+      "pattern_word_count": 4,
+      "synonym_group_count": 0,
+      "missing_stage1": [
+        {
+          "from": 1,
+          "to": 2,
+          "count": 2,
+          "pages": "p.1<img src=x onerror=\"window.__xss=1\">"
+        }
+      ],
+      "links": {}
+    },
+    "synonym_groups": [],
+    "words": [
+      {
+        "id": "XSS-1\" onclick=\"window.__xss=3",
+        "s": 1,
+        "n": 1,
+        "w": "alertword<img src=x onerror=\"window.__xss=1\">",
+        "ipa": "/test/",
+        "pos": "動詞",
+        "ph": "alertword<img src=x onerror=\"window.__xss=1\"> the <script>window.__xss=2</script> target",
+        "m": "テスト意味<img src=x onerror=\"window.__xss=4\">",
+        "rel": "",
+        "mk": "x",
+        "dt": ["2026-11-20"],
+        "b": "B0001-0050",
+        "pt": ["alertword A <img src=x onerror=\"window.__xss=5\">＝テスト型"],
+        "sg": [],
+        "hk": {
+          "mp": [{"part": "<img src=x onerror=\"window.__xss=6\">", "role": "root", "gloss": "xss"}],
+          "co": "<img src=x onerror=\"window.__xss=7\">core",
+          "et": "<script>window.__xss=8</script>etym",
+          "kn": "<img src=x onerror=\"window.__xss=9\">loan",
+          "mn": "<img src=x onerror=\"window.__xss=10\">mnem",
+          "cf": ["<img src=x onerror=\"window.__xss=11\">"]
+        }
+      },
+      {
+        "id": "XSS-2",
+        "s": 1,
+        "n": 2,
+        "w": "safealpha",
+        "ipa": "/s/",
+        "pos": "動詞",
+        "ph": "safealpha the neutral item",
+        "m": "安全な語1",
+        "mk": "x",
+        "dt": [],
+        "b": "B0001-0050",
+        "pt": ["safealpha A＝Aを処理する"],
+        "sg": []
+      },
+      {
+        "id": "XSS-3",
+        "s": 1,
+        "n": 3,
+        "w": "safebeta",
+        "ipa": "/s/",
+        "pos": "動詞",
+        "ph": "safebeta the neutral item",
+        "m": "安全な語2",
+        "mk": "tri",
+        "dt": [],
+        "b": "B0001-0050",
+        "pt": ["safebeta A＝Aを検査する"],
+        "sg": []
+      },
+      {
+        "id": "XSS-4",
+        "s": 1,
+        "n": 4,
+        "w": "safegamma",
+        "ipa": "/s/",
+        "pos": "動詞",
+        "ph": "safegamma the neutral item",
+        "m": "安全な語3",
+        "mk": "tri",
+        "dt": [],
+        "b": "B0001-0050",
+        "pt": ["safegamma A＝Aを整理する"],
+        "sg": []
+      }
+    ]
+  },
+  "ai_pack": {
+    "version": "1.1",
+    "hooks": {
+      "XSS-2": {
+        "mp": [{"part": "<img src=x onerror=\"window.__xss=12\">", "role": "root", "gloss": "x"}],
+        "co": "<img src=x onerror=\"window.__xss=13\">",
+        "et": "<script>window.__xss=14</script>",
+        "kn": "<img src=x onerror=\"window.__xss=15\">",
+        "mn": "<img src=x onerror=\"window.__xss=16\">",
+        "cf": []
+      }
+    },
+    "cloze": [
+      {
+        "id": "XSS-Q-01",
+        "wid": "XSS-2",
+        "family": "transitive_trap",
+        "stem": "Engineers <img src=x onerror=\"window.__xss=17\"> must (    ) the signal safely.",
+        "ja": "技術者は<img src=x onerror=\"window.__xss=18\">信号を安全に処理すべきだ。",
+        "choices": [
+          "safealpha<img src=x onerror=\"window.__xss=19\">",
+          "safealpha about",
+          "safealpha to",
+          "safealpha with"
+        ],
+        "answer": 0,
+        "why": "解説<img src=x onerror=\"window.__xss=20\">",
+        "trap": "⚠️ トラップ<img src=x onerror=\"window.__xss=21\">",
+        "level": "national",
+        "confusable_wids": []
+      }
+    ]
+  }
+}

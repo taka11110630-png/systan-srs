@@ -1,0 +1,860 @@
+{
+  "meta": {
+    "generated_at": "2026-11-27",
+    "total_words": 36,
+    "hook_count": 3,
+    "pattern_word_count": 29,
+    "synonym_group_count": 2,
+    "missing_stage1": [
+      {
+        "from": 901,
+        "to": 905,
+        "count": 5,
+        "pages": "p.99"
+      }
+    ],
+    "links": {
+      "wiki_folder": "https://example.invalid/wiki",
+      "unit_vocab": "https://example.invalid/vocab"
+    }
+  },
+  "synonym_groups": [
+    {
+      "gid": "SG-SYN-01",
+      "title": "議論・伝達系の動詞（テスト）",
+      "category": "動詞",
+      "summary": "他動詞（前置詞不要）と to 型・of 型の違いを比較するテストグループ",
+      "items": [
+        {
+          "id": "SYN-S1-01",
+          "word": "discuss",
+          "nuance": "目的語を直接とる他動詞（about は不要）",
+          "patterns": [
+            "discuss A（×about A）＝Aを議論する"
+          ]
+        },
+        {
+          "id": "SYN-S1-07",
+          "word": "explain",
+          "nuance": "SVOO不可。to 人 を用いて説明する",
+          "patterns": [
+            "explain A to B（×explain B A）＝BにAを説明する"
+          ]
+        },
+        {
+          "id": "SYN-S1-08",
+          "word": "mention",
+          "nuance": "軽く触れる他動詞。about は不要",
+          "patterns": [
+            "mention A to B（×mention about A）＝BにAを言及する"
+          ]
+        },
+        {
+          "id": "SYN-S1-14",
+          "word": "inform",
+          "nuance": "人に事柄を通知する of 型",
+          "patterns": [
+            "inform A of B＝AにBを知らせる"
+          ]
+        }
+      ]
+    },
+    {
+      "gid": "SG-SYN-02",
+      "title": "供給・剥奪系の動詞（テスト）",
+      "category": "動詞",
+      "summary": "V A with B（供給）と V A of B（奪取）の前置詞を対比するテストグループ",
+      "items": [
+        {
+          "id": "SYN-S1-11",
+          "word": "provide",
+          "nuance": "人にモノを提供する with 型",
+          "patterns": [
+            "provide A with B＝AにBを提供する"
+          ]
+        },
+        {
+          "id": "SYN-S2-15",
+          "word": "supply",
+          "nuance": "必要物資を継続供給する with 型",
+          "patterns": [
+            "supply A with B＝AにBを供給する"
+          ]
+        },
+        {
+          "id": "SYN-S1-12",
+          "word": "rob",
+          "nuance": "場所・人から物理的・比喩的に奪う of 型",
+          "patterns": [
+            "rob A of B＝AからBを奪う"
+          ]
+        },
+        {
+          "id": "SYN-S2-16",
+          "word": "deprive",
+          "nuance": "権利や機会を奪う of 型",
+          "patterns": [
+            "deprive A of B＝AからBを奪う"
+          ]
+        }
+      ]
+    }
+  ],
+  "words": [
+    {
+      "id": "SYN-S1-01",
+      "s": 1,
+      "n": 1,
+      "w": "discuss",
+      "ipa": "/dɪˈskʌs/",
+      "pos": "動詞",
+      "ph": "discuss the urban policy",
+      "m": "〜を議論する",
+      "rel": "discussion (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "discuss A（×about A）＝Aを議論する"
+      ],
+      "sg": [
+        "SG-SYN-01"
+      ],
+      "hk": {
+        "mp": [
+          {
+            "part": "dis-",
+            "role": "prefix",
+            "gloss": "バラバラに"
+          },
+          {
+            "part": "cuss",
+            "role": "root",
+            "gloss": "叩く"
+          }
+        ],
+        "co": "BASE_CO_DISCUSS: 論点をバラバラに砕いて検討する",
+        "et": "BASE_ET_DISCUSS: dis(分離)+quatere(振る)から論点を砕く",
+        "kn": "BASE_KN_DISCUSS: ディスカッション（討論会）",
+        "mn": "BASE_MN_DISCUSS: ディス（分離）してカスになるまで議論する",
+        "cf": [
+          "talk about"
+        ]
+      }
+    },
+    {
+      "id": "SYN-S1-02",
+      "s": 1,
+      "n": 2,
+      "w": "approach",
+      "ipa": "/əˈprəʊtʃ/",
+      "pos": "動詞",
+      "ph": "approaching the coastal harbor",
+      "m": "〜に近づく",
+      "rel": "approachable (形)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-03",
+      "s": 1,
+      "n": 3,
+      "w": "resemble",
+      "ipa": "/rɪˈzembl/",
+      "pos": "動詞",
+      "ph": "resembles the ancient blueprint",
+      "m": "〜に似ている",
+      "rel": "resemblance (名)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-04",
+      "s": 1,
+      "n": 4,
+      "w": "survive",
+      "ipa": "/səˈvaɪv/",
+      "pos": "動詞",
+      "ph": "survive in the polar tundra",
+      "m": "生き残る・〜を生き延びる",
+      "rel": "survival (名)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-05",
+      "s": 1,
+      "n": 5,
+      "w": "apologize",
+      "ipa": "/əˈpɒlədʒaɪz/",
+      "pos": "動詞",
+      "ph": "apologize to the council for the delay",
+      "m": "謝罪する",
+      "rel": "apology (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "apologize to 人 for 理由＝人に理由を謝罪する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-06",
+      "s": 1,
+      "n": 6,
+      "w": "graduate",
+      "ipa": "/ˈɡrædʒueɪt/",
+      "pos": "動詞",
+      "ph": "graduate from the technical academy",
+      "m": "卒業する",
+      "rel": "graduation (名)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "graduate from A＝Aを卒業する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-07",
+      "s": 1,
+      "n": 7,
+      "w": "explain",
+      "ipa": "/ɪkˈspleɪn/",
+      "pos": "動詞",
+      "ph": "explain the algorithm to the team",
+      "m": "〜を説明する",
+      "rel": "explanation (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "explain A to B（×explain B A）＝BにAを説明する"
+      ],
+      "sg": [
+        "SG-SYN-01"
+      ],
+      "hk": {
+        "mp": [
+          {
+            "part": "ex-",
+            "role": "prefix",
+            "gloss": "外へ"
+          },
+          {
+            "part": "plain",
+            "role": "root",
+            "gloss": "平らな"
+          }
+        ],
+        "co": "BASE_CO_EXPLAIN: 複雑な折り目を平らに広げて見せる",
+        "et": "BASE_ET_EXPLAIN: ex(外へ)+plain(平らに)で分かりやすくする",
+        "kn": "BASE_KN_EXPLAIN: プレーン（平らで単純な）から連想",
+        "mn": "BASE_MN_EXPLAIN: エクス（外へ）プレーンに広げて説明する",
+        "cf": [
+          "tell"
+        ]
+      }
+    },
+    {
+      "id": "SYN-S1-08",
+      "s": 1,
+      "n": 8,
+      "w": "mention",
+      "ipa": "/ˈmenʃn/",
+      "pos": "動詞",
+      "ph": "mention the schedule to the mentor",
+      "m": "〜に言及する",
+      "rel": "",
+      "mk": "tri",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "mention A to B（×mention about A）＝BにAを言及する"
+      ],
+      "sg": [
+        "SG-SYN-01"
+      ]
+    },
+    {
+      "id": "SYN-S1-09",
+      "s": 1,
+      "n": 9,
+      "w": "enable",
+      "ipa": "/ɪˈneɪbl/",
+      "pos": "動詞",
+      "ph": "enable scholars to verify fossils",
+      "m": "〜を可能にする",
+      "rel": "able (形)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "enable A to V＝AがVするのを可能にする"
+      ],
+      "sg": [],
+      "hk": {
+        "mp": [
+          {
+            "part": "en-",
+            "role": "prefix",
+            "gloss": "〜にする"
+          },
+          {
+            "part": "able",
+            "role": "root",
+            "gloss": "できる"
+          }
+        ],
+        "co": "BASE_CO_ENABLE: できる状態へ押し上げる",
+        "et": "BASE_ET_ENABLE: en(〜にする)+able(可能な)",
+        "kn": "BASE_KN_ENABLE: イネーブル（設定を有効化）",
+        "mn": "BASE_MN_ENABLE: 円(en)の力でエイブル(可能)にする",
+        "cf": [
+          "allow"
+        ]
+      }
+    },
+    {
+      "id": "SYN-S1-10",
+      "s": 1,
+      "n": 10,
+      "w": "prevent",
+      "ipa": "/prɪˈvent/",
+      "pos": "動詞",
+      "ph": "prevent frost from damaging orchards",
+      "m": "〜を妨げる",
+      "rel": "prevention (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "prevent A from Ving＝AがVするのを妨げる"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-11",
+      "s": 1,
+      "n": 11,
+      "w": "provide",
+      "ipa": "/prəˈvaɪd/",
+      "pos": "動詞",
+      "ph": "provide villages with clean wells",
+      "m": "〜を提供する",
+      "rel": "provision (名)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "provide A with B＝AにBを提供する"
+      ],
+      "sg": [
+        "SG-SYN-02"
+      ]
+    },
+    {
+      "id": "SYN-S1-12",
+      "s": 1,
+      "n": 12,
+      "w": "rob",
+      "ipa": "/rɒb/",
+      "pos": "動詞",
+      "ph": "rob travelers of their compass",
+      "m": "〜から奪う",
+      "rel": "robbery (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "rob A of B＝AからBを奪う"
+      ],
+      "sg": [
+        "SG-SYN-02"
+      ]
+    },
+    {
+      "id": "SYN-S1-13",
+      "s": 1,
+      "n": 13,
+      "w": "regard",
+      "ipa": "/rɪˈɡɑːd/",
+      "pos": "動詞",
+      "ph": "regard accuracy as a virtue",
+      "m": "〜とみなす",
+      "rel": "regardless (副)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "regard A as B＝AをBとみなす"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S1-14",
+      "s": 1,
+      "n": 14,
+      "w": "inform",
+      "ipa": "/ɪnˈfɔːm/",
+      "pos": "動詞",
+      "ph": "inform residents of the detour",
+      "m": "〜に知らせる",
+      "rel": "information (名)",
+      "mk": "check",
+      "dt": [
+        "2026-11-20"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "inform A of B＝AにBを知らせる"
+      ],
+      "sg": [
+        "SG-SYN-01"
+      ]
+    },
+    {
+      "id": "SYN-S2-15",
+      "s": 2,
+      "n": 15,
+      "w": "supply",
+      "ipa": "/səˈplaɪ/",
+      "pos": "動詞",
+      "ph": "supply clinics with cold packs",
+      "m": "〜を供給する",
+      "rel": "",
+      "mk": "tri",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "supply A with B＝AにBを供給する"
+      ],
+      "sg": [
+        "SG-SYN-02"
+      ]
+    },
+    {
+      "id": "SYN-S2-16",
+      "s": 2,
+      "n": 16,
+      "w": "deprive",
+      "ipa": "/dɪˈpraɪv/",
+      "pos": "動詞",
+      "ph": "deprive citizens of quiet rest",
+      "m": "〜から奪う",
+      "rel": "deprivation (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "deprive A of B＝AからBを奪う"
+      ],
+      "sg": [
+        "SG-SYN-02"
+      ]
+    },
+    {
+      "id": "SYN-S2-17",
+      "s": 2,
+      "n": 17,
+      "w": "distinguish",
+      "ipa": "/dɪˈstɪŋɡwɪʃ/",
+      "pos": "動詞",
+      "ph": "distinguish quartz from glass",
+      "m": "〜を区別する",
+      "rel": "distinction (名)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "distinguish A from B＝AとBを区別する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S2-18",
+      "s": 2,
+      "n": 18,
+      "w": "recognize",
+      "ipa": "/ˈrekəɡnaɪz/",
+      "pos": "動詞",
+      "ph": "recognize the badge as valid",
+      "m": "〜を認識する",
+      "rel": "recognition (名)",
+      "mk": "check",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "recognize A as B＝AをBと認める"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S2-19",
+      "s": 2,
+      "n": 19,
+      "w": "suggest",
+      "ipa": "/səˈdʒest/",
+      "pos": "動詞",
+      "ph": "suggest that the lab pause tests",
+      "m": "〜を提案する",
+      "rel": "suggestion (名)",
+      "mk": "x",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "suggest that S (should) V（×suggest A to V）＝SがVするよう提案する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S2-20",
+      "s": 2,
+      "n": 20,
+      "w": "remind",
+      "ipa": "/rɪˈmaɪnd/",
+      "pos": "動詞",
+      "ph": "remind listeners of alpine echoes",
+      "m": "〜に思い出させる",
+      "rel": "reminder (名)",
+      "mk": "tri",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "remind A of B＝AにBを思い出させる"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S2-21",
+      "s": 2,
+      "n": 21,
+      "w": "persuade",
+      "ipa": "/pəˈsweɪd/",
+      "pos": "動詞",
+      "ph": "persuade pilots to delay takeoff",
+      "m": "〜を説得する",
+      "rel": "persuasion (名)",
+      "mk": "circle",
+      "dt": [
+        "2026-11-21"
+      ],
+      "b": "B0001-0050",
+      "pt": [
+        "persuade A to V＝Aを説得してVさせる"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S2-22",
+      "s": 2,
+      "n": 22,
+      "w": "reach",
+      "ipa": "/riːtʃ/",
+      "pos": "動詞",
+      "ph": "reach the northern summit",
+      "m": "〜に到着する",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S3-23",
+      "s": 3,
+      "n": 23,
+      "w": "compel",
+      "ipa": "/kəmˈpel/",
+      "pos": "動詞",
+      "ph": "compel observers to revise charts",
+      "m": "〜に強いる",
+      "rel": "compelling (形)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "compel A to V＝AにVすることを強いる"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S3-24",
+      "s": 3,
+      "n": 24,
+      "w": "confine",
+      "ipa": "/kənˈfaɪn/",
+      "pos": "動詞",
+      "ph": "confine remarks to verified facts",
+      "m": "〜を限定する",
+      "rel": "confinement (名)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "confine A to B＝AをBに限定する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S3-25",
+      "s": 3,
+      "n": 25,
+      "w": "attribute",
+      "ipa": "/əˈtrɪbjuːt/",
+      "pos": "動詞",
+      "ph": "attribute delays to icy rails",
+      "m": "〜に帰する",
+      "rel": "attribution (名)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "attribute A to B＝AをBのせいにする"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S3-26",
+      "s": 3,
+      "n": 26,
+      "w": "substitute",
+      "ipa": "/ˈsʌbstɪtjuːt/",
+      "pos": "動詞",
+      "ph": "substitute cedar for pine timber",
+      "m": "〜を代わりに使う",
+      "rel": "substitution (名)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "substitute A for B＝Bの代わりにAを用いる"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S3-27",
+      "s": 3,
+      "n": 27,
+      "w": "comprise",
+      "ipa": "/kəmˈpraɪz/",
+      "pos": "動詞",
+      "ph": "comprise seven coastal districts",
+      "m": "〜から構成される",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "comprise A（×comprise of A）＝Aから成る"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S3-28",
+      "s": 3,
+      "n": 28,
+      "w": "refrain",
+      "ipa": "/rɪˈfreɪn/",
+      "pos": "動詞",
+      "ph": "refrain from loud commentary",
+      "m": "控える",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "refrain from Ving＝Vするのを控える"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S4-29",
+      "s": 4,
+      "n": 29,
+      "w": "however",
+      "ipa": "/haʊˈevə/",
+      "pos": "副詞・他",
+      "ph": "however, the tide shifted",
+      "m": "しかしながら",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S4-30",
+      "s": 4,
+      "n": 30,
+      "w": "despite",
+      "ipa": "/dɪˈspaɪt/",
+      "pos": "副詞・他",
+      "ph": "despite the sudden fog",
+      "m": "〜にもかかわらず",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "despite A（＋名詞句）＝Aにもかかわらず"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S5-31",
+      "s": 5,
+      "n": 31,
+      "w": "yield",
+      "ipa": "/jiːld/",
+      "pos": "多義語",
+      "ph": "yield clear mineral samples",
+      "m": "①産出する ②屈する",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "yield to A＝Aに屈する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S5-32",
+      "s": 5,
+      "n": 32,
+      "w": "address",
+      "ipa": "/əˈdres/",
+      "pos": "多義語",
+      "ph": "address the drainage shortage",
+      "m": "①取り組む ②演説する",
+      "rel": "",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "address A（×address to A）＝Aに取り組む"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S5-33",
+      "s": 5,
+      "n": 33,
+      "w": "observe",
+      "ipa": "/əbˈzɜːv/",
+      "pos": "多義語",
+      "ph": "observe strict lab protocols",
+      "m": "①順守する ②観察する ③述べる",
+      "rel": "observance (名)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S5-34",
+      "s": 5,
+      "n": 34,
+      "w": "reserve",
+      "ipa": "/rɪˈzɜːv/",
+      "pos": "多義語",
+      "ph": "reserve final judgment",
+      "m": "①留保する ②予約する",
+      "rel": "reservation (名)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [],
+      "sg": []
+    },
+    {
+      "id": "SYN-S5-35",
+      "s": 5,
+      "n": 35,
+      "w": "strike",
+      "ipa": "/straɪk/",
+      "pos": "多義語",
+      "ph": "strike readers as coherent",
+      "m": "①印象を与える ②思いつく ③打つ",
+      "rel": "striking (形)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "strike A as B＝AにBという印象を与える"
+      ],
+      "sg": []
+    },
+    {
+      "id": "SYN-S5-36",
+      "s": 5,
+      "n": 36,
+      "w": "subject",
+      "ipa": "/səbˈdʒekt/",
+      "pos": "多義語",
+      "ph": "be subject to sudden frost",
+      "m": "①さらす ②主題 ③被験者",
+      "rel": "subjective (形)",
+      "mk": "",
+      "dt": [],
+      "b": "B0001-0050",
+      "pt": [
+        "be subject to A＝Aを受けやすい・従う"
+      ],
+      "sg": []
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "words": [
+    {
+      "id": "MIN-S1-01",
+      "s": 1,
+      "n": 1,
+      "w": "discuss",
+      "ipa": "/dɪˈskʌs/",
+      "pos": "動詞",
+      "ph": "discuss the plan",
+      "m": "〜を議論する",
+      "mk": "x",
+      "pt": [
+        "discuss A＝Aを議論する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "MIN-S1-02",
+      "s": 1,
+      "n": 2,
+      "w": "provide",
+      "ipa": "/prəˈvaɪd/",
+      "pos": "動詞",
+      "ph": "provide hikers with maps",
+      "m": "〜を提供する",
+      "mk": "tri",
+      "pt": [
+        "provide A with B＝AにBを提供する"
+      ],
+      "sg": []
+    },
+    {
+      "id": "MIN-S1-03",
+      "s": 1,
+      "n": 3,
+      "w": "prevent",
+      "ipa": "/prɪˈvent/",
+      "pos": "動詞",
+      "ph": "prevent ice from forming",
+      "m": "〜を妨げる",
+      "mk": "check",
+      "pt": [
+        "prevent A from Ving＝AがVするのを妨げる"
+      ],
+      "sg": []
+    }
+  ]
+}

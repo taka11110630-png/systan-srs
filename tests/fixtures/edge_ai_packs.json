@@ -1,0 +1,136 @@
+{
+  "prose_wrapped_text": "こちらが生成した特訓パックです。以下をそのまま貼り付けて取り込んでください。\n\n```json\n{\n  \"version\": \"1.1\",\n  \"hooks\": {\n    \"SYN-S2-19\": {\n      \"mp\": [{\"part\": \"sug-\", \"role\": \"prefix\", \"gloss\": \"下に\"}, {\"part\": \"gest\", \"role\": \"root\", \"gloss\": \"運ぶ\"}],\n      \"co\": \"AI_PROSE_CO_SUGGEST: 下からそっと案を差し出す\",\n      \"et\": \"AI_PROSE_ET_SUGGEST: sub(下に)+gerere(運ぶ)\",\n      \"kn\": \"AI_PROSE_KN_SUGGEST: サジェスト（検索候補の提案）\",\n      \"mn\": \"AI_PROSE_MN_SUGGEST: すぐジェスチャーで提案する\",\n      \"cf\": [\"propose\"],\n      \"src\": \"ai_prose\"\n    }\n  },\n  \"cloze\": [\n    {\n      \"id\": \"SYN-EDGE-NAT\",\n      \"wid\": \"SYN-S2-19\",\n      \"family\": \"composition_trap\",\n      \"stem\": \"The review panel suggested that the archive (    ) all fragile ledgers first.\",\n      \"ja\": \"審査委員会は資料館が壊れやすい台帳を最優先で保存するよう提案した。\",\n      \"choices\": [\"preserve\", \"preserves\", \"to preserve\", \"preserving\"],\n      \"answer\": 0,\n      \"why\": \"suggest that S (should) 原形 の仮定法現在。\",\n      \"trap\": \"⚠️ suggest 人 to V は減点\",\n      \"level\": \"旧帝大\",\n      \"confusable_wids\": []\n    },\n    {\n      \"id\": \"SYN-EDGE-MAR\",\n      \"wid\": \"SYN-S2-15\",\n      \"family\": \"with_family\",\n      \"stem\": \"Regional cooperatives supply rural clinics (    ) calibrated thermometers.\",\n      \"ja\": \"地域の協同組合は地方診療所に較正済み温度計を供給している。\",\n      \"choices\": [\"with\", \"to\", \"of\", \"for\"],\n      \"answer\": 0,\n      \"why\": \"supply A with B の型。\",\n      \"trap\": \"⚠️ supply A B は誤り\",\n      \"level\": \"難関私大\",\n      \"confusable_wids\": []\n    },\n    {\n      \"id\": \"SYN-EDGE-COM\",\n      \"wid\": \"SYN-S1-06\",\n      \"family\": \"intrans_prep\",\n      \"stem\": \"She will graduate (    ) the maritime engineering department next spring.\",\n      \"ja\": \"彼女は来春、海洋工学科を卒業する予定だ。\",\n      \"choices\": [\"from\", \"of\", \"out\", \"at\"],\n      \"answer\": 0,\n      \"why\": \"graduate from A（Aを卒業する）。\",\n      \"trap\": \"⚠️ graduate A（他動詞用法）に注意\",\n      \"level\": \"共通テスト\",\n      \"confusable_wids\": []\n    }\n  ]\n}\n```\n\n復習に役立ててください！",
+  "legacy_alias_pack": {
+    "version": "1.1",
+    "hooks": {},
+    "cloze": [
+      {
+        "id": "SYN-ALIAS-01",
+        "wid": "SYN-S1-01",
+        "family": "vt_trap",
+        "stem": "Delegates gathered early to (    ) the new coastal drainage blueprint.",
+        "ja": "代表者たちは新しい沿岸排水計画を議論するため早めに集まった。",
+        "choices": ["discuss", "discuss about", "discuss on", "discuss to"],
+        "answer": 0,
+        "why": "vt_trap は transitive_trap へ正規化される。",
+        "trap": "⚠️ discuss about は不可",
+        "level": "common",
+        "confusable_wids": []
+      },
+      {
+        "id": "SYN-ALIAS-02",
+        "wid": "SYN-S1-07",
+        "family": "svoo_to",
+        "stem": "The mentor explained the calibration chart (    ) the new trainees.",
+        "ja": "指導者は新研修生に較正表を説明した。",
+        "choices": ["to", "for", "with", "at"],
+        "answer": 0,
+        "why": "svoo_to は svoo_vs_to へ正規化される。",
+        "trap": "⚠️ explain 人 物 は不可",
+        "level": "march",
+        "confusable_wids": []
+      },
+      {
+        "id": "SYN-ALIAS-03",
+        "wid": "SYN-S4-29",
+        "family": "writing_trap",
+        "stem": "The first model was compact; (    ), its cooling vents proved insufficient.",
+        "ja": "初期モデルは小型だったが、冷却通気口が不十分だと判明した。",
+        "choices": ["however", "although", "despite", "because"],
+        "answer": 0,
+        "why": "writing_trap は composition_trap へ正規化される。",
+        "trap": "⚠️ however のカンマスプライスに注意",
+        "level": "national",
+        "confusable_wids": []
+      }
+    ]
+  },
+  "invalid_cloze_pack": {
+    "version": "1.1",
+    "hooks": {},
+    "cloze": [
+      {
+        "id": "SYN-BAD-EMPTY-ANS",
+        "wid": "SYN-S1-01",
+        "family": "transitive_trap",
+        "stem": "Bad item with empty string answer (    ) test.",
+        "ja": "不正データテスト1",
+        "choices": ["a", "b", "c", "d"],
+        "answer": "",
+        "why": "invalid",
+        "trap": "⚠️ invalid",
+        "level": "common",
+        "confusable_wids": []
+      },
+      {
+        "id": "SYN-BAD-NULL-ANS",
+        "wid": "SYN-S1-01",
+        "family": "transitive_trap",
+        "stem": "Bad item with null answer (    ) test.",
+        "ja": "不正データテスト2",
+        "choices": ["a", "b", "c", "d"],
+        "answer": null,
+        "why": "invalid",
+        "trap": "⚠️ invalid",
+        "level": "common",
+        "confusable_wids": []
+      },
+      {
+        "id": "SYN-BAD-OOB-ANS",
+        "wid": "SYN-S1-01",
+        "family": "transitive_trap",
+        "stem": "Bad item with out-of-range answer (    ) test.",
+        "ja": "不正データテスト3",
+        "choices": ["a", "b", "c", "d"],
+        "answer": 99,
+        "why": "invalid",
+        "trap": "⚠️ invalid",
+        "level": "common",
+        "confusable_wids": []
+      },
+      {
+        "id": "SYN-BAD-2CHOICES",
+        "wid": "SYN-S1-01",
+        "family": "transitive_trap",
+        "stem": "Bad item with only 2 choices (    ) test.",
+        "ja": "不正データテスト4",
+        "choices": ["onlyA", "onlyB"],
+        "answer": 0,
+        "why": "invalid",
+        "trap": "⚠️ invalid",
+        "level": "common",
+        "confusable_wids": []
+      }
+    ]
+  },
+  "malformed_text": "{not valid json at all ::: [unclosed",
+  "duplicate_update_pack": {
+    "version": "1.1",
+    "hooks": {
+      "SYN-S1-01": {
+        "mp": [{"part": "dis-", "role": "prefix", "gloss": "分離"}],
+        "co": "UPDATED_CO_DISCUSS",
+        "et": "UPDATED_ET_DISCUSS",
+        "kn": "UPDATED_KN_DISCUSS",
+        "mn": "UPDATED_MN_DISCUSS",
+        "cf": [],
+        "src": "ai_updated"
+      }
+    },
+    "cloze": [
+      {
+        "id": "SYN-Q-01",
+        "wid": "SYN-S1-01",
+        "family": "transitive_trap",
+        "stem": "The planning committee met on Friday to (    ) the proposed harbor budget.",
+        "ja": "計画委員会は提案された港湾予算を議論するため金曜日に集まった。",
+        "choices": ["discuss", "discuss about", "discuss on", "discuss over"],
+        "answer": 0,
+        "why": "UPDATED_WHY_SYN_Q01: discussは他動詞でabout不要（更新版）。",
+        "trap": "⚠️ discuss about A は誤用（更新版）",
+        "level": "national",
+        "confusable_wids": ["SYN-S1-08"]
+      }
+    ]
+  }
+}
