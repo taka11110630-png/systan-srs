@@ -7,3 +7,8 @@ systan-srs-state*.json
 .DS_Store
 __pycache__/
 .pytest_cache/
+node_modules/
+.clasp.json
+.clasprc.json
+*.clasprc.json
+.env

@@ -1,0 +1,7 @@
+# Ignore everything by default, then allow only GAS source files under src/
+**/**
+!src/**/*.js
+!src/**/*.gs
+!src/**/*.ts
+!src/**/*.html
+!src/appsscript.json
