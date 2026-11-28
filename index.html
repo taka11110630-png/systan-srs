@@ -545,21 +545,23 @@
 
     <div class="step-box">
       <div class="row"><span class="step-num">1</span><strong>手動：Google Driveから自分の単語データを保存する</strong></div>
-      <div class="muted" style="font-size:13px;">下のボタンで <code>systan_data.json</code> をタブレットにダウンロードしてください（Google Docsではなくファイルとして保存されます）。</div>
-      <div class="row">
-        <a id="driveDataDlLink" href="https://drive.google.com/uc?export=download&id=1SoOigYCcNDhTyDavYdz8dLp6QgOZrImh" target="_blank" rel="noopener" style="display:inline-block; padding:10px 16px; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; text-decoration:none;">⬇ systan_data.json をDriveから保存</a>
+      <div class="muted" style="font-size:13px;">まずは単語本体 <code>systan_data.json</code>（852KB）を端末に保存してください。<br><span style="font-size:12px;">※iPhone/iPadのSafariで403エラーになる場合は、<strong>Google Driveアプリ</strong>で <code>AIミス蓄積ノート / ops / systan_data.json</code> を開き、右上の「<code>…</code> → コピーを送信 → ファイルに保存」を選んでください。</span></div>
+      <div class="row" style="gap:8px;">
+        <a id="driveDataDlLink" href="https://drive.google.com/file/d/1SoOigYCcNDhTyDavYdz8dLp6QgOZrImh/view" target="_blank" rel="noopener" style="display:inline-block; padding:10px 16px; border-radius:10px; background:var(--accent); color:#fff; font-weight:700; text-decoration:none;">📄 systan_data.json をDriveで開く</a>
+        <a href="https://drive.google.com/drive/folders/1CArKJNjuntQFJ0D7saBqRmHJFZWUiqtx" target="_blank" rel="noopener" style="display:inline-block; padding:10px 14px; border-radius:10px; background:var(--surface); border:1px solid var(--border); color:var(--ink); font-weight:700; text-decoration:none; font-size:13px;">📁 opsフォルダを開く</a>
       </div>
     </div>
 
     <div class="step-box">
       <div class="row"><span class="step-num">2</span><strong>手動：保存した <code>systan_data.json</code> をここに読み込む</strong></div>
-      <div class="muted" style="font-size:13px;">一度読み込むとタブレット内に自動保存され、次からはこの画面は出ません。</div>
+      <div class="muted" style="font-size:13px;">一度読み込むと端末内に自動保存され、次からはこの画面は出ません（<code>systan_ai_pack.json</code> も一緒に選べます）。</div>
       <div class="row">
         <label style="display:inline-block;">
           <span style="display:inline-block; padding:11px 18px; border-radius:10px; background:var(--ok-fg); color:#fff; font-weight:700; cursor:pointer;">📂 systan_data.json を選択して開始</span>
-          <input id="bundleFileInput" type="file" accept=".json,application/json" style="display:none;" />
+          <input id="bundleFileInput" type="file" accept=".json,application/json,text/plain" multiple style="display:none;" />
         </label>
       </div>
+      <div id="obManualStatus" class="muted" style="font-size:12.5px; display:none; padding:8px 10px; border-radius:8px; background:var(--surface); border:1px solid var(--border);"></div>
     </div>
 
     <div class="muted" style="font-size:12px; padding:4px 2px;">
@@ -934,7 +936,7 @@
         </label>
         <label style="display:inline-block;">
           <span style="display:inline-block; padding:9px 14px; border:1px solid var(--border); border-radius:10px; cursor:pointer; background:var(--surface);">🔄 単語データ(systan_data.json)を更新</span>
-          <input id="reloadBundleInput" type="file" accept=".json" style="display:none;" />
+          <input id="reloadBundleInput" type="file" accept=".json,application/json,text/plain" multiple style="display:none;" />
         </label>
         <button id="exportAnkiWeakBtn">🃏 Anki TSV（×/△弱点）</button>
         <button id="exportAnkiAllBtn">🃏 Anki TSV（全語）</button>
@@ -2492,45 +2494,102 @@ const EMBEDDED_BUNDLE = null;
     r.readAsText(f);
   });
   async function handleBundleFile(file) {
-    if (!file) return;
-    const text = await file.text();
+    if (!file) return false;
+    const setObMsg = (msg, isErr = false) => {
+      const el = document.getElementById("obManualStatus");
+      if (el) {
+        el.style.display = "block";
+        el.style.color = isErr ? "var(--x-fg)" : "var(--ok-fg)";
+        el.textContent = msg;
+      }
+      toast(msg);
+    };
+    const rawText = (await file.text()).replace(/^\uFEFF/, "").trim();
+    if (!rawText) {
+      setObMsg("⚠️ 選択したファイルが空です。Driveから保存し直してください。", true);
+      return false;
+    }
+    if (/^<(!doctype|html|head|body)/i.test(rawText)) {
+      setObMsg("⚠️ Google Driveの403エラー画面（HTML）が保存されています。Google Driveアプリで systan_data.json を開き「… → コピーを送信 → ファイルに保存」で保存し直してください。", true);
+      return false;
+    }
     try {
-      const parsed = JSON.parse(text);
-      if (!parsed.words || !Array.isArray(parsed.words)) throw new Error("invalid");
-      BUNDLE = parsed;
-      await saveBundleToIDB(parsed);
-      // B11: Reset stale caches and narrow filters on bundle reload
-      patPairs = [];
-      pqDeck = [];
-      pqIdx = 0;
-      pqStarted = false;
-      pqRevealed = false;
-      loopState.initialized = false;
-      loopState.started = false;
-      loopState.finished = false;
-      loopState.target = "today_weak";
-      loopState.levelFilter = "all";
-      loopState.verbFamily = "all";
-      loopState.stageSel = "all";
-      loopState.batchSel = "all";
-      loopState.rangeFrom = "";
-      loopState.rangeTo = "";
-      loopState.customLabel = "";
-      loopState.setWords = [];
-      loopState.deck = [];
-      toast(`単語データ ${parsed.words.length}語 を読み込みました！`);
-      bootApp();
-    } catch (_) { toast("systan_data.json の形式が正しくありません"); }
+      const parsed = JSON.parse(rawText);
+      if (parsed && Array.isArray(parsed.words)) {
+        BUNDLE = parsed;
+        await saveBundleToIDB(parsed);
+        // B11: Reset stale caches and narrow filters on bundle reload
+        patPairs = [];
+        pqDeck = [];
+        pqIdx = 0;
+        pqStarted = false;
+        pqRevealed = false;
+        loopState.initialized = false;
+        loopState.started = false;
+        loopState.finished = false;
+        loopState.target = "today_weak";
+        loopState.levelFilter = "all";
+        loopState.verbFamily = "all";
+        loopState.stageSel = "all";
+        loopState.batchSel = "all";
+        loopState.rangeFrom = "";
+        loopState.rangeTo = "";
+        loopState.customLabel = "";
+        loopState.setWords = [];
+        loopState.deck = [];
+        toast(`単語データ ${parsed.words.length}語 を読み込みました！`);
+        bootApp();
+        return true;
+      }
+      // If user picked systan_ai_pack.json / ext_cloze.json / ext_hooks.json on onboarding, stage it automatically!
+      const looksLikeAiPack = parsed && (
+        Array.isArray(parsed) ||
+        parsed.hooks !== undefined || parsed.cloze !== undefined ||
+        parsed.extHooks !== undefined || parsed.extCloze !== undefined ||
+        Object.values(parsed).some(v => v && typeof v === "object" && (v.kn || v.mn || v.et))
+      );
+      if (looksLikeAiPack) {
+        try {
+          const res = parseAndMergeExtJsonText(rawText);
+          await saveExtPackToIDB(res.pack);
+          const hCnt = Object.keys(res.pack.hooks || {}).length;
+          const cCnt = (res.pack.cloze || []).length;
+          setObMsg(`🤖 AI拡張パック（フック ${hCnt}語 / 4択 ${cCnt}問）を先に保存しました！続けて単語本体「systan_data.json」（852KB）を選ぶと自動で合体して起動します。`, false);
+          return false;
+        } catch (_) {}
+      }
+      if (parsed && parsed.cards && typeof parsed.cards === "object") {
+        setObMsg("⚠️ これは学習履歴バックアップ（systan_state.json）です。先に単語本体「systan_data.json」を読み込んだ後、「Wiki連携」タブから復元してください。", true);
+        return false;
+      }
+      throw new Error("invalid");
+    } catch (_) {
+      setObMsg("⚠️ systan_data.json の形式が正しくありません（ファイル名と中身を確認してください）。", true);
+      return false;
+    }
+  }
+  async function handleBundleFileList(fileList) {
+    const files = [...(fileList || [])];
+    if (!files.length) return;
+    // Load AI packs after or alongside bundle; run bundle files first if both selected
+    const sorted = [...files].sort((a, b) => {
+      const aData = /systan_data/i.test(a.name) ? 0 : 1;
+      const bData = /systan_data/i.test(b.name) ? 0 : 1;
+      return aData - bData;
+    });
+    for (const f of sorted) {
+      await handleBundleFile(f);
+    }
   }
   document.getElementById("bundleFileInput").addEventListener("change", async e => {
-    const f = e.target.files[0];
+    const files = [...(e.target.files || [])];
     e.target.value = "";
-    await handleBundleFile(f);
+    await handleBundleFileList(files);
   });
   document.getElementById("reloadBundleInput").addEventListener("change", async e => {
-    const f = e.target.files[0];
+    const files = [...(e.target.files || [])];
     e.target.value = "";
-    await handleBundleFile(f);
+    await handleBundleFileList(files);
   });
 
   function exportAnki(onlyWeak) {
@@ -5162,7 +5221,7 @@ const EMBEDDED_BUNDLE = null;
           <div class="row" style="gap:6px;">
             <label style="display:inline-block;">
               <span style="display:inline-block; padding:6px 12px; border-radius:9px; background:var(--surface); border:1px solid var(--border); font-size:12px; font-weight:700; cursor:pointer;">📂 .json ファイルを選択して取込</span>
-              <input id="loopExtFileInput" type="file" accept=".json,application/json" multiple style="display:none;" />
+              <input id="loopExtFileInput" type="file" accept=".json,application/json,text/plain" multiple style="display:none;" />
             </label>
             ${(hCnt > 0 || cCnt > 0) ? `<button id="aiExportExtBtn" style="font-size:12px; min-height:34px; padding:5px 10px;">💾 拡張JSON保存</button><button id="aiResetExtBtn" class="ghost" style="font-size:12px; color:var(--x-fg);">🗑 リセット</button>` : ""}
           </div>
